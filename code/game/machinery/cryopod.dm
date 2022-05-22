@@ -60,16 +60,6 @@ GLOBAL_LIST_EMPTY(cryopod_computers)
 	var/list/data = list()
 	data["frozen_crew"] = frozen_crew
 
-	var/obj/item/card/id/id_card
-	var/datum/bank_account/current_user
-	if(isliving(user))
-		var/mob/living/person = user
-		id_card = person.get_idcard()
-	if(id_card?.registered_account)
-		current_user = id_card.registered_account
-	if(current_user)
-		data["account_name"] = current_user.account_holder
-
 	return data
 
 /obj/item/circuitboard/computer/cryopodcontrol
@@ -182,13 +172,7 @@ GLOBAL_LIST_EMPTY(cryopod_computers)
 	for(var/datum/objective/objective in GLOB.objectives)
 		// We don't want revs to get objectives that aren't for heads of staff. Letting
 		// them win or lose based on cryo is silly so we remove the objective.
-		if(istype(objective,/datum/objective/mutiny) && objective.target == mob_occupant.mind)
-			objective.team.objectives -= objective
-			qdel(objective)
-			for(var/datum/mind/mind in objective.team.members)
-				to_chat(mind.current, "<BR>[SPAN_USERDANGER("Your target is no longer within reach. Objective removed!")]")
-				mind.announce_objectives()
-		else if(objective.target && istype(objective.target, /datum/mind))
+		if(objective.target && istype(objective.target, /datum/mind))
 			if(objective.target == mob_occupant.mind)
 				var/old_target = objective.target
 				objective.target = null
@@ -340,9 +324,5 @@ GLOBAL_LIST_EMPTY(cryopod_computers)
 
 	close_machine(target)
 	name = "[name] ([target.name])"
-
-// Attacks/effects.
-/obj/machinery/cryopod/blob_act()
-	return // Sorta gamey, but we don't really want these to be destroyed.
 
 #undef AHELP_FIRST_MESSAGE

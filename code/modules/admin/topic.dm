@@ -227,12 +227,6 @@
 				var/mob/living/carbon/human/newmob = M.change_mob_type( /mob/living/carbon/human , null, null, delmob )
 				if(posttransformoutfit && istype(newmob))
 					newmob.equipOutfit(posttransformoutfit)
-			if("slime")
-				M.change_mob_type( /mob/living/simple_animal/slime , null, null, delmob )
-			if("adultslime")
-				var/mob/living/simple_animal/slime/baby_slime = M.change_mob_type( /mob/living/simple_animal/slime , null, null, delmob )
-				baby_slime.amount_grown = SLIME_EVOLUTION_THRESHOLD
-				baby_slime.Evolve()
 			if("monkey")
 				M.change_mob_type( /mob/living/carbon/human/species/monkey , null, null, delmob )
 			if("robot")
@@ -255,14 +249,6 @@
 				M.change_mob_type( /mob/living/simple_animal/parrot , null, null, delmob )
 			if("polyparrot")
 				M.change_mob_type( /mob/living/simple_animal/parrot/poly , null, null, delmob )
-			if("constructjuggernaut")
-				M.change_mob_type( /mob/living/simple_animal/hostile/construct/juggernaut , null, null, delmob )
-			if("constructartificer")
-				M.change_mob_type( /mob/living/simple_animal/hostile/construct/artificer , null, null, delmob )
-			if("constructwraith")
-				M.change_mob_type( /mob/living/simple_animal/hostile/construct/wraith , null, null, delmob )
-			if("shade")
-				M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
 
 	else if(href_list["boot2"])
 		if(!check_rights(R_ADMIN))
@@ -664,28 +650,6 @@
 		message_admins(SPAN_DANGER("Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!"))
 		log_admin("[key_name(usr)] healed / Revived [key_name(L)].")
 
-	else if(href_list["makeai"])
-		if(!check_rights(R_SPAWN))
-			return
-
-		var/mob/living/carbon/human/H = locate(href_list["makeai"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human.", confidential = TRUE)
-			return
-
-		var/move = TRUE
-		switch(tgui_alert(usr,"Move new AI to AI spawn location?","Move AI?", list("Yes", "No","Cancel")))
-			if("Cancel")
-				return
-			if("No")
-				move = FALSE
-		if(QDELETED(H))
-			to_chat(usr, SPAN_DANGER("Subject was deleted already. Transform canceled."))
-			return
-		message_admins(SPAN_DANGER("Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!"))
-		log_admin("[key_name(usr)] AIized [key_name(H)].")
-		H.AIize(TRUE, H.client, move)
-
 	else if(href_list["makealien"])
 		if(!check_rights(R_SPAWN))
 			return
@@ -696,40 +660,6 @@
 			return
 
 		usr.client.cmd_admin_alienize(H)
-
-	else if(href_list["makeslime"])
-		if(!check_rights(R_SPAWN))
-			return
-
-		var/mob/living/carbon/human/H = locate(href_list["makeslime"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human.", confidential = TRUE)
-			return
-
-		usr.client.cmd_admin_slimeize(H)
-
-	else if(href_list["makeblob"])
-		if(!check_rights(R_SPAWN))
-			return
-
-		var/mob/living/carbon/human/H = locate(href_list["makeblob"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human.", confidential = TRUE)
-			return
-
-		usr.client.cmd_admin_blobize(H)
-
-
-	else if(href_list["makerobot"])
-		if(!check_rights(R_SPAWN))
-			return
-
-		var/mob/living/carbon/human/H = locate(href_list["makerobot"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human.", confidential = TRUE)
-			return
-
-		usr.client.cmd_admin_robotize(H)
 
 	else if(href_list["makeanimal"])
 		if(!check_rights(R_SPAWN))
@@ -784,11 +714,6 @@
 			C.admin_ghost()
 		sleep(2)
 		C.jumptocoord(x,y,z)
-
-	else if(href_list["adminchecklaws"])
-		if(!check_rights(R_ADMIN))
-			return
-		output_ai_laws()
 
 	else if(href_list["adminmoreinfo"])
 		var/mob/M = locate(href_list["adminmoreinfo"]) in GLOB.mob_list
@@ -1085,16 +1010,6 @@
 		else
 			show_traitor_panel(M)
 
-	else if(href_list["borgpanel"])
-		if(!check_rights(R_ADMIN))
-			return
-
-		var/mob/M = locate(href_list["borgpanel"])
-		if(!iscyborg(M))
-			to_chat(usr, "This can only be used on cyborgs", confidential = TRUE)
-		else
-			open_borgopanel(M)
-
 	else if(href_list["initmind"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -1231,11 +1146,6 @@
 								var/mob/living/L = usr
 								var/obj/item/I = O
 								L.put_in_hands(I)
-								if(iscyborg(L))
-									var/mob/living/silicon/robot/R = L
-									if(R.model)
-										R.model.add_module(I, TRUE, TRUE)
-										R.activate_module(I)
 
 		if(pod)
 			new /obj/effect/pod_landingzone(target, pod)
@@ -1518,15 +1428,6 @@
 			log_admin("[key_name(usr)] has kicked [afkonly ? "all AFK" : "all"] clients from the lobby. [length(listkicked)] clients kicked: [strkicked ? strkicked : "--"]")
 		else
 			to_chat(usr, "You may only use this when the game is running.", confidential = TRUE)
-
-	else if(href_list["set_selfdestruct_code"])
-		if(!check_rights(R_ADMIN))
-			return
-		var/code = random_nukecode()
-		for(var/obj/machinery/nuclearbomb/selfdestruct/SD in GLOB.nuke_list)
-			SD.r_code = code
-		message_admins("[key_name_admin(usr)] has set the self-destruct \
-			code to \"[code]\".")
 
 	else if(href_list["add_station_goal"])
 		if(!check_rights(R_ADMIN))
@@ -1830,12 +1731,6 @@
 				heart_recepient.receive_heart(usr)
 			else
 				return
-
-	else if(href_list["force_war"])
-		if(!check_rights(R_ADMIN))
-			return
-		var/obj/item/nuclear_challenge/button = locate(href_list["force_war"])
-		button.force_war()
 
 	else if (href_list["interview"])
 		if(!check_rights(R_ADMIN))

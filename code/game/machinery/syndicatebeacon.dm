@@ -43,11 +43,6 @@
 	if(user)
 		to_chat(user, SPAN_NOTICE("You deactivate the beacon."))
 
-
-/obj/machinery/power/singularity_beacon/attack_ai(mob/user)
-	return
-
-
 /obj/machinery/power/singularity_beacon/attack_hand(mob/user, list/modifiers)
 	. = ..()
 	if(.)
@@ -141,7 +136,3 @@
 /obj/item/sbeacondrop/powersink
 	desc = "A label on it reads: <i>Warning: Activating this device will send a power draining device to your location</i>."
 	droptype = /obj/item/powersink
-
-/obj/item/sbeacondrop/clownbomb
-	desc = "A label on it reads: <i>Warning: Activating this device will send a silly explosive to your location</i>."
-	droptype = /obj/machinery/syndicatebomb/badmin/clown

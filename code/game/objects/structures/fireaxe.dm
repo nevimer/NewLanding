@@ -115,12 +115,6 @@
 		new /obj/item/stack/sheet/iron(loc, 2)
 	qdel(src)
 
-/obj/structure/fireaxecabinet/blob_act(obj/structure/blob/B)
-	if(fireaxe)
-		fireaxe.forceMove(loc)
-		fireaxe = null
-	qdel(src)
-
 /obj/structure/fireaxecabinet/attack_hand(mob/user, list/modifiers)
 	. = ..()
 	if(.)
@@ -143,11 +137,6 @@
 
 /obj/structure/fireaxecabinet/attack_paw(mob/living/user, list/modifiers)
 	return attack_hand(user, modifiers)
-
-/obj/structure/fireaxecabinet/attack_ai(mob/user)
-	toggle_lock(user)
-	return
-
 
 /obj/structure/fireaxecabinet/attack_tk(mob/user)
 	. = COMPONENT_CANCEL_ATTACK_CHAIN

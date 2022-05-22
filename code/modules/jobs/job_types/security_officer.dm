@@ -15,11 +15,7 @@
 	outfit = /datum/outfit/job/security
 	plasmaman_outfit = /datum/outfit/plasmaman/security
 
-	paycheck = PAYCHECK_HARD
-	paycheck_department = ACCOUNT_SEC
-
 	display_order = JOB_DISPLAY_ORDER_SECURITY_OFFICER
-	bounty_types = CIV_JOB_SEC
 	departments_list = list(
 		/datum/job_department/security,
 		)
@@ -207,8 +203,6 @@ GLOBAL_LIST_EMPTY(security_officer_distribution)
 	satchel = /obj/item/storage/backpack/satchel/sec
 	duffelbag = /obj/item/storage/backpack/duffelbag/sec
 	box = /obj/item/storage/box/survival/security
-
-	implants = list(/obj/item/implant/mindshield)
 
 	chameleon_extras = list(/obj/item/gun/energy/disabler, /obj/item/clothing/glasses/hud/security/sunglasses, /obj/item/clothing/head/helmet)
 	//The helmet is necessary because /obj/item/clothing/head/helmet/sec is overwritten in the chameleon list by the standard helmet, which has the same name and icon state

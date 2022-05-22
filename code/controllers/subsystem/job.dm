@@ -4,7 +4,7 @@ SUBSYSTEM_DEF(job)
 	flags = SS_NO_FIRE
 
 	/// List of all jobs.
-	var/list/datum/job/all_occupations = list() 
+	var/list/datum/job/all_occupations = list()
 	/// List of jobs that can be joined through the starting menu.
 	var/list/datum/job/joinable_occupations = list()
 	/// Dictionary of all jobs, keys are titles.
@@ -325,21 +325,6 @@ SUBSYSTEM_DEF(job)
 		var/mob/dead/new_player/candidate = pick(candidates)
 		AssignRole(candidate, job)
 
-/// Attempts to fill out all available AI positions.
-/datum/controller/subsystem/job/proc/fill_ai_positions()
-	var/datum/job/ai_job = GetJob("AI")
-	if(!ai_job)
-		return
-	// In byond for(in to) loops, the iteration is inclusive so we need to stop at ai_job.total_positions - 1
-	for(var/i in ai_job.current_positions to ai_job.total_positions - 1)
-		for(var/level in level_order)
-			var/list/candidates = list()
-			candidates = FindOccupationCandidates(ai_job, level)
-			if(candidates.len)
-				var/mob/dead/new_player/candidate = pick(candidates)
-				if(AssignRole(candidate, GetJobType(/datum/job/ai)))
-					break
-
 
 /** Proc DivideOccupations
  *  fills var "assigned_role" for all ready players.
@@ -396,11 +381,6 @@ SUBSYSTEM_DEF(job)
 	JobDebug("DO, Running Head Check")
 	FillHeadPosition()
 	JobDebug("DO, Head Check end")
-
-	// Fill out any remaining AI positions.
-	JobDebug("DO, Running AI Check")
-	fill_ai_positions()
-	JobDebug("DO, AI Check end")
 
 	//Other jobs are now checked
 	JobDebug("DO, Running Standard Check")
@@ -579,7 +559,6 @@ SUBSYSTEM_DEF(job)
 	for(var/i=equip_needed-5, i>0, i--)
 		if(GLOB.secequipment.len)
 			var/spawnloc = GLOB.secequipment[1]
-			new /obj/structure/closet/secure_closet/security/sec(spawnloc)
 			GLOB.secequipment -= spawnloc
 		else //We ran out of spare locker spawns!
 			break

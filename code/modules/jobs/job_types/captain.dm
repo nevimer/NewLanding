@@ -17,9 +17,6 @@
 	outfit = /datum/outfit/job/captain
 	plasmaman_outfit = /datum/outfit/plasmaman/captain
 
-	paycheck = PAYCHECK_COMMAND
-	paycheck_department = ACCOUNT_SEC
-
 	display_order = JOB_DISPLAY_ORDER_CAPTAIN
 	departments_list = list(
 		/datum/job_department/command,
@@ -61,7 +58,6 @@
 	satchel = /obj/item/storage/backpack/satchel/cap
 	duffelbag = /obj/item/storage/backpack/duffelbag/captain
 
-	implants = list(/obj/item/implant/mindshield)
 	accessory = /obj/item/clothing/accessory/medal/gold/captain
 
 	chameleon_extras = list(/obj/item/gun/energy/e_gun, /obj/item/stamp/captain)

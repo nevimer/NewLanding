@@ -22,11 +22,7 @@
 		/datum/job_department/command,
 		)
 
-	paycheck = PAYCHECK_COMMAND
-	paycheck_department = ACCOUNT_SEC
-
 	display_order = JOB_DISPLAY_ORDER_HEAD_OF_SECURITY
-	bounty_types = CIV_JOB_SEC
 
 	banned_quirks = list(SEC_RESTRICTED_QUIRKS, HEAD_RESTRICTED_QUIRKS)
 
@@ -63,8 +59,6 @@
 	satchel = /obj/item/storage/backpack/satchel/sec
 	duffelbag = /obj/item/storage/backpack/duffelbag/sec
 	box = /obj/item/storage/box/survival/security
-
-	implants = list(/obj/item/implant/mindshield)
 
 	chameleon_extras = list(/obj/item/gun/energy/e_gun/hos, /obj/item/stamp/hos)
 

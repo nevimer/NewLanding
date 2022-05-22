@@ -318,8 +318,7 @@
 		/obj/item/organ/regenerative_core,
 		/obj/item/wormhole_jaunter,
 		/obj/item/stack/marker_beacon,
-		/obj/item/key/lasso,
-		/obj/item/skeleton_key
+		/obj/item/key/lasso
 		))
 
 
@@ -342,29 +341,6 @@
 	. = ..()
 	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
 	STR.max_items = 5
-
-/obj/item/storage/belt/soulstone
-	name = "soul stone belt"
-	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away."
-	icon_state = "soulstonebelt"
-	inhand_icon_state = "soulstonebelt"
-	worn_icon_state = "soulstonebelt"
-
-/obj/item/storage/belt/soulstone/ComponentInitialize()
-	. = ..()
-	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
-	STR.max_items = 6
-	STR.set_holdable(list(
-		/obj/item/soulstone
-		))
-
-/obj/item/storage/belt/soulstone/full/PopulateContents()
-	for(var/i in 1 to 6)
-		new /obj/item/soulstone/mystic(src)
-
-/obj/item/storage/belt/soulstone/full/chappy/PopulateContents()
-	for(var/i in 1 to 6)
-		new /obj/item/soulstone/anybody/chaplain(src)
 
 /obj/item/storage/belt/champion
 	name = "championship belt"
@@ -448,23 +424,6 @@
 		/obj/item/reagent_containers/food/drinks/drinkingglass/filled/nuka_cola
 		))
 		new rig_snacks(src)
-
-/obj/item/storage/belt/military/abductor
-	name = "agent belt"
-	desc = "A belt used by abductor agents."
-	icon = 'icons/obj/abductor.dmi'
-	icon_state = "belt"
-	inhand_icon_state = "security"
-	worn_icon_state = "security"
-
-/obj/item/storage/belt/military/abductor/full/PopulateContents()
-	new /obj/item/screwdriver/abductor(src)
-	new /obj/item/wrench/abductor(src)
-	new /obj/item/weldingtool/abductor(src)
-	new /obj/item/crowbar/abductor(src)
-	new /obj/item/wirecutters/abductor(src)
-	new /obj/item/multitool/abductor(src)
-	new /obj/item/stack/cable_coil(src)
 
 /obj/item/storage/belt/military/army
 	name = "army belt"

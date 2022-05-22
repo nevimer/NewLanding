@@ -22,18 +22,13 @@
 		/datum/job_department/command,
 		)
 
-	paycheck = PAYCHECK_COMMAND
-	paycheck_department = ACCOUNT_SCI
-
 	display_order = JOB_DISPLAY_ORDER_RESEARCH_DIRECTOR
-	bounty_types = CIV_JOB_SCI
 
 	banned_quirks = list(HEAD_RESTRICTED_QUIRKS)
 
 	mail_goodies = list(
 		/obj/item/storage/box/monkeycubes = 30,
-		/obj/item/circuitboard/machine/sleeper/party = 3,
-		/obj/item/borg/upgrade/ai = 2
+		/obj/item/circuitboard/machine/sleeper/party = 3
 	)
 
 	family_heirlooms = list(/obj/item/toy/plush/slimeplushie)

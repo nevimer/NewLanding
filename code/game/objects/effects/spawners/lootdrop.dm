@@ -68,7 +68,6 @@
 	loot = list(/obj/item/gun/ballistic/automatic/pistol = 5,
 				/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
 				/obj/item/gun/ballistic/automatic/pistol/deagle,
-				/obj/item/storage/box/syndie_kit/throwing_weapons = 3,
 				/obj/item/gun/ballistic/revolver/mateba)
 
 /obj/effect/spawner/lootdrop/armory_contraband/donutstation
@@ -76,7 +75,6 @@
 				/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
 				/obj/item/bikehorn/golden,
 				/obj/item/grenade/clusterbuster,
-				/obj/item/storage/box/syndie_kit/throwing_weapons = 3,
 				/obj/item/gun/ballistic/revolver/mateba)
 
 /obj/effect/spawner/lootdrop/prison_contraband
@@ -126,7 +124,6 @@
 	loot = list(
 				/obj/item/gun/ballistic/revolver/russian = 5,
 				/obj/item/clothing/head/ushanka = 3,
-				/obj/item/storage/box/syndie_kit/throwing_weapons,
 				/obj/item/coin/gold,
 				/obj/item/reagent_containers/food/drinks/bottle/vodka/badminka,
 				)
@@ -290,23 +287,6 @@
 				"" = 80
 				)
 
-/obj/effect/spawner/lootdrop/organ_spawner
-	name = "ayylien organ spawner"
-	loot = list(
-		/obj/item/organ/heart/gland/electric = 3,
-		/obj/item/organ/heart/gland/trauma = 4,
-		/obj/item/organ/heart/gland/egg = 7,
-		/obj/item/organ/heart/gland/chem = 5,
-		/obj/item/organ/heart/gland/mindshock = 5,
-		/obj/item/organ/heart/gland/plasma = 7,
-		/obj/item/organ/heart/gland/transform = 5,
-		/obj/item/organ/heart/gland/slime = 4,
-		/obj/item/organ/heart/gland/spiderman = 5,
-		/obj/item/organ/heart/gland/ventcrawling = 1,
-		/obj/item/organ/body_egg/alien_embryo = 1,
-		/obj/item/organ/regenerative_core = 2)
-	lootcount = 3
-
 /obj/effect/spawner/lootdrop/memeorgans
 	name = "meme organ spawner"
 	loot = list(
@@ -376,144 +356,7 @@
 		/obj/item/clothing/mask/gas/cyborg = 25,
 		"" = 75)
 
-/obj/effect/spawner/lootdrop/aimodule_harmless // These shouldn't allow the AI to start butchering people
-	name = "harmless AI module spawner"
-	loot = list(
-				/obj/item/ai_module/core/full/asimov,
-				/obj/item/ai_module/core/full/asimovpp,
-				/obj/item/ai_module/core/full/hippocratic,
-				/obj/item/ai_module/core/full/paladin_devotion,
-				/obj/item/ai_module/core/full/paladin
-				)
-
-/obj/effect/spawner/lootdrop/aimodule_neutral // These shouldn't allow the AI to start butchering people without reason
-	name = "neutral AI module spawner"
-	loot = list(
-				/obj/item/ai_module/core/full/corp,
-				/obj/item/ai_module/core/full/maintain,
-				/obj/item/ai_module/core/full/drone,
-				/obj/item/ai_module/core/full/peacekeeper,
-				/obj/item/ai_module/core/full/reporter,
-				/obj/item/ai_module/core/full/robocop,
-				/obj/item/ai_module/core/full/liveandletlive,
-				/obj/item/ai_module/core/full/hulkamania
-				)
-
-/obj/effect/spawner/lootdrop/aimodule_harmful // These will get the shuttle called
-	name = "harmful AI module spawner"
-	loot = list(
-				/obj/item/ai_module/core/full/antimov,
-				/obj/item/ai_module/core/full/balance,
-				/obj/item/ai_module/core/full/tyrant,
-				/obj/item/ai_module/core/full/thermurderdynamic,
-				/obj/item/ai_module/core/full/damaged,
-				/obj/item/ai_module/reset/purge
-				)
-
 // Tech storage circuit board spawners
-
-/obj/effect/spawner/lootdrop/techstorage
-	name = "generic circuit board spawner"
-	lootdoubles = FALSE
-	fan_out_items = TRUE
-	lootcount = INFINITY
-
-/obj/effect/spawner/lootdrop/techstorage/service
-	name = "service circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/arcade/battle,
-				/obj/item/circuitboard/computer/arcade/orion_trail,
-				/obj/item/circuitboard/machine/autolathe,
-				/obj/item/circuitboard/computer/mining,
-				/obj/item/circuitboard/machine/ore_redemption,
-				/obj/item/circuitboard/machine/mining_equipment_vendor,
-				/obj/item/circuitboard/machine/microwave,
-				/obj/item/circuitboard/machine/chem_dispenser/drinks,
-				/obj/item/circuitboard/machine/chem_dispenser/drinks/beer,
-				/obj/item/circuitboard/computer/slot_machine
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/rnd
-	name = "RnD circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/aifixer,
-				/obj/item/circuitboard/machine/rdserver,
-				/obj/item/circuitboard/machine/mechfab,
-				/obj/item/circuitboard/machine/circuit_imprinter/department,
-				/obj/item/circuitboard/computer/teleporter,
-				/obj/item/circuitboard/machine/destructive_analyzer,
-				/obj/item/circuitboard/computer/rdconsole,
-				/obj/item/circuitboard/computer/nanite_chamber_control,
-				/obj/item/circuitboard/computer/nanite_cloud_controller,
-				/obj/item/circuitboard/machine/nanite_chamber,
-				/obj/item/circuitboard/machine/nanite_programmer,
-				/obj/item/circuitboard/machine/nanite_program_hub,
-				/obj/item/circuitboard/computer/scan_consolenew,
-				/obj/item/circuitboard/machine/dnascanner
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/security
-	name = "security circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/secure_data,
-				/obj/item/circuitboard/computer/security,
-				/obj/item/circuitboard/computer/prisoner
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/engineering
-	name = "engineering circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/atmos_alert,
-				/obj/item/circuitboard/computer/stationalert,
-				/obj/item/circuitboard/computer/powermonitor
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/tcomms
-	name = "tcomms circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/message_monitor,
-				/obj/item/circuitboard/machine/telecomms/broadcaster,
-				/obj/item/circuitboard/machine/telecomms/bus,
-				/obj/item/circuitboard/machine/telecomms/server,
-				/obj/item/circuitboard/machine/telecomms/receiver,
-				/obj/item/circuitboard/machine/telecomms/processor,
-				/obj/item/circuitboard/machine/announcement_system,
-				/obj/item/circuitboard/computer/comm_server,
-				/obj/item/circuitboard/computer/comm_monitor
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/medical
-	name = "medical circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/machine/chem_dispenser,
-				/obj/item/circuitboard/computer/med_data,
-				/obj/item/circuitboard/machine/smoke_machine,
-				/obj/item/circuitboard/machine/chem_master,
-				/obj/item/circuitboard/computer/pandemic
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/ai
-	name = "secure AI circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/aiupload,
-				/obj/item/circuitboard/computer/borgupload,
-				/obj/item/circuitboard/aicore
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/command
-	name = "secure command circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/crew,
-				/obj/item/circuitboard/computer/communications
-				)
-
-/obj/effect/spawner/lootdrop/techstorage/rnd_secure
-	name = "secure RnD circuit board spawner"
-	loot = list(
-				/obj/item/circuitboard/computer/mecha_control,
-				/obj/item/circuitboard/computer/apc_control,
-				/obj/item/circuitboard/computer/robotics
-				)
 
 /obj/effect/spawner/lootdrop/mafia_outfit
 	name = "mafia outfit spawner"
@@ -588,41 +431,9 @@
 /obj/effect/spawner/lootdrop/space/fancytech
 	lootcount = 2
 	loot = list(
-		/obj/item/raw_anomaly_core/random = 1,
-		/obj/item/disk/tech_disk/spaceloot = 1,
 		/obj/item/camera_bug = 1
 	)
 
-/// Space loot spawner. Some sort of random and rare tool. Only a single drop.
-/obj/effect/spawner/lootdrop/space/fancytool
-	lootcount = 1
-	loot = list(
-		/obj/item/wrench/abductor = 1,
-		/obj/item/wirecutters/abductor = 1,
-		/obj/item/screwdriver/abductor = 1,
-		/obj/item/crowbar/abductor = 1,
-		/obj/item/weldingtool/abductor = 1,
-		/obj/item/multitool/abductor = 1,
-		/obj/item/scalpel/alien = 1,
-		/obj/item/hemostat/alien = 1,
-		/obj/item/retractor/alien = 1,
-		/obj/item/circular_saw/alien = 1,
-		/obj/item/surgicaldrill/alien = 1,
-		/obj/item/cautery/alien = 1,
-		/obj/item/wrench/caravan = 1,
-		/obj/item/wirecutters/caravan = 1,
-		/obj/item/screwdriver/caravan = 1,
-		/obj/item/crowbar/red/caravan = 1
-	)
-
-/// Mail loot spawner. Some sort of random and rare building tool. No alien tech here.
-/obj/effect/spawner/lootdrop/space/fancytool/engineonly
-	loot = list(
-		/obj/item/wrench/caravan = 1,
-		/obj/item/wirecutters/caravan = 1,
-		/obj/item/screwdriver/caravan = 1,
-		/obj/item/crowbar/red/caravan = 1
-	)
 
 /// Mail loot spawner. Drop pool of advanced medical tools typically from research. Not endgame content.
 /obj/effect/spawner/lootdrop/space/fancytool/advmedicalonly
@@ -630,17 +441,6 @@
 		/obj/item/scalpel/advanced = 1,
 		/obj/item/retractor/advanced = 1,
 		/obj/item/cautery/advanced = 1
-	)
-
-/// Mail loot spawner. Some sort of random and rare surgical tool. Alien tech found here.
-/obj/effect/spawner/lootdrop/space/fancytool/raremedicalonly
-	loot = list(
-		/obj/item/scalpel/alien = 1,
-		/obj/item/hemostat/alien = 1,
-		/obj/item/retractor/alien = 1,
-		/obj/item/circular_saw/alien = 1,
-		/obj/item/surgicaldrill/alien = 1,
-		/obj/item/cautery/alien = 1
 	)
 
 /// Space loot spawner. A bunch of rarer seeds. /obj/item/seeds/random is not a random seed, but an exotic seed.
@@ -677,8 +477,6 @@
 	lootcount = 3
 	loot = list(
 		/obj/item/stack/sheet/plastic/fifty = 5,
-		/obj/item/stack/sheet/runed_metal/ten = 20,
-		/obj/item/stack/sheet/runed_metal/fifty = 5,
 		/obj/item/stack/sheet/mineral/diamond{amount = 15} = 15,
 		/obj/item/stack/sheet/mineral/uranium{amount = 15} = 15,
 		/obj/item/stack/sheet/mineral/plasma{amount = 15} = 15,

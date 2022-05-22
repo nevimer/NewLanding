@@ -193,29 +193,6 @@
 		user.set_pull_offsets(src, grab_state)
 		return TRUE
 
-
-/mob/living/attack_slime(mob/living/simple_animal/slime/M)
-	if(!SSticker.HasRoundStarted())
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if(M.buckled)
-		if(M in buckled_mobs)
-			M.Feedstop()
-		return // can't attack while eating!
-
-	if(HAS_TRAIT(src, TRAIT_PACIFISM))
-		to_chat(M, SPAN_WARNING("You don't want to hurt anyone!"))
-		return FALSE
-
-	if (stat != DEAD)
-		log_combat(M, src, "attacked")
-		M.do_attack_animation(src)
-		visible_message(SPAN_DANGER("\The [M.name] glomps [src]!"), \
-						SPAN_USERDANGER("\The [M.name] glomps you!"), SPAN_HEAR("You hear a sickening sound of flesh hitting flesh!"), COMBAT_MESSAGE_RANGE, M)
-		to_chat(M, SPAN_DANGER("You glomp [src]!"))
-		return TRUE
-
 /mob/living/attack_animal(mob/living/simple_animal/user, list/modifiers)
 	user.face_atom(src)
 	if(user.melee_damage_upper == 0)
@@ -372,34 +349,6 @@
 	investigate_log("([key_name(src)]) has been consumed by the singularity.", INVESTIGATE_SINGULO) //Oh that's where the clown ended up!
 	gib()
 	return 20
-
-/mob/living/narsie_act()
-	if(status_flags & GODMODE || QDELETED(src))
-		return
-
-	if(GLOB.cult_narsie && GLOB.cult_narsie.souls_needed[src])
-		GLOB.cult_narsie.souls_needed -= src
-		GLOB.cult_narsie.souls += 1
-		if((GLOB.cult_narsie.souls == GLOB.cult_narsie.soul_goal) && (GLOB.cult_narsie.resolved == FALSE))
-			GLOB.cult_narsie.resolved = TRUE
-			sound_to_playing_players('sound/machines/alarm.ogg')
-			addtimer(CALLBACK(GLOBAL_PROC, .proc/cult_ending_helper, 1), 120)
-			addtimer(CALLBACK(GLOBAL_PROC, .proc/ending_helper), 270)
-	if(client)
-		makeNewConstruct(/mob/living/simple_animal/hostile/construct/harvester, src, cultoverride = TRUE)
-	else
-		switch(rand(1, 4))
-			if(1)
-				new /mob/living/simple_animal/hostile/construct/juggernaut/hostile(get_turf(src))
-			if(2)
-				new /mob/living/simple_animal/hostile/construct/wraith/hostile(get_turf(src))
-			if(3)
-				new /mob/living/simple_animal/hostile/construct/artificer/hostile(get_turf(src))
-			if(4)
-				new /mob/living/simple_animal/hostile/construct/proteon/hostile(get_turf(src))
-	spawn_dust()
-	gib()
-	return TRUE
 
 //called when the mob receives a bright flash
 /mob/living/proc/flash_act(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /atom/movable/screen/fullscreen/flash, length = 25)

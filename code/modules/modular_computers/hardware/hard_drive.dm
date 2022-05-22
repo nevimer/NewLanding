@@ -163,8 +163,6 @@
 /obj/item/computer_hardware/hard_drive/small/integrated/install_default_programs()
 	store_file(new /datum/computer_file/program/computerconfig(src)) // Computer configuration utility, allows hardware control and displays more info than status bar
 	store_file(new /datum/computer_file/program/filemanager(src)) // File manager, allows text editor functions and basic file manipulation.
-	store_file(new /datum/computer_file/program/robotact(src))
-
 
 // Syndicate variant - very slight better
 /obj/item/computer_hardware/hard_drive/small/syndicate
@@ -182,7 +180,6 @@
 	store_file(new/datum/computer_file/program/computerconfig(src))
 	store_file(new/datum/computer_file/program/ntnetdownload/syndicate(src)) // Syndicate version; automatic access to syndicate apps and no NT apps
 	store_file(new/datum/computer_file/program/filemanager(src))
-	store_file(new/datum/computer_file/program/radar/fission360(src)) //I am legitimately afraid if I don't do this, Ops players will think they just don't get a pinpointer anymore.
 
 /obj/item/computer_hardware/hard_drive/micro
 	name = "micro solid state drive"

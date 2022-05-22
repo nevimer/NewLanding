@@ -302,23 +302,6 @@
 	button_icon_state = "thermal_[suit.thermal_on ? "on" : "off"]"
 	UpdateButtonIcon()
 
-/datum/action/item_action/vortex_recall
-	name = "Vortex Recall"
-	desc = "Recall yourself, and anyone nearby, to an attuned hierophant beacon at any time.<br>If the beacon is still attached, will detach it."
-	icon_icon = 'icons/mob/actions/actions_items.dmi'
-	button_icon_state = "vortex_recall"
-
-/datum/action/item_action/vortex_recall/IsAvailable()
-	var/area/current_area = get_area(target)
-	if(current_area.area_flags & NOTELEPORT)
-		to_chat(owner, SPAN_NOTICE("[target] fizzles uselessly."))
-		return
-	if(istype(target, /obj/item/hierophant_club))
-		var/obj/item/hierophant_club/H = target
-		if(H.teleporting)
-			return FALSE
-	return ..()
-
 /datum/action/item_action/berserk_mode
 	name = "Berserk"
 	desc = "Increase your movement and melee speed while also increasing your melee armor for a short amount of time."
@@ -476,44 +459,6 @@
 	..()
 	name = "Use [target.name]"
 	button.name = name
-
-/datum/action/item_action/cult_dagger
-	name = "Draw Blood Rune"
-	desc = "Use the ritual dagger to create a powerful blood rune"
-	icon_icon = 'icons/mob/actions/actions_cult.dmi'
-	button_icon_state = "draw"
-	buttontooltipstyle = "cult"
-	background_icon_state = "bg_demon"
-
-/datum/action/item_action/cult_dagger/Grant(mob/M)
-	if(IS_CULTIST(M))
-		..()
-		button.screen_loc = "6:157,4:-2"
-		button.moved = "6:157,4:-2"
-	else
-		Remove(owner)
-
-
-/datum/action/item_action/cult_dagger/Trigger()
-	for(var/obj/item/H in owner.held_items) //In case we were already holding another dagger
-		if(istype(H, /obj/item/melee/cultblade/dagger))
-			H.attack_self(owner)
-			return
-	var/obj/item/I = target
-	if(owner.can_equip(I, ITEM_SLOT_HANDS))
-		owner.temporarilyRemoveItemFromInventory(I)
-		owner.put_in_hands(I)
-		I.attack_self(owner)
-		return
-	if(!isliving(owner))
-		to_chat(owner, SPAN_WARNING("You lack the necessary living force for this action."))
-		return
-	var/mob/living/living_owner = owner
-	if (living_owner.usable_hands <= 0)
-		to_chat(living_owner, SPAN_WARNING("You dont have any usable hands!"))
-	else
-		to_chat(living_owner, SPAN_WARNING("Your hands are full!"))
-
 
 ///MGS BOX!
 /datum/action/item_action/agent_box

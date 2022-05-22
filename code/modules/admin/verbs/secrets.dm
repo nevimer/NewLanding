@@ -114,8 +114,6 @@
 			for(var/sig in GLOB.lawchanges)
 				dat += "[sig]<BR>"
 			holder << browse(dat, "window=lawchanges;size=800x500")
-		if("showailaws")
-			holder.holder.output_ai_laws()//huh, inconvenient var naming, huh?
 		if("manifest")
 			var/dat = "<B>Showing Crew Manifest.</B><HR>"
 			dat += "<table cellspacing=5><tr><th>Name</th><th>Position</th></tr>"
@@ -263,61 +261,6 @@
 				return
 			holder.anon_names()
 			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Anonymous Names"))
-		if("tripleAI")
-			if(!is_funmin)
-				return
-			holder.triple_ai()
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Triple AI"))
-		if("onlyone")
-			if(!is_funmin)
-				return
-			var/response = tgui_alert(usr,"Delay by 40 seconds?", "There can, in fact, only be one", list("Instant!", "40 seconds (crush the hope of a normal shift)"))
-			if(response == "Instant!")
-				holder.only_one()
-			else
-				holder.only_one_delayed()
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("There Can Be Only One"))
-		if("guns")
-			if(!is_funmin)
-				return
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Summon Guns"))
-			var/survivor_probability = 0
-			switch(tgui_alert(usr,"Do you want this to create survivors antagonists?",,list("No Antags","Some Antags","All Antags!")))
-				if("Some Antags")
-					survivor_probability = 25
-				if("All Antags!")
-					survivor_probability = 100
-
-			rightandwrong(SUMMON_GUNS, holder, survivor_probability)
-		if("magic")
-			if(!is_funmin)
-				return
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Summon Magic"))
-			var/survivor_probability = 0
-			switch(tgui_alert(usr,"Do you want this to create magician antagonists?",,list("No Antags","Some Antags","All Antags!")))
-				if("Some Antags")
-					survivor_probability = 25
-				if("All Antags!")
-					survivor_probability = 100
-
-			rightandwrong(SUMMON_MAGIC, holder, survivor_probability)
-		if("events")
-			if(!is_funmin)
-				return
-			if(!SSgamemode.wizardmode)
-				if(tgui_alert(usr,"Do you want to toggle summon events on?",,list("Yes","No")) == "Yes")
-					summonevents()
-					SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Summon Events", "Activate"))
-
-			else
-				switch(tgui_alert(usr,"What would you like to do?",,list("Intensify Summon Events","Turn Off Summon Events","Nothing")))
-					if("Intensify Summon Events")
-						summonevents()
-						SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Summon Events", "Intensify"))
-					if("Turn Off Summon Events")
-						SSgamemode.toggleWizardmode()
-						SSgamemode.resetFrequency()
-						SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Summon Events", "Disable"))
 		if("eagles")
 			if(!is_funmin)
 				return
@@ -327,16 +270,6 @@
 					W.req_access = list()
 			message_admins("[key_name_admin(holder)] activated Egalitarian Station mode")
 			priority_announce("CentCom airlock control override activated. Please take this time to get acquainted with your coworkers.", null, SSstation.announcer.get_rand_report_sound())
-		if("ancap")
-			if(!is_funmin)
-				return
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Anarcho-capitalist Station"))
-			SSeconomy.full_ancap = !SSeconomy.full_ancap
-			message_admins("[key_name_admin(holder)] toggled Anarcho-capitalist mode")
-			if(SSeconomy.full_ancap)
-				priority_announce("The NAP is now in full effect.", null, SSstation.announcer.get_rand_report_sound())
-			else
-				priority_announce("The NAP has been revoked.", null, SSstation.announcer.get_rand_report_sound())
 		if("blackout")
 			if(!is_funmin)
 				return
@@ -442,32 +375,6 @@
 			for(var/i in GLOB.human_list)
 				var/mob/living/carbon/human/H = i
 				INVOKE_ASYNC(H, /mob/living/carbon.proc/monkeyize)
-		if("traitor_all")
-			if(!is_funmin)
-				return
-			if(!SSticker.HasRoundStarted())
-				tgui_alert(usr,"The game hasn't started yet!")
-				return
-			var/objective = stripped_input(holder, "Enter an objective")
-			if(!objective)
-				return
-			SSblackbox.record_feedback("nested tally", "admin_secrets_fun_used", 1, list("Traitor All", "[objective]"))
-			for(var/mob/living/player in GLOB.player_list)
-				if(!(ishuman(player)||istype(player, /mob/living/silicon/)))
-					continue
-				if(player.stat == DEAD || !player.mind || ispAI(player))
-					continue
-				if(is_special_character(player))
-					continue
-				var/datum/antagonist/traitor/traitor_datum = new()
-				traitor_datum.give_objectives = FALSE
-				var/datum/objective/new_objective = new
-				new_objective.owner = player
-				new_objective.explanation_text = objective
-				traitor_datum.objectives += new_objective
-				player.mind.add_antag_datum(traitor_datum)
-			message_admins(SPAN_ADMINNOTICE("[key_name_admin(holder)] used everyone is a traitor secret. Objective is [objective]"))
-			log_admin("[key_name(holder)] used everyone is a traitor secret. Objective is [objective]")
 		if("massbraindamage")
 			if(!is_funmin)
 				return
@@ -547,32 +454,6 @@
 			message_admins("[key_name_admin(holder)] has Un-Fully Immersed \
 				everyone!")
 			log_admin("[key_name(holder)] has Un-Fully Immersed everyone.")
-		if("makeNerd")
-			var/spawnpoint = pick(GLOB.blobstart)
-			var/list/mob/dead/observer/candidates
-			var/mob/dead/observer/chosen_candidate
-			var/mob/living/simple_animal/drone/nerd
-			var/teamsize
-
-			teamsize = input(usr, "How many drones?", "N.E.R.D. team size", 2) as num|null
-
-			if(teamsize <= 0)
-				return FALSE
-
-			candidates = pollGhostCandidates("Do you wish to be considered for a Nanotrasen emergency response drone?", "Drone")
-
-			if(length(candidates) == 0)
-				return FALSE
-
-			while(length(candidates) && teamsize)
-				chosen_candidate = pick(candidates)
-				candidates -= chosen_candidate
-				nerd = new /mob/living/simple_animal/drone/classic(spawnpoint)
-				nerd.key = chosen_candidate.key
-				log_game("[key_name(nerd)] has been selected as a Nanotrasen emergency response drone")
-				teamsize--
-
-			return TRUE
 	if(E)
 		E.processing = FALSE
 		if(E.announceWhen>0)

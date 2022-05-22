@@ -103,9 +103,6 @@
 	if(mob.remote_control) //we're controlling something, our movement is relayed to it
 		return mob.remote_control.relaymove(mob, direct)
 
-	if(isAI(mob))
-		return AIMove(new_loc,direct,mob)
-
 	if(Process_Grab()) //are we restrained by someone's grip?
 		return
 
@@ -255,10 +252,6 @@
 			if(stepTurf)
 				for(var/obj/effect/decal/cleanable/food/salt/S in stepTurf)
 					to_chat(L, SPAN_WARNING("[S] bars your passage!"))
-					if(isrevenant(L))
-						var/mob/living/simple_animal/revenant/R = L
-						R.reveal(20)
-						R.stun(20)
 					return
 				if(stepTurf.turf_flags & NOJAUNT)
 					to_chat(L, SPAN_WARNING("Some strange aura is blocking the way."))

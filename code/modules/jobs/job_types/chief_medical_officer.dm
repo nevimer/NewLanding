@@ -22,19 +22,13 @@
 		/datum/job_department/command,
 		)
 
-	paycheck = PAYCHECK_COMMAND
-	paycheck_department = ACCOUNT_MED
-
 	display_order = JOB_DISPLAY_ORDER_CHIEF_MEDICAL_OFFICER
-	bounty_types = CIV_JOB_MED
 
 	banned_quirks = list(HEAD_RESTRICTED_QUIRKS)
 
 	mail_goodies = list(
-		/obj/effect/spawner/lootdrop/organ_spawner = 10,
 		/obj/effect/spawner/lootdrop/memeorgans = 8,
-		/obj/effect/spawner/lootdrop/space/fancytool/advmedicalonly = 4,
-		/obj/effect/spawner/lootdrop/space/fancytool/raremedicalonly = 1
+		/obj/effect/spawner/lootdrop/space/fancytool/advmedicalonly = 4
 	)
 	family_heirlooms = list(/obj/item/storage/firstaid/ancient/heirloom)
 

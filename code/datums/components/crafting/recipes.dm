@@ -214,23 +214,6 @@
 	..()
 	blacklist += subtypesof(/obj/item/gun/energy/e_gun)
 
-/datum/crafting_recipe/beam_rifle
-	name = "Particle Acceleration Rifle"
-	tool_behaviors = list(TOOL_SCREWDRIVER, TOOL_WIRECUTTER)
-	result = /obj/item/gun/energy/beam_rifle
-	reqs = list(/obj/item/gun/energy/e_gun = 1,
-				/obj/item/assembly/signaler/anomaly/flux = 1,
-				/obj/item/assembly/signaler/anomaly/grav = 1,
-				/obj/item/stack/cable_coil = 5,
-				/obj/item/weaponcrafting/gunkit/beam_rifle = 1)
-	time = 200
-	category = CAT_WEAPONRY
-	subcategory = CAT_WEAPON
-
-/datum/crafting_recipe/beam_rifle/New()
-	..()
-	blacklist += subtypesof(/obj/item/gun/energy/e_gun)
-
 /datum/crafting_recipe/ebow
 	name = "Energy Crossbow"
 	tool_behaviors = list(TOOL_SCREWDRIVER, TOOL_WIRECUTTER)
@@ -308,114 +291,6 @@
 /datum/crafting_recipe/decloner/New()
 	..()
 	blacklist += subtypesof(/obj/item/gun/energy/laser)
-
-/datum/crafting_recipe/teslacannon
-	name = "Tesla Cannon"
-	tool_behaviors = list(TOOL_SCREWDRIVER, TOOL_WIRECUTTER)
-	result = /obj/item/gun/energy/tesla_cannon
-	reqs = list(/obj/item/assembly/signaler/anomaly/flux = 1,
-				/obj/item/stack/cable_coil = 5,
-				/obj/item/weaponcrafting/gunkit/tesla = 1)
-	time = 200
-	category = CAT_WEAPONRY
-	subcategory = CAT_WEAPON
-
-/datum/crafting_recipe/ed209
-	name = "ED209"
-	result = /mob/living/simple_animal/bot/secbot/ed209
-	reqs = list(/obj/item/robot_suit = 1,
-				/obj/item/clothing/head/helmet = 1,
-				/obj/item/clothing/suit/armor/vest = 1,
-				/obj/item/bodypart/l_leg/robot = 1,
-				/obj/item/bodypart/r_leg/robot = 1,
-				/obj/item/stack/sheet/iron = 1,
-				/obj/item/stack/cable_coil = 1,
-				/obj/item/gun/energy/disabler = 1,
-				/obj/item/assembly/prox_sensor = 1)
-	tool_behaviors = list(TOOL_WELDER, TOOL_SCREWDRIVER)
-	time = 60
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/secbot
-	name = "Secbot"
-	result = /mob/living/simple_animal/bot/secbot
-	reqs = list(/obj/item/assembly/signaler = 1,
-				/obj/item/clothing/head/helmet/sec = 1,
-				/obj/item/melee/baton = 1,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/bodypart/r_arm/robot = 1)
-	tool_behaviors = list(TOOL_WELDER)
-	time = 60
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/cleanbot
-	name = "Cleanbot"
-	result = /mob/living/simple_animal/bot/cleanbot
-	reqs = list(/obj/item/reagent_containers/glass/bucket = 1,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/bodypart/r_arm/robot = 1)
-	time = 40
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/floorbot
-	name = "Floorbot"
-	result = /mob/living/simple_animal/bot/floorbot
-	reqs = list(/obj/item/storage/toolbox = 1,
-				/obj/item/stack/tile/iron = 10,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/bodypart/r_arm/robot = 1)
-	time = 40
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/medbot
-	name = "Medbot"
-	result = /mob/living/simple_animal/bot/medbot
-	reqs = list(/obj/item/healthanalyzer = 1,
-				/obj/item/storage/firstaid = 1,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/bodypart/r_arm/robot = 1)
-	time = 40
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/honkbot
-	name = "Honkbot"
-	result = /mob/living/simple_animal/bot/honkbot
-	reqs = list(/obj/item/storage/box/clown = 1,
-				/obj/item/bodypart/r_arm/robot = 1,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/bikehorn/ = 1)
-	time = 40
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/firebot
-	name = "Firebot"
-	result = /mob/living/simple_animal/bot/firebot
-	reqs = list(/obj/item/extinguisher = 1,
-				/obj/item/bodypart/r_arm/robot = 1,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/clothing/head/hardhat/red = 1)
-	time = 40
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/vibebot
-	name = "Vibebot"
-	result = /mob/living/simple_animal/bot/vibebot
-	reqs = list(/obj/item/light/bulb = 2,
-				/obj/item/bodypart/head/robot = 1,
-				/obj/item/assembly/prox_sensor = 1,
-				/obj/item/toy/crayon = 1)
-	time = 40
-	category = CAT_ROBOT
-
-/datum/crafting_recipe/hygienebot
-	name = "Hygienebot"
-	result = /mob/living/simple_animal/bot/hygienebot
-	reqs = list(/obj/item/bot_assembly/hygienebot = 1,
-				/obj/item/stack/ducts = 1,
-				/obj/item/assembly/prox_sensor = 1)
-	tool_behaviors = list(TOOL_WELDER)
-	time = 40
-	category = CAT_ROBOT
 
 /datum/crafting_recipe/improvised_pneumatic_cannon //Pretty easy to obtain but
 	name = "Pneumatic Cannon"
@@ -893,14 +768,6 @@
 	result = /obj/structure/bonfire
 	category = CAT_PRIMAL
 
-/datum/crafting_recipe/skeleton_key
-	name = "Skeleton Key"
-	time = 30
-	reqs = list(/obj/item/stack/sheet/bone = 5)
-	result = /obj/item/skeleton_key
-	always_available = FALSE
-	category = CAT_PRIMAL
-
 /datum/crafting_recipe/rake //Category resorting incoming
 	name = "Rake"
 	time = 30
@@ -986,34 +853,6 @@
 	tool_behaviors = list(TOOL_SCREWDRIVER, TOOL_WRENCH, TOOL_WELDER)
 	category = CAT_MISC
 
-/datum/crafting_recipe/aitater
-	name = "intelliTater"
-	result = /obj/item/aicard/aitater
-	time = 30
-	tool_behaviors = list(TOOL_WIRECUTTER)
-	reqs = list(/obj/item/aicard = 1,
-					/obj/item/food/grown/potato = 1,
-					/obj/item/stack/cable_coil = 5)
-	category = CAT_MISC
-
-/datum/crafting_recipe/aitater/check_requirements(mob/user, list/collected_requirements)
-	var/obj/item/aicard/aicard = collected_requirements[/obj/item/aicard][1]
-	if(!aicard.AI)
-		return TRUE
-
-	to_chat(user, SPAN_BOLDWARNING("You can't craft an intelliTater with an AI in the card!"))
-	return FALSE
-
-/datum/crafting_recipe/aispook
-	name = "intelliLantern"
-	result = /obj/item/aicard/aispook
-	time = 30
-	tool_behaviors = list(TOOL_WIRECUTTER)
-	reqs = list(/obj/item/aicard = 1,
-					/obj/item/food/grown/pumpkin = 1,
-					/obj/item/stack/cable_coil = 5)
-	category = CAT_MISC
-
 /datum/crafting_recipe/ghettojetpack
 	name = "Improvised Jetpack"
 	result = /obj/item/tank/jetpack/improvised
@@ -1021,36 +860,6 @@
 	reqs = list(/obj/item/tank/internals/oxygen = 2, /obj/item/extinguisher = 1, /obj/item/pipe = 3, /obj/item/stack/cable_coil = MAXCOIL)
 	category = CAT_MISC
 	tool_behaviors = list(TOOL_WRENCH, TOOL_WELDER, TOOL_WIRECUTTER)
-
-/datum/crafting_recipe/rib
-	name = "Collosal Rib"
-	always_available = FALSE
-	reqs = list(
-		/obj/item/stack/sheet/bone = 10,
-		/datum/reagent/fuel/oil = 5,
-	)
-	result = /obj/structure/statue/bone/rib
-	subcategory = CAT_PRIMAL
-
-/datum/crafting_recipe/skull
-	name = "Skull Carving"
-	always_available = FALSE
-	reqs = list(
-		/obj/item/stack/sheet/bone = 6,
-		/datum/reagent/fuel/oil = 5,
-	)
-	result = /obj/structure/statue/bone/skull
-	category = CAT_PRIMAL
-
-/datum/crafting_recipe/halfskull
-	name = "Cracked Skull Carving"
-	always_available = FALSE
-	reqs = list(
-		/obj/item/stack/sheet/bone = 3,
-		/datum/reagent/fuel/oil = 5,
-	)
-	result = /obj/structure/statue/bone/skull/half
-	category = CAT_PRIMAL
 
 /datum/crafting_recipe/boneshovel
 	name = "Serrated Bone Shovel"
@@ -1079,15 +888,6 @@
 		/obj/item/stack/sticky_tape = 1,
 	)
 	result = /obj/item/clothing/gloves/tackler/offbrand
-	category = CAT_CLOTHING
-
-/datum/crafting_recipe/boh
-	name = "Bag of Holding"
-	reqs = list(
-		/obj/item/bag_of_holding_inert = 1,
-		/obj/item/assembly/signaler/anomaly/bluespace = 1,
-	)
-	result = /obj/item/storage/backpack/holding
 	category = CAT_CLOTHING
 
 /datum/crafting_recipe/ipickaxe
@@ -1122,16 +922,6 @@
 	reqs = list(/obj/item/stack/sheet/mineral/metal_hydrogen = 20,
 				/obj/item/stack/sheet/mineral/zaukerite = 15,
 				/obj/item/stack/sheet/iron = 30,
-				)
-	category = CAT_MISC
-
-/datum/crafting_recipe/bluespace_vendor_mount
-	name = "Bluespace Vendor Wall Mount"
-	result = /obj/item/wallframe/bluespace_vendor_mount
-	time = 6 SECONDS
-	reqs = list(/obj/item/stack/sheet/iron = 15,
-				/obj/item/stack/sheet/glass = 10,
-				/obj/item/stack/cable_coil = 10,
 				)
 	category = CAT_MISC
 

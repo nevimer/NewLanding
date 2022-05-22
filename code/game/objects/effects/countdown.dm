@@ -76,61 +76,6 @@
 	else if(S.active)
 		return S.seconds_remaining()
 
-/obj/effect/countdown/nuclearbomb
-	name = "nuclear bomb countdown"
-	color = "#81FF14"
-
-/obj/effect/countdown/nuclearbomb/get_value()
-	var/obj/machinery/nuclearbomb/N = attached_to
-	if(!istype(N))
-		return
-	else if(N.timing)
-		return round(N.get_time_left(), 1)
-
-/obj/effect/countdown/supermatter
-	name = "supermatter damage"
-	text_size = 1
-	color = "#00ff80"
-
-/obj/effect/countdown/supermatter/get_value()
-	var/obj/machinery/power/supermatter_crystal/S = attached_to
-	if(!istype(S))
-		return
-	return "<div align='center' valign='middle' style='position:relative; top:0px; left:0px'>[round(S.get_integrity_percent(), 1)]%</div>"
-
-/obj/effect/countdown/transformer
-	name = "transformer countdown"
-	color = "#4C5866"
-
-/obj/effect/countdown/transformer/get_value()
-	var/obj/machinery/transformer/T = attached_to
-	if(!istype(T))
-		return
-	else if(T.cooldown)
-		var/seconds_left = max(0, (T.cooldown_timer - world.time) / 10)
-		return "[round(seconds_left)]"
-
-/obj/effect/countdown/doomsday
-	name = "doomsday countdown"
-
-/obj/effect/countdown/doomsday/get_value()
-	var/obj/machinery/doomsday_device/DD = attached_to
-	if(!istype(DD))
-		return
-	else if(DD.timing)
-		return "<div align='center' valign='middle' style='position:relative; top:0px; left:0px'>[DD.seconds_remaining()]</div>"
-
-/obj/effect/countdown/anomaly
-	name = "anomaly countdown"
-
-/obj/effect/countdown/anomaly/get_value()
-	var/obj/effect/anomaly/A = attached_to
-	if(!istype(A))
-		return
-	else
-		var/time_left = max(0, (A.death_time - world.time) / 10)
-		return round(time_left)
-
 /obj/effect/countdown/hourglass
 	name = "hourglass countdown"
 

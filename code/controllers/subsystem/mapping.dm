@@ -13,14 +13,7 @@ SUBSYSTEM_DEF(mapping)
 
 	var/list/map_templates = list()
 
-	var/list/planet_templates = list()
-
 	var/list/ruins_templates = list()
-	var/list/space_ruins_templates = list()
-	var/list/lava_ruins_templates = list()
-	var/list/ice_ruins_templates = list()
-	var/list/ice_ruins_underground_templates = list()
-	var/list/planet_ruins_templates = list()
 
 	var/datum/space_level/isolated_ruins_z //Created on demand during ruin loading.
 
@@ -74,10 +67,6 @@ SUBSYSTEM_DEF(mapping)
 
 #ifndef LOWMEMORYMODE
 
-	// Pick a random away mission.
-	if(CONFIG_GET(flag/roundstart_away))
-		createRandomZlevel()
-
 	// Load the virtual reality hub
 	if(CONFIG_GET(flag/virtual_reality))
 		to_chat(world, SPAN_BOLDANNOUNCE("Loading virtual reality..."))
@@ -86,29 +75,12 @@ SUBSYSTEM_DEF(mapping)
 
 	// Generate mining ruins
 	loading_ruins = TRUE
-
-	var/list/ice_ruins = virtual_levels_by_trait(ZTRAIT_ICE_RUINS)
-	if (ice_ruins.len)
-		// needs to be whitelisted for underground too so place_below ruins work
-		seedRuins(ice_ruins, CONFIG_GET(number/icemoon_budget), list(/area/icemoon/surface/outdoors/unexplored, /area/icemoon/underground/unexplored), ice_ruins_templates)
-		for (var/datum/virtual_level/ice_sub in ice_ruins)
-			spawn_rivers(ice_sub, 4, /turf/open/openspace/icemoon, /area/icemoon/surface/outdoors/unexplored/rivers)
-
-	var/list/ice_ruins_underground = virtual_levels_by_trait(ZTRAIT_ICE_RUINS_UNDERGROUND)
-	if (ice_ruins_underground.len)
-		seedRuins(ice_ruins_underground, CONFIG_GET(number/icemoon_budget), list(/area/icemoon/underground/unexplored), ice_ruins_underground_templates)
-		for (var/datum/virtual_level/ice_sub in ice_ruins_underground)
-			spawn_rivers(ice_sub, 4, ice_sub.get_trait(ZTRAIT_BASETURF), /area/icemoon/underground/unexplored/rivers)
-
-	// Generate deep space ruins
-	var/list/space_ruins = virtual_levels_by_trait(ZTRAIT_SPACE_RUINS)
-	if (space_ruins.len)
-		seedRuins(space_ruins, CONFIG_GET(number/space_budget), list(/area/space), space_ruins_templates)
+	// TODO
 	loading_ruins = FALSE
 #endif
 	// Run map generation after ruin generation to prevent issues
 	run_map_generation()
-	
+
 	repopulate_sorted_areas()
 	generate_station_area_list()
 	return ..()
@@ -150,11 +122,6 @@ Used by the AI doomsday and the self-destruct nuke.
 	initialized = SSmapping.initialized
 	map_templates = SSmapping.map_templates
 	ruins_templates = SSmapping.ruins_templates
-	space_ruins_templates = SSmapping.space_ruins_templates
-	lava_ruins_templates = SSmapping.lava_ruins_templates
-	ice_ruins_templates = SSmapping.ice_ruins_templates
-	ice_ruins_underground_templates = SSmapping.ice_ruins_underground_templates
-	planet_ruins_templates = SSmapping.planet_ruins_templates
 	shuttle_templates = SSmapping.shuttle_templates
 	shelter_templates = SSmapping.shelter_templates
 	holodeck_templates = SSmapping.holodeck_templates
@@ -173,7 +140,6 @@ Used by the AI doomsday and the self-destruct nuke.
 		list/traits,
 		list/default_traits,
 		silent = FALSE,
-		datum/overmap_object/ov_obj = null,
 		weather_controller_type,
 		atmosphere_type,
 		day_night_controller_type,
@@ -187,7 +153,7 @@ Used by the AI doomsday and the self-destruct nuke.
 	)
 	. = list()
 	var/start_time = REALTIMEOFDAY
-	var/datum/map_zone/mapzone = new(name, ov_obj)
+	var/datum/map_zone/mapzone = new(name)
 
 	if (!islist(files))  // handle single-level maps
 		files = list(files)
@@ -221,9 +187,9 @@ Used by the AI doomsday and the self-destruct nuke.
 	for (var/list/level as anything in traits)
 		i++
 		var/level_name = "[name] [i]"
-		
+
 		var/datum/virtual_level/vlevel = create_virtual_level(level_name, level.Copy(), mapzone, world.maxx, world.maxy, ALLOCATION_FULL)
-		
+
 		ordered_vlevels += vlevel
 	var/subi = 0
 	for(var/datum/virtual_level/vlevel as anything in ordered_vlevels)
@@ -285,12 +251,8 @@ Used by the AI doomsday and the self-destruct nuke.
 	// ensure we have space_level datums for compiled-in maps
 	InitializeDefaultZLevels()
 
-	//Load overmap
-	SSovermap.MappingInit()
-
 	// load the station
 	INIT_ANNOUNCE("Loading [config.map_name]...")
-	var/station_overmap_object = new config.overmap_object_type(SSovermap.main_system, rand(3,10), rand(3,10))
 	var/picked_rock_color = CHECK_AND_PICK_OR_NULL(config.rock_color)
 	var/picked_plant_color = CHECK_AND_PICK_OR_NULL(config.plant_color)
 	var/picked_grass_color = CHECK_AND_PICK_OR_NULL(config.grass_color)
@@ -301,7 +263,6 @@ Used by the AI doomsday and the self-destruct nuke.
 			config.map_file,
 			config.traits,
 			ZTRAITS_STATION,
-			ov_obj = station_overmap_object,
 			weather_controller_type = config.weather_controller_type,
 			atmosphere_type = config.atmosphere_type,
 			day_night_controller_type = config.day_night_controller_type,
@@ -322,35 +283,7 @@ Used by the AI doomsday and the self-destruct nuke.
 		qdel(query_round_map_name)
 
 #ifndef LOWMEMORYMODE
-	// TODO: remove this when the DB is prepared for the z-levels getting reordered
-	if(config.space_ruin_levels)
-		for(var/i in 1 to config.space_ruin_levels)
-			var/ruins_name = "Ruins Area [i]"
-			var/overmap_obj = new /datum/overmap_object/ruins(SSovermap.main_system, rand(5,25), rand(5,25))
-			var/datum/map_zone/mapzone = create_map_zone(ruins_name, overmap_obj)
-			create_virtual_level(ruins_name, ZTRAITS_SPACE, mapzone, world.maxx, world.maxy, ALLOCATION_FULL)
-	//Load planets
-	if(config.minetype == "lavaland")
-		var/datum/planet_template/lavaland_template = planet_templates[/datum/planet_template/lavaland]
-		lavaland_template.LoadTemplate(SSovermap.main_system, rand(3,10), rand(3,10))
-	else if (!isnull(config.minetype) && config.minetype != "none")
-		INIT_ANNOUNCE("WARNING: An unknown minetype '[config.minetype]' was set! This is being ignored! Update the maploader code!")
-
-	var/list/planet_list = SPAWN_PLANET_WEIGHT_LIST
-	var/spawned_habitable //One habitable planet is guaranteed to be spawned
-	if(config.amount_of_planets_spawned)
-		for(var/i in 1 to config.amount_of_planets_spawned)
-			if(!length(planet_list))
-				break
-			var/picked_planet_type
-			if(!spawned_habitable)
-				picked_planet_type = pickweight(HABITABLE_PLANETS)
-				spawned_habitable = TRUE
-			else
-				picked_planet_type = pickweight(planet_list)
-			planet_list -= picked_planet_type
-			var/datum/planet_template/picked_template = planet_templates[picked_planet_type]
-			picked_template.LoadTemplate(SSovermap.main_system, rand(5,25), rand(5,25))
+	// TODO: Heavy memory mapping stuff here
 #endif
 
 	if(LAZYLEN(FailedZs)) //but seriously, unless the server's filesystem is messed up this will never happen
@@ -371,7 +304,7 @@ Used by the AI doomsday and the self-destruct nuke.
 GLOBAL_LIST_EMPTY(the_station_areas)
 
 /datum/controller/subsystem/mapping/proc/generate_station_area_list()
-	var/list/station_areas_blacklist = typecacheof(list(/area/space, /area/mine, /area/ruin, /area/asteroid/nearstation))
+	var/list/station_areas_blacklist = typecacheof(list(/area/space, /area/ruin, /area/asteroid/nearstation))
 	for(var/area/A in world)
 		if (is_type_in_typecache(A, station_areas_blacklist))
 			continue
@@ -466,15 +399,10 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 		var/datum/map_template/T = new(path = "[path][map]", rename = "[map]")
 		map_templates[T.name] = T
 
-	preloadPlanetTemplates()
 	preloadRuinTemplates()
 	preloadShuttleTemplates()
 	preloadShelterTemplates()
 	preloadHolodeckTemplates()
-
-/datum/controller/subsystem/mapping/proc/preloadPlanetTemplates()
-	for(var/path in subtypesof(/datum/planet_template))
-		planet_templates[path] = new path()
 
 /datum/controller/subsystem/mapping/proc/preloadRuinTemplates()
 	// Still supporting bans by filename
@@ -495,28 +423,13 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 		map_templates[R.name] = R
 		ruins_templates[R.name] = R
 
-		if(istype(R, /datum/map_template/ruin/lavaland))
-			lava_ruins_templates[R.name] = R
-		else if(istype(R, /datum/map_template/ruin/icemoon/underground))
-			ice_ruins_underground_templates[R.name] = R
-		else if(istype(R, /datum/map_template/ruin/icemoon))
-			ice_ruins_templates[R.name] = R
-		else if(istype(R, /datum/map_template/ruin/space))
-			space_ruins_templates[R.name] = R
-		else if (istype(R, /datum/map_template/ruin/planetary))
-			planet_ruins_templates[R.name] = R
-
 /datum/controller/subsystem/mapping/proc/preloadShuttleTemplates()
-	var/list/unbuyable = generateMapList("[global.config.directory]/unbuyableshuttles.txt")
-
 	for(var/item in subtypesof(/datum/map_template/shuttle))
 		var/datum/map_template/shuttle/shuttle_type = item
 		if(!(initial(shuttle_type.suffix)))
 			continue
 
 		var/datum/map_template/shuttle/S = new shuttle_type()
-		if(unbuyable.Find(S.mappath))
-			S.who_can_purchase = null
 
 		shuttle_templates[S.shuttle_id] = S
 		map_templates[S.shuttle_id] = S
@@ -539,48 +452,6 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 		var/datum/map_template/holodeck/holo_template = new holodeck_type()
 
 		holodeck_templates[holo_template.template_id] = holo_template
-
-//Manual loading of away missions.
-/client/proc/admin_away()
-	set name = "Load Away Mission"
-	set category = "Admin.Events"
-
-	if(!holder ||!check_rights(R_FUN))
-		return
-
-
-	if(!GLOB.the_gateway)
-		if(tgui_alert(usr, "There's no home gateway on the station. You sure you want to continue ?", "Uh oh", list("Yes", "No")) != "Yes")
-			return
-
-	var/list/possible_options = GLOB.potentialRandomZlevels + "Custom"
-	var/away_name
-	var/datum/space_level/away_level
-
-	var/answer = input("What kind ? ","Away") as null|anything in possible_options
-	switch(answer)
-		if("Custom")
-			var/mapfile = input("Pick file:", "File") as null|file
-			if(!mapfile)
-				return
-			away_name = "[mapfile] custom"
-			to_chat(usr,SPAN_NOTICE("Loading [away_name]..."))
-			var/datum/map_template/template = new(mapfile, "Away Mission")
-			away_level = template.load_new_z()
-		else
-			if(answer in GLOB.potentialRandomZlevels)
-				away_name = answer
-				to_chat(usr,SPAN_NOTICE("Loading [away_name]..."))
-				var/datum/map_template/template = new(away_name, "Away Mission")
-				away_level = template.load_new_z()
-			else
-				return
-
-	message_admins("Admin [key_name_admin(usr)] has loaded [away_name] away mission.")
-	log_admin("Admin [key_name(usr)] has loaded [away_name] away mission.")
-	if(!away_level)
-		message_admins("Loading [away_name] failed!")
-		return
 
 ///Initialize all biomes, assoc as type || instance
 /datum/controller/subsystem/mapping/proc/initialize_biomes()
@@ -679,8 +550,8 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 			target_x += allocation_jump
 
 /// Creates and passes a new map zone
-/datum/controller/subsystem/mapping/proc/create_map_zone(new_name, datum/overmap_object/passed_ov_obj)
-	return new /datum/map_zone(new_name, passed_ov_obj)
+/datum/controller/subsystem/mapping/proc/create_map_zone(new_name)
+	return new /datum/map_zone(new_name)
 
 /// Allocates, creates and passes a new virtual level
 /datum/controller/subsystem/mapping/proc/create_virtual_level(new_name, list/traits, datum/map_zone/mapzone, width, height, allocation_type = ALLOCATION_FREE, allocation_jump = DEFAULT_ALLOC_JUMP)

@@ -39,9 +39,6 @@
 
 	check_cremation(delta_time, times_fired)
 
-	//Updates the number of stored chemicals for powers
-	handle_changeling(delta_time, times_fired)
-
 	if(. && mind) //. == not dead
 		for(var/key in mind.addiction_points)
 			var/datum/addiction/addiction = SSaddiction.all_addictions[key]
@@ -382,18 +379,6 @@
 		if(W.processes) // meh
 			W.handle_process(delta_time, times_fired)
 
-//todo generalize this and move hud out
-/mob/living/carbon/proc/handle_changeling(delta_time, times_fired)
-	if(mind && hud_used?.lingchemdisplay)
-		var/datum/antagonist/changeling/changeling = mind.has_antag_datum(/datum/antagonist/changeling)
-		if(changeling)
-			changeling.regenerate(delta_time, times_fired)
-			hud_used.lingchemdisplay.invisibility = 0
-			hud_used.lingchemdisplay.maptext = MAPTEXT("<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><font color='#dd66dd'>[round(changeling.chem_charges)]</font></div>")
-		else
-			hud_used.lingchemdisplay.invisibility = INVISIBILITY_ABSTRACT
-
-
 /mob/living/carbon/handle_mutations_and_radiation(delta_time, times_fired)
 	if(dna?.temporary_mutations.len)
 		for(var/mut in dna.temporary_mutations)
@@ -524,16 +509,6 @@ All effects don't start immediately, but rather get worse over time; the rate is
 
 		if(drunkenness >= 11 && slurring < 5)
 			slurring += 0.6 * delta_time
-
-		if(mind && (is_scientist_job(mind.assigned_role) || is_research_director_job(mind.assigned_role)))
-			if(SSresearch.science_tech)
-				if(drunkenness >= 12.9 && drunkenness <= 13.8)
-					drunkenness = round(drunkenness, 0.01)
-					if(DT_PROB(2.5, delta_time))
-						say(pick_list_replacements(VISTA_FILE, "ballmer_good_msg"), forced = "ballmer")
-				if(drunkenness > 26) // by this point you're into windows ME territory
-					if(DT_PROB(2.5, delta_time))
-						say(pick_list_replacements(VISTA_FILE, "ballmer_windows_me_msg"), forced = "ballmer")
 
 		if(drunkenness >= 41)
 			if(DT_PROB(16, delta_time))

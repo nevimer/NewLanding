@@ -32,13 +32,6 @@
 
 	name = "brain"
 
-	if(C.mind && C.mind.has_antag_datum(/datum/antagonist/changeling) && !no_id_transfer) //congrats, you're trapped in a body you don't control
-		if(brainmob && !(C.stat == DEAD || (HAS_TRAIT(C, TRAIT_DEATHCOMA))))
-			to_chat(brainmob, "<span class= danger>You can't feel your body! You're still just a brain!</span>")
-		forceMove(C)
-		C.update_hair()
-		return
-
 	if(brainmob)
 		if(C.key)
 			C.ghostize()
@@ -94,9 +87,6 @@
 
 /obj/item/organ/brain/attackby(obj/item/O, mob/user, params)
 	user.changeNext_move(CLICK_CD_MELEE)
-
-	if(istype(O, /obj/item/borg/apparatus/organ_storage))
-		return //Borg organ bags shouldn't be killing brains
 
 	if((organ_flags & ORGAN_FAILING) && O.is_drainable() && O.reagents.has_reagent(/datum/reagent/medicine/mannitol)) //attempt to heal the brain
 		. = TRUE //don't do attack animation.

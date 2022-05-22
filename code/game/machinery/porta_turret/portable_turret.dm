@@ -234,12 +234,6 @@ DEFINE_BITFIELD(turret_flags, list(
 		"allow_manual_control" = FALSE,
 		"lasertag_turret" = istype(src, /obj/machinery/porta_turret/lasertag),
 	)
-	if(issilicon(user))
-		data["silicon_user"] = TRUE
-		if(!manual_control)
-			var/mob/living/silicon/S = user
-			if(S.hack_software)
-				data["allow_manual_control"] = TRUE
 	return data
 
 /obj/machinery/porta_turret/ui_act(action, list/params)
@@ -438,24 +432,6 @@ DEFINE_BITFIELD(turret_flags, list(
 				targets += SA
 				continue
 
-		if(issilicon(A))
-			var/mob/living/silicon/sillycone = A
-
-			if(ispAI(A))
-				continue
-
-			if((turret_flags & TURRET_FLAG_SHOOT_BORGS) && sillycone.stat != DEAD && iscyborg(sillycone))
-				targets += sillycone
-				continue
-
-			if(sillycone.stat || in_faction(sillycone))
-				continue
-
-			if(iscyborg(sillycone))
-				var/mob/living/silicon/robot/sillyconerobot = A
-				if(LAZYLEN(faction) && (ROLE_SYNDICATE in faction) && sillyconerobot.emagged == TRUE)
-					continue
-
 		else if(iscarbon(A))
 			var/mob/living/carbon/C = A
 			//If not emagged, only target carbons that can use items
@@ -483,10 +459,6 @@ DEFINE_BITFIELD(turret_flags, list(
 				if(!in_faction(occupant)) //If there is a user and they're not in our faction
 					if(assess_perp(occupant) >= 4)
 						targets += mech
-
-	if((turret_flags & TURRET_FLAG_SHOOT_ANOMALOUS) && GLOB.blobs.len && (mode == TURRET_LETHAL))
-		for(var/obj/structure/blob/B in view(scan_range, base))
-			targets += B
 
 	if(targets.len)
 		tryToShootAt(targets)
@@ -949,12 +921,6 @@ DEFINE_BITFIELD(turret_flags, list(
 	to_chat(user, SPAN_NOTICE("You short out the turret controls' access analysis module."))
 	obj_flags |= EMAGGED
 	locked = FALSE
-
-/obj/machinery/turretid/attack_ai(mob/user)
-	if(!ailock || isAdminGhostAI(user))
-		return attack_hand(user)
-	else
-		to_chat(user, SPAN_WARNING("There seems to be a firewall preventing you from accessing this device!"))
 
 /obj/machinery/turretid/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)

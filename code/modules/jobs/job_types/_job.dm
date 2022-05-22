@@ -52,12 +52,7 @@
 	/// Experience type granted by playing in this job.
 	var/exp_granted_type = ""
 
-	var/paycheck = PAYCHECK_MINIMAL
-	var/paycheck_department = ACCOUNT_CIV
-
 	var/display_order = JOB_DISPLAY_ORDER_DEFAULT
-
-	var/bounty_types = CIV_JOB_BASIC
 
 	/// Goodies that can be received via the mail system.
 	// this is a weighted list.
@@ -150,10 +145,6 @@
 	return
 
 /mob/living/carbon/human/on_job_equipping(datum/job/equipping, apply_loadout = FALSE, player_client)
-	var/datum/bank_account/bank_account = new(real_name, equipping, dna.species.payday_modifier)
-	bank_account.payday(STARTING_PAYCHECKS, TRUE)
-	account_id = bank_account.account_id
-
 	dress_up_as_job(equipping, apply_loadout = apply_loadout, player_client = player_client)
 
 
@@ -274,10 +265,6 @@
 			C.registered_age = H.age
 		C.update_label()
 		C.update_icon()
-		var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
-		if(B && B.account_id == H.account_id)
-			C.registered_account = B
-			B.bank_cards += C
 		H.sec_hud_set_ID()
 
 	var/obj/item/pda/PDA = H.get_item_by_slot(pda_slot)
@@ -376,35 +363,6 @@
 		fully_replace_character_name(null, GLOB.current_anonymous_theme.anonymous_name(src))
 	player_client.prefs.apply_prefs_to(src)
 	dna.update_dna_identity()
-
-
-/mob/living/silicon/ai/apply_prefs_job(client/player_client, datum/job/job)
-	if(GLOB.current_anonymous_theme)
-		fully_replace_character_name(real_name, GLOB.current_anonymous_theme.anonymous_ai_name(TRUE))
-		return
-	apply_pref_name("ai", player_client) // This proc already checks if the player is appearance banned.
-	set_core_display_icon(null, player_client)
-
-
-/mob/living/silicon/robot/apply_prefs_job(client/player_client, datum/job/job)
-	if(mmi)
-		var/organic_name
-		if(GLOB.current_anonymous_theme)
-			organic_name = GLOB.current_anonymous_theme.anonymous_name(src)
-		else
-			if(!player_client)
-				return // Disconnected while checking the appearance ban.
-			organic_name = player_client.prefs.real_name
-
-		mmi.name = "[initial(mmi.name)]: [organic_name]"
-		if(mmi.brain)
-			mmi.brain.name = "[organic_name]'s brain"
-		if(mmi.brainmob)
-			mmi.brainmob.real_name = organic_name //the name of the brain inside the cyborg is the robotized human's name.
-			mmi.brainmob.name = organic_name
-	// If this checks fails, then the name will have been handled during initialization.
-	if(!GLOB.current_anonymous_theme && player_client.prefs.custom_names["cyborg"] != DEFAULT_CYBORG_NAME)
-		apply_pref_name("cyborg", player_client)
 
 /**
  * Called after a successful roundstart spawn.

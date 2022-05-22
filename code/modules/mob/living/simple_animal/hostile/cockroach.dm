@@ -42,9 +42,6 @@
 /mob/living/simple_animal/hostile/cockroach/proc/make_squashable()
 	AddComponent(/datum/component/squashable, squash_chance = 50, squash_damage = 1)
 
-/mob/living/simple_animal/hostile/cockroach/add_cell_sample()
-	AddElement(/datum/element/swabable, CELL_LINE_TABLE_COCKROACH, CELL_VIRUS_TABLE_GENERIC_MOB, 1, 7)
-
 /obj/projectile/glockroachbullet
 	damage = 10 //same damage as a hivebot
 	damage_type = BRUTE
@@ -67,11 +64,6 @@
 	casingtype = /obj/item/ammo_casing/glockroach
 	ranged = TRUE
 	faction = list("hostile")
-
-/mob/living/simple_animal/hostile/cockroach/death(gibbed)
-	if(GLOB.station_was_nuked) //If the nuke is going off, then cockroaches are invincible. Keeps the nuke from killing them, cause cockroaches are immune to nukes.
-		return
-	..()
 
 /mob/living/simple_animal/hostile/cockroach/ex_act() //Explosions are a terrible way to handle a cockroach.
 	return FALSE

@@ -57,120 +57,6 @@
 	set_species(species)
 	return src
 
-/mob/living/carbon/human/AIize(transfer_after = TRUE, client/preference_source)
-	if (notransform)
-		return
-	for(var/t in bodyparts)
-		qdel(t)
-
-	return ..()
-
-/mob/living/carbon/AIize(transfer_after = TRUE, client/preference_source)
-	if (notransform)
-		return
-	notransform = TRUE
-	Paralyze(1, ignore_canstun = TRUE)
-	for(var/obj/item/W in src)
-		dropItemToGround(W)
-	regenerate_icons()
-	icon = null
-	invisibility = INVISIBILITY_MAXIMUM
-	return ..()
-
-/mob/proc/AIize(transfer_after = TRUE, client/preference_source, move = TRUE)
-	var/list/turf/landmark_loc = list()
-
-	if(!move)
-		landmark_loc += loc
-	else
-		for(var/obj/effect/landmark/start/ai/sloc in GLOB.landmarks_list)
-			if(locate(/mob/living/silicon/ai) in sloc.loc)
-				continue
-			if(sloc.primary_ai)
-				LAZYCLEARLIST(landmark_loc)
-				landmark_loc += sloc.loc
-				break
-			landmark_loc += sloc.loc
-		if(!landmark_loc.len)
-			to_chat(src, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
-			for(var/obj/effect/landmark/start/ai/sloc in GLOB.landmarks_list)
-				landmark_loc += sloc.loc
-
-	if(!landmark_loc.len)
-		message_admins("Could not find ai landmark for [src]. Yell at a mapper! We are spawning them at their current location.")
-		landmark_loc += loc
-
-	if(client)
-		stop_sound_channel(CHANNEL_LOBBYMUSIC)
-
-	if(!transfer_after)
-		mind.active = FALSE
-
-	. = new /mob/living/silicon/ai(pick(landmark_loc), null, src)
-
-	if(preference_source)
-		apply_pref_name("ai",preference_source)
-
-	qdel(src)
-
-/mob/living/carbon/human/proc/Robotize(delete_items = 0, transfer_after = TRUE)
-	if (notransform)
-		return
-	notransform = TRUE
-	Paralyze(1, ignore_canstun = TRUE)
-
-	for(var/obj/item/W in src)
-		if(delete_items)
-			qdel(W)
-		else
-			dropItemToGround(W)
-	regenerate_icons()
-	icon = null
-	invisibility = INVISIBILITY_MAXIMUM
-	for(var/t in bodyparts)
-		qdel(t)
-
-	var/mob/living/silicon/robot/R = new /mob/living/silicon/robot(loc)
-
-	R.gender = gender
-	R.invisibility = 0
-
-	if(client)
-		R.updatename(client)
-
-	if(mind) //TODO //TODO WHAT
-		if(!transfer_after)
-			mind.active = FALSE
-		mind.transfer_to(R)
-	else if(transfer_after)
-		R.key = key
-
-	if(R.mmi)
-		R.mmi.name = "[initial(R.mmi.name)]: [real_name]"
-		if(R.mmi.brain)
-			R.mmi.brain.name = "[real_name]'s brain"
-		if(R.mmi.brainmob)
-			R.mmi.brainmob.real_name = real_name //the name of the brain inside the cyborg is the robotized human's name.
-			R.mmi.brainmob.name = real_name
-
-	R.job = "Cyborg"
-	R.notify_ai(NEW_BORG)
-
-	. = R
-	if(R.ckey && is_banned_from(R.ckey, "Cyborg"))
-		INVOKE_ASYNC(R, /mob/living/silicon/robot.proc/replace_banned_cyborg)
-	qdel(src)
-
-/mob/living/silicon/robot/proc/replace_banned_cyborg()
-	to_chat(src, "<b>You are job banned from cyborg! Appeal your job ban if you want to avoid this in the future!</b>")
-	ghostize(FALSE)
-
-	var/list/mob/dead/observer/candidates = pollCandidatesForMob("Do you want to play as [src]?", "[src]", null, "Cyborg", 50, src)
-	if(LAZYLEN(candidates))
-		var/mob/dead/observer/chosen_candidate = pick(candidates)
-		message_admins("[key_name_admin(chosen_candidate)] has taken control of ([key_name_admin(src)]) to replace a jobbanned player.")
-		key = chosen_candidate.key
-
 //human -> alien
 /mob/living/carbon/human/proc/Alienize()
 	if (notransform)
@@ -236,13 +122,6 @@
 	to_chat(new_slime, "<B>You are now a slime. Skreee!</B>")
 	. = new_slime
 	qdel(src)
-
-/mob/proc/become_overmind(starting_points = OVERMIND_STARTING_POINTS)
-	var/mob/camera/blob/B = new /mob/camera/blob(get_turf(src), starting_points)
-	B.key = key
-	. = B
-	qdel(src)
-
 
 /mob/living/carbon/human/proc/corgize()
 	if (notransform)
@@ -353,9 +232,6 @@
 	if(!MP)
 		return FALSE //Sanity, this should never happen.
 
-	if(ispath(MP, /mob/living/simple_animal/hostile/construct))
-		return FALSE //Verbs do not appear for players.
-
 //Good mobs!
 	if(ispath(MP, /mob/living/simple_animal/pet/cat))
 		return TRUE
@@ -366,8 +242,6 @@
 	if(ispath(MP, /mob/living/simple_animal/hostile/carp))
 		return TRUE
 	if(ispath(MP, /mob/living/simple_animal/hostile/mushroom))
-		return TRUE
-	if(ispath(MP, /mob/living/simple_animal/shade))
 		return TRUE
 	if(ispath(MP, /mob/living/simple_animal/hostile/killertomato))
 		return TRUE

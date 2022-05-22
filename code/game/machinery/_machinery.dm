@@ -128,7 +128,6 @@
 	var/interaction_flags_machine = INTERACT_MACHINE_WIRES_IF_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OPEN_SILICON | INTERACT_MACHINE_SET_MACHINE
 	var/fair_market_price = 69
 	var/market_verb = "Customer"
-	var/payment_department = ACCOUNT_ENG
 
 	// For storing and overriding ui id
 	var/tgui_id // ID of TGUI interface
@@ -402,35 +401,6 @@
 
 	return TRUE // If we passed all of those checks, woohoo! We can interact with this machine.
 
-/obj/machinery/proc/check_nap_violations()
-	if(!SSeconomy.full_ancap)
-		return TRUE
-	if(occupant && !state_open)
-		var/mob/living/L = occupant
-		var/obj/item/card/id/I = L.get_idcard(TRUE)
-		if(I)
-			var/datum/bank_account/insurance = I.registered_account
-			if(!insurance)
-				say("[market_verb] NAP Violation: No bank account found.")
-				nap_violation(L)
-				return FALSE
-			else
-				if(!insurance.adjust_money(-fair_market_price))
-					say("[market_verb] NAP Violation: Unable to pay.")
-					nap_violation(L)
-					return FALSE
-				var/datum/bank_account/D = SSeconomy.get_dep_account(payment_department)
-				if(D)
-					D.adjust_money(fair_market_price)
-		else
-			say("[market_verb] NAP Violation: No ID card found.")
-			nap_violation(L)
-			return FALSE
-	return TRUE
-
-/obj/machinery/proc/nap_violation(mob/violator)
-	return
-
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 //Return a non FALSE value to interrupt attack_hand propagation to subtypes.
@@ -475,27 +445,6 @@
 		return
 	var/damage = damage_deflection / 10
 	arm.receive_damage(brute=damage, wound_bonus = CANT_WOUND)
-
-/obj/machinery/attack_robot(mob/user)
-	if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON) && !isAdminGhostAI(user))
-		return FALSE
-	if(Adjacent(user) && can_buckle && has_buckled_mobs()) //so that borgs (but not AIs, sadly (perhaps in a future PR?)) can unbuckle people from machines
-		if(buckled_mobs.len > 1)
-			var/unbuckled = input(user, "Who do you wish to unbuckle?","Unbuckle Who?") as null|mob in sortNames(buckled_mobs)
-			if(user_unbuckle_mob(unbuckled,user))
-				return TRUE
-		else
-			if(user_unbuckle_mob(buckled_mobs[1],user))
-				return TRUE
-	return _try_interact(user)
-
-/obj/machinery/attack_ai(mob/user)
-	if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON) && !isAdminGhostAI(user))
-		return FALSE
-	if(iscyborg(user))// For some reason attack_robot doesn't work
-		return attack_robot(user)
-	else
-		return _try_interact(user)
 
 /obj/machinery/attackby(obj/item/weapon, mob/user, params)
 	. = ..()
@@ -795,9 +744,6 @@
 	. = . % 9
 	AM.pixel_x = -8 + ((.%3)*8)
 	AM.pixel_y = -8 + (round( . / 3)*8)
-
-/obj/machinery/rust_heretic_act()
-	take_damage(500, BRUTE, MELEE, 1)
 
 /obj/machinery/vv_edit_var(vname, vval)
 	if(vname == "occupant")

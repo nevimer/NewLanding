@@ -132,21 +132,6 @@
 	delay_message = "Translating manifest..."
 	loot_type = /datum/adventure_loot_generator/simple/drugs
 
-// EXPLORATION_SITE_ALIEN 2/2
-/datum/exploration_event/simple/resource/alien_tools
-	name = "alien sarcophagus"
-	required_site_traits = list(EXPLORATION_SITE_ALIEN)
-	band_values = list(EXOSCANNER_BAND_TECH=1,EXOSCANNER_BAND_RADIATION=1)
-	required_tool = EXODRONE_TOOL_TRANSLATOR
-	discovery_log = "Discovered a alien sarcophagus covered in unknown glyphs"
-	success_log = "Retrieved contents of alien sarcophagus"
-	description = "You find an giant sarcophagus of alien origin covered in unknown script."
-	no_tool_description = "You see no way to open the sarcophagus or translate the glyphs without a tool."
-	has_tool_description = "You translate the glyphs and find a description of a hidden mechanism for unlocking the tomb."
-	delay_message = "Opening..."
-	action_text = "Open"
-	loot_type = /obj/item/scalpel/alien
-
 /datum/exploration_event/simple/resource/pod
 	name = "alien biopod"
 	required_site_traits = list(EXPLORATION_SITE_ALIEN)
@@ -174,31 +159,6 @@
 	delay_message = "Opening..."
 	action_text = "Open"
 	loot_type = /obj/item/fuel_pellet/exotic
-
-/datum/exploration_event/simple/resource/navigation
-	name = "navigation systems"
-	required_site_traits = list(EXPLORATION_SITE_SHIP)
-	required_tool = EXODRONE_TOOL_TRANSLATOR
-	discovery_log = "Discovered ship navigation systems."
-	description = "You find the ship navigation systems. With proper tools you can retrieve any data stored here."
-	success_log = "Retrieved shipping data from navigation systems."
-	no_tool_description = "You'll need a translator to decipher the data."
-	delay_message = "Retrieving data..."
-	action_text = "Retrieve data"
-	loot_type = /datum/adventure_loot_generator/cargo
-
-// EXPLORATION_SITE_HABITABLE 2/2
-/datum/exploration_event/simple/resource/unknown_microbiome
-	name = "unknown microbiome"
-	required_site_traits = list(EXPLORATION_SITE_HABITABLE)
-	required_tool = EXODRONE_TOOL_TRANSLATOR
-	discovery_log = "Discovered a isolated microbiome."
-	description = "You discover a giant fungus colony."
-	success_log = "Retrieved samples of the fungus for future study."
-	no_tool_description = "With a laser tool you could slice off a sample for study."
-	delay_message = "Taking samples..."
-	action_text = "Take sample"
-	loot_type = /obj/item/petri_dish/random
 
 /datum/exploration_event/simple/resource/tcg_nerd
 	name = "creepy stranger"

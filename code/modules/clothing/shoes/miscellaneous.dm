@@ -111,7 +111,6 @@
 /obj/item/clothing/shoes/clown_shoes/Initialize()
 	. = ..()
 	LoadComponent(/datum/component/squeak, list('sound/effects/clownstep1.ogg'=1,'sound/effects/clownstep2.ogg'=1), 50, falloff_exponent = 20) //die off quick please
-	AddElement(/datum/element/swabable, CELL_LINE_TABLE_CLOWN, CELL_VIRUS_TABLE_GENERIC, rand(2,3), 0)
 
 /obj/item/clothing/shoes/clown_shoes/equipped(mob/user, slot)
 	. = ..()
@@ -491,7 +490,7 @@
 	if(occupants.len >= max_occupants)
 		to_chat(user, SPAN_WARNING("[src] are full!"))
 		return
-	if(istype(target, /mob/living/simple_animal/hostile/retaliate/snake) || istype(target, /mob/living/simple_animal/hostile/headcrab) || istype(target, /mob/living/carbon/alien/larva))
+	if(istype(target, /mob/living/simple_animal/hostile/retaliate/snake) || istype(target, /mob/living/carbon/alien/larva))
 		occupants += target
 		target.forceMove(src)
 		to_chat(user, SPAN_NOTICE("[target] slithers into [src]."))

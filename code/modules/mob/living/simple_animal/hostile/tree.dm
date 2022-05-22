@@ -74,9 +74,6 @@
 			C.visible_message(SPAN_DANGER("\The [src] knocks down \the [C]!"), \
 					SPAN_USERDANGER("\The [src] knocks you down!"))
 
-/mob/living/simple_animal/hostile/tree/add_cell_sample()
-	AddElement(/datum/element/swabable, CELL_LINE_TABLE_PINE, CELL_VIRUS_TABLE_GENERIC_MOB, 1, 5)
-
 /mob/living/simple_animal/hostile/tree/festivus
 	name = "festivus pole"
 	desc = "Serenity now... SERENITY NOW!"
@@ -101,9 +98,6 @@
 		visible_message(SPAN_WARNING("[src] crackles with static electricity!"))
 		for(var/obj/item/stock_parts/cell/C in range(2, get_turf(src)))
 			C.give(75)
-		for(var/mob/living/silicon/robot/R in range(2, get_turf(src)))
-			if(R.cell)
-				R.cell.give(75)
 		for(var/obj/machinery/power/apc/A in range(2, get_turf(src)))
 			if(A.cell)
 				A.cell.give(75)

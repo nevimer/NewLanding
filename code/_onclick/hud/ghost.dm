@@ -5,14 +5,6 @@
 	. = ..()
 	flick(icon_state + "_anim", src)
 
-/atom/movable/screen/ghost/spawners_menu
-	name = "Spawners menu"
-	icon_state = "spawners"
-
-/atom/movable/screen/ghost/spawners_menu/Click()
-	var/mob/dead/observer/observer = usr
-	observer.open_spawners_menu()
-
 /atom/movable/screen/ghost/orbit
 	name = "Orbit"
 	icon_state = "orbit"
@@ -37,22 +29,9 @@
 	var/mob/dead/observer/G = usr
 	G.dead_tele()
 
-/atom/movable/screen/ghost/pai
-	name = "pAI Candidate"
-	icon_state = "pai"
-
-/atom/movable/screen/ghost/pai/Click()
-	var/mob/dead/observer/G = usr
-	G.register_pai()
-
 /datum/hud/ghost/New(mob/owner)
 	..()
 	var/atom/movable/screen/using
-
-	using = new /atom/movable/screen/ghost/spawners_menu()
-	using.screen_loc = ui_ghost_spawners_menu
-	using.hud = src
-	static_inventory += using
 
 	using = new /atom/movable/screen/ghost/orbit()
 	using.screen_loc = ui_ghost_orbit
@@ -66,11 +45,6 @@
 
 	using = new /atom/movable/screen/ghost/teleport()
 	using.screen_loc = ui_ghost_teleport
-	using.hud = src
-	static_inventory += using
-
-	using = new /atom/movable/screen/ghost/pai()
-	using.screen_loc = ui_ghost_pai
 	using.hud = src
 	static_inventory += using
 

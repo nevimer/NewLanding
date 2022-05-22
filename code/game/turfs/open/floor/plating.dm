@@ -43,13 +43,6 @@
 	if(..())
 		return
 	try_place_tile(C, user, attachment_holes, (broken || burnt))
-	if(istype(C, /obj/item/cautery/prt)) //plating repair tool
-		if((broken || burnt) && C.use_tool(src, user, 0, volume=80))
-			to_chat(user, SPAN_DANGER("You fix some dents on the broken plating."))
-			icon_state = base_icon_state
-			burnt = FALSE
-			broken = FALSE
-
 
 /turf/open/floor/plating/welder_act(mob/living/user, obj/item/I)
 	..()
@@ -60,11 +53,6 @@
 		broken = FALSE
 
 	return TRUE
-
-/turf/open/floor/plating/rust_heretic_act()
-	if(prob(70))
-		new /obj/effect/temp_visual/glowing_rune(src)
-	ChangeTurf(/turf/open/floor/plating/rust)
 
 /turf/open/floor/plating/make_plating(force = FALSE)
 	return

@@ -112,62 +112,12 @@
 	name = "mindshield firing pin"
 	desc = "This Security firing pin authorizes the weapon for only mindshield-implanted users."
 	icon_state = "firing_pin_loyalty"
-	req_implant = /obj/item/implant/mindshield
+	req_implant = /obj/item/implant/weapons_auth
 
 /obj/item/firing_pin/implant/pindicate
 	name = "syndicate firing pin"
 	icon_state = "firing_pin_pindi"
 	req_implant = /obj/item/implant/weapons_auth
-
-
-
-// Honk pin, clown's joke item.
-// Can replace other pins. Replace a pin in cap's laser for extra fun!
-/obj/item/firing_pin/clown
-	name = "hilarious firing pin"
-	desc = "Advanced clowntech that can convert any firearm into a far more useful object."
-	color = "#FFFF00"
-	fail_message = SPAN_WARNING("HONK!")
-	force_replace = TRUE
-
-/obj/item/firing_pin/clown/pin_auth(mob/living/user)
-	playsound(src, 'sound/items/bikehorn.ogg', 50, TRUE)
-	return FALSE
-
-// Ultra-honk pin, clown's deadly joke item.
-// A gun with ultra-honk pin is useful for clown and useless for everyone else.
-/obj/item/firing_pin/clown/ultra
-	name = "ultra hilarious firing pin"
-
-/obj/item/firing_pin/clown/ultra/pin_auth(mob/living/user)
-	playsound(src.loc, 'sound/items/bikehorn.ogg', 50, TRUE)
-	if(QDELETED(user))  //how the hell...?
-		stack_trace("/obj/item/firing_pin/clown/ultra/pin_auth called with a [isnull(user) ? "null" : "invalid"] user.")
-		return TRUE
-	if(HAS_TRAIT(user, TRAIT_CLUMSY)) //clumsy
-		return TRUE
-	if(user.mind)
-		if(is_clown_job(user.mind.assigned_role)) //traitor clowns can use this, even though they're technically not clumsy
-			return TRUE
-		if(user.mind.has_antag_datum(/datum/antagonist/nukeop/clownop)) //clown ops aren't clumsy by default and technically don't have an assigned role of "Clown", but come on, they're basically clowns
-			return TRUE
-		if(user.mind.has_antag_datum(/datum/antagonist/nukeop/leader/clownop)) //Wanna hear a funny joke?
-			return TRUE //The clown op leader antag datum isn't a subtype of the normal clown op antag datum.
-	return FALSE
-
-/obj/item/firing_pin/clown/ultra/gun_insert(mob/living/user, obj/item/gun/G)
-	..()
-	G.clumsy_check = FALSE
-
-/obj/item/firing_pin/clown/ultra/gun_remove(mob/living/user)
-	gun.clumsy_check = initial(gun.clumsy_check)
-	..()
-
-// Now two times deadlier!
-/obj/item/firing_pin/clown/ultra/selfdestruct
-	name = "super ultra hilarious firing pin"
-	desc = "Advanced clowntech that can convert any firearm into a far more useful object. It has a small nitrobananium charge on it."
-	selfdestruct = TRUE
 
 
 // DNA-keyed pin.
@@ -204,108 +154,6 @@
 /obj/item/firing_pin/dna/dredd
 	desc = "This is a DNA-locked firing pin which only authorizes one user. Attempt to fire once to DNA-link. It has a small explosive charge on it."
 	selfdestruct = TRUE
-
-// Paywall pin, brought to you by ARMA 3 DLC.
-// Checks if the user has a valid bank account on an ID and if so attempts to extract a one-time payment to authorize use of the gun. Otherwise fails to shoot.
-/obj/item/firing_pin/paywall
-	name = "paywall firing pin"
-	desc = "A firing pin with a built-in configurable paywall."
-	color = "#FFD700"
-	fail_message = ""
-	var/list/gun_owners = list() //list of people who've accepted the license prompt. If this is the multi-payment pin, then this means they accepted the waiver that each shot will cost them money
-	var/payment_amount //how much gets paid out to license yourself to the gun
-	var/obj/item/card/id/pin_owner
-	var/multi_payment = FALSE //if true, user has to pay everytime they fire the gun
-	var/owned = FALSE
-	var/active_prompt = FALSE //purchase prompt to prevent spamming it
-
-/obj/item/firing_pin/paywall/attack_self(mob/user)
-	multi_payment = !multi_payment
-	to_chat(user, SPAN_NOTICE("You set the pin to [( multi_payment ) ? "process payment for every shot" : "one-time license payment"]."))
-
-/obj/item/firing_pin/paywall/examine(mob/user)
-	. = ..()
-	if(pin_owner)
-		. += SPAN_NOTICE("This firing pin is currently authorized to pay into the account of [pin_owner.registered_name].")
-
-/obj/item/firing_pin/paywall/gun_insert(mob/living/user, obj/item/gun/G)
-	if(!pin_owner)
-		to_chat(user, SPAN_WARNING("ERROR: Please swipe valid identification card before installing firing pin!"))
-		return
-	gun = G
-	forceMove(gun)
-	gun.pin = src
-	if(multi_payment)
-		gun.desc += SPAN_NOTICE(" This [gun.name] has a per-shot cost of [payment_amount] credit[( payment_amount > 1 ) ? "s" : ""].")
-		return
-	gun.desc += SPAN_NOTICE(" This [gun.name] has a license permit cost of [payment_amount] credit[( payment_amount > 1 ) ? "s" : ""].")
-	return
-
-
-/obj/item/firing_pin/paywall/gun_remove(mob/living/user)
-	gun.desc = initial(desc)
-	..()
-
-/obj/item/firing_pin/paywall/attackby(obj/item/M, mob/user, params)
-	if(istype(M, /obj/item/card/id))
-		var/obj/item/card/id/id = M
-		if(!id.registered_account)
-			to_chat(user, SPAN_WARNING("ERROR: Identification card lacks registered bank account!"))
-			return
-		if(id != pin_owner && owned)
-			to_chat(user, SPAN_WARNING("ERROR: This firing pin has already been authorized!"))
-			return
-		if(id == pin_owner)
-			to_chat(user, SPAN_NOTICE("You unlink the card from the firing pin."))
-			gun_owners -= user
-			pin_owner = null
-			owned = FALSE
-			return
-		var/transaction_amount = input(user, "Insert valid deposit amount for gun purchase", "Money Deposit") as null|num
-		if(transaction_amount < 1)
-			to_chat(user, SPAN_WARNING("ERROR: Invalid amount designated."))
-			return
-		if(!transaction_amount)
-			return
-		pin_owner = id
-		owned = TRUE
-		payment_amount = transaction_amount
-		gun_owners += user
-		to_chat(user, SPAN_NOTICE("You link the card to the firing pin."))
-
-/obj/item/firing_pin/paywall/pin_auth(mob/living/user)
-	if(!istype(user))//nice try commie
-		return FALSE
-	var/datum/bank_account/credit_card_details = user.get_bank_account()
-	if(user in gun_owners)
-		if(multi_payment && credit_card_details)
-			if(credit_card_details.adjust_money(-payment_amount))
-				pin_owner.registered_account.adjust_money(payment_amount)
-				return TRUE
-			to_chat(user, SPAN_WARNING("ERROR: User balance insufficent for successful transaction!"))
-			return FALSE
-		return TRUE
-	if(credit_card_details && !active_prompt)
-		var/license_request = tgui_alert(user, "Do you wish to pay [payment_amount] credit[( payment_amount > 1 ) ? "s" : ""] for [( multi_payment ) ? "each shot of [gun.name]" : "usage license of [gun.name]"]?", "Weapon Purchase", list("Yes", "No"))
-		active_prompt = TRUE
-		if(!user.canUseTopic(src, BE_CLOSE))
-			active_prompt = FALSE
-			return FALSE
-		switch(license_request)
-			if("Yes")
-				if(credit_card_details.adjust_money(-payment_amount))
-					pin_owner.registered_account.adjust_money(payment_amount)
-					gun_owners += user
-					to_chat(user, SPAN_NOTICE("Gun license purchased, have a secure day!"))
-					active_prompt = FALSE
-					return FALSE //we return false here so you don't click initially to fire, get the prompt, accept the prompt, and THEN the gun
-				to_chat(user, SPAN_WARNING("ERROR: User balance insufficent for successful transaction!"))
-				return FALSE
-			if("No")
-				to_chat(user, SPAN_WARNING("ERROR: User has declined to purchase gun license!"))
-				return FALSE
-	to_chat(user, SPAN_WARNING("ERROR: User has no valid bank account to substract neccesary funds from!"))
-	return FALSE
 
 // Explorer Firing Pin- Prevents use on station Z-Level, so it's justifiable to give Explorers guns that don't suck.
 /obj/item/firing_pin/explorer

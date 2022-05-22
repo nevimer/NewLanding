@@ -223,8 +223,6 @@
 			var/turf/place = colony_turfs[i]
 			if(!place)
 				return BAD_COORDS
-			if(!istype(place.loc, /area/lavaland/surface))
-				return BAD_AREA
 			if(disallowed_turf_types[place.type])
 				return BAD_TURF
 
@@ -435,9 +433,6 @@
 
 /obj/structure/mining_shuttle_beacon/proc/clear_cooldown()
 	anti_spam_cd = 0
-
-/obj/structure/mining_shuttle_beacon/attack_robot(mob/user)
-	return attack_hand(user) //So borgies can help
 
 #undef ZONE_SET
 #undef BAD_ZLEVEL

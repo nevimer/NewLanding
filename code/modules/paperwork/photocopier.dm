@@ -46,7 +46,6 @@
 
 /obj/machinery/photocopier/Initialize()
 	. = ..()
-	AddComponent(/datum/component/payment, 5, SSeconomy.get_dep_account(ACCOUNT_CIV), PAYMENT_CLINICAL)
 	toner_cartridge = new(src)
 
 /obj/machinery/photocopier/ui_interact(mob/user, datum/tgui/ui)
@@ -126,21 +125,6 @@
 				document_copy = null
 			else if(check_ass())
 				to_chat(ass, SPAN_NOTICE("You feel a slight pressure on your ass."))
-			return TRUE
-
-		// AI printing photos from their saved images.
-		if("ai_photo")
-			if(busy)
-				to_chat(usr, SPAN_WARNING("[src] is currently busy copying something. Please wait until it is finished."))
-				return FALSE
-			var/mob/living/silicon/ai/tempAI = usr
-			if(!length(tempAI.aicamera.stored))
-				to_chat(usr, SPAN_BOLDANNOUNCE("No images saved."))
-				return
-			var/datum/picture/selection = tempAI.aicamera.selectpicture(usr)
-			var/obj/item/photo/photo = new(loc, selection) // AI prints color photos only.
-			give_pixel_offset(photo)
-			toner_cartridge.charges -= PHOTO_TONER_USE
 			return TRUE
 
 		// Switch between greyscale and color photos

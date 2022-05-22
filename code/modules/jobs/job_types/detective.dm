@@ -18,9 +18,6 @@
 		/datum/job_department/security,
 		)
 
-	paycheck = PAYCHECK_MEDIUM
-	paycheck_department = ACCOUNT_SEC
-
 	display_order = JOB_DISPLAY_ORDER_DETECTIVE
 
 	banned_quirks = list(SEC_RESTRICTED_QUIRKS)
@@ -59,8 +56,6 @@
 		/obj/item/detective_scanner=1,\
 		/obj/item/melee/classic_baton=1)
 	mask = /obj/item/clothing/mask/cigarette
-
-	implants = list(/obj/item/implant/mindshield)
 
 	chameleon_extras = list(/obj/item/gun/ballistic/revolver/detective, /obj/item/clothing/glasses/sunglasses)
 

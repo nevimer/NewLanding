@@ -97,71 +97,6 @@
 			new_mob.ghostize(can_reenter_corpse = FALSE)
 			new_mob.key = null
 
-/datum/disease/transformation/jungle_fever
-	name = "Jungle Fever"
-	cure_text = "Death."
-	cures = list(/datum/reagent/medicine/adminordrazine)
-	spread_text = "Monkey Bites"
-	spread_flags = DISEASE_SPREAD_SPECIAL
-	viable_mobtypes = list(/mob/living/carbon/human)
-	permeability_mod = 1
-	cure_chance = 0.5
-	disease_flags = CAN_CARRY|CAN_RESIST
-	desc = "Monkeys with this disease will bite humans, causing humans to mutate into a monkey."
-	severity = DISEASE_SEVERITY_BIOHAZARD
-	stage_prob = 2
-	visibility_flags = NONE
-	agent = "Kongey Vibrion M-909"
-	new_form = /mob/living/carbon/human/species/monkey
-	bantype = ROLE_MONKEY
-
-
-	stage1 = list()
-	stage2 = list()
-	stage3 = list()
-	stage4 = list(SPAN_WARNING("Your back hurts."), SPAN_WARNING("You breathe through your mouth."),
-					SPAN_WARNING("You have a craving for bananas."), SPAN_WARNING("Your mind feels clouded."))
-	stage5 = list(SPAN_WARNING("You feel like monkeying around."))
-
-/datum/disease/transformation/jungle_fever/do_disease_transformation(mob/living/carbon/affected_mob)
-	if(affected_mob.mind && !IS_INFECTED_MONKEY(affected_mob.mind))
-		affected_mob.mind.add_antag_datum(/datum/antagonist/monkey)
-		affected_mob.monkeyize()
-		ADD_TRAIT(affected_mob, TRAIT_VENTCRAWLER_ALWAYS, type)
-
-
-/datum/disease/transformation/jungle_fever/stage_act(delta_time, times_fired)
-	. = ..()
-	if(!.)
-		return
-
-	switch(stage)
-		if(2)
-			if(DT_PROB(1, delta_time))
-				to_chat(affected_mob, SPAN_NOTICE("Your [pick("back", "arm", "leg", "elbow", "head")] itches."))
-		if(3)
-			if(DT_PROB(2, delta_time))
-				to_chat(affected_mob, SPAN_DANGER("You feel a stabbing pain in your head."))
-				affected_mob.add_confusion(10)
-		if(4)
-			if(DT_PROB(1.5, delta_time))
-				affected_mob.say(pick("Eeek, ook ook!", "Eee-eeek!", "Eeee!", "Ungh, ungh."), forced = "jungle fever")
-
-
-/datum/disease/transformation/jungle_fever/cure()
-	affected_mob.mind.remove_antag_datum(/datum/antagonist/monkey)
-	..()
-
-/datum/disease/transformation/jungle_fever/monkeymode
-	visibility_flags = HIDDEN_SCANNER|HIDDEN_PANDEMIC
-	disease_flags = CAN_CARRY //no vaccines! no cure!
-
-/datum/disease/transformation/jungle_fever/monkeymode/after_add()
-	if(affected_mob && !IS_MONKEY_LEADER(affected_mob.mind))
-		visibility_flags = NONE
-
-
-
 /datum/disease/transformation/robot
 
 	name = "Robotic Transformation"
@@ -232,41 +167,6 @@
 			if(DT_PROB(10, delta_time))
 				affected_mob.say(pick("You look delicious.", "Going to... devour you...", "Hsssshhhhh!"), forced = "xenomorph transformation")
 
-
-/datum/disease/transformation/slime
-	name = "Advanced Mutation Transformation"
-	cure_text = "frost oil"
-	cures = list(/datum/reagent/consumable/frostoil)
-	cure_chance = 55
-	agent = "Advanced Mutation Toxin"
-	desc = "This highly concentrated extract converts anything into more of itself."
-	severity = DISEASE_SEVERITY_BIOHAZARD
-	visibility_flags = NONE
-	stage1 = list("You don't feel very well.")
-	stage2 = list("Your skin feels a little slimy.")
-	stage3 = list(SPAN_DANGER("Your appendages are melting away."), SPAN_DANGER("Your limbs begin to lose their shape."))
-	stage4 = list(SPAN_DANGER("You are turning into a slime."))
-	stage5 = list(SPAN_DANGER("You have become a slime."))
-	new_form = /mob/living/simple_animal/slime/random
-
-
-/datum/disease/transformation/slime/stage_act(delta_time, times_fired)
-	. = ..()
-	if(!.)
-		return
-
-	switch(stage)
-		if(1)
-			if(ishuman(affected_mob) && affected_mob.dna)
-				if(affected_mob.dna.species.id == "slime" || affected_mob.dna.species.id == "stargazer" || affected_mob.dna.species.id == "lum")
-					stage = 5
-		if(3)
-			if(ishuman(affected_mob))
-				var/mob/living/carbon/human/human = affected_mob
-				if(human.dna.species.id != "slime" && affected_mob.dna.species.id != "stargazer" && affected_mob.dna.species.id != "lum")
-					human.set_species(/datum/species/jelly/slime)
-
-
 /datum/disease/transformation/corgi
 	name = "The Barkening"
 	cure_text = "Death"
@@ -294,25 +194,6 @@
 		if(4)
 			if (DT_PROB(10, delta_time))
 				affected_mob.say(pick("Bark!", "AUUUUUU"), forced = "corgi transformation")
-
-
-/datum/disease/transformation/morph
-	name = "Gluttony's Blessing"
-	cure_text = "Nothing"
-	cures = list(/datum/reagent/consumable/nothing)
-	agent = "Gluttony's Blessing"
-	desc = "A 'gift' from somewhere terrible."
-	stage_prob = 10
-	severity = DISEASE_SEVERITY_BIOHAZARD
-	visibility_flags = NONE
-	stage1 = list("Your stomach rumbles.")
-	stage2 = list("Your skin feels saggy.")
-	stage3 = list(SPAN_DANGER("Your appendages are melting away."), SPAN_DANGER("Your limbs begin to lose their shape."))
-	stage4 = list(SPAN_DANGER("You're ravenous."))
-	stage5 = list(SPAN_DANGER("You have become a morph."))
-	new_form = /mob/living/simple_animal/hostile/morph
-	infectable_biotypes = MOB_ORGANIC|MOB_MINERAL|MOB_UNDEAD //magic!
-	transformed_antag_datum = /datum/antagonist/morph
 
 /datum/disease/transformation/gondola
 	name = "Gondola Transformation"

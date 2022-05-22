@@ -11,11 +11,7 @@
 	outfit = /datum/outfit/job/doctor
 	plasmaman_outfit = /datum/outfit/plasmaman/medical
 
-	paycheck = PAYCHECK_MEDIUM
-	paycheck_department = ACCOUNT_MED
-
 	display_order = JOB_DISPLAY_ORDER_MEDICAL_DOCTOR
-	bounty_types = CIV_JOB_MED
 	departments_list = list(
 		/datum/job_department/medical,
 		)
@@ -28,7 +24,6 @@
 		/obj/item/retractor/advanced = 6,
 		/obj/item/cautery/advanced = 6,
 		/obj/item/reagent_containers/glass/bottle/formaldehyde = 6,
-		/obj/effect/spawner/lootdrop/organ_spawner = 5,
 		/obj/effect/spawner/lootdrop/memeorgans = 1
 	)
 

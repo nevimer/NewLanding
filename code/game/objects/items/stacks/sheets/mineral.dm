@@ -373,9 +373,7 @@ GLOBAL_LIST_INIT(snow_recipes, list ( \
 */
 
 
-GLOBAL_LIST_INIT(adamantine_recipes, list(
-	new /datum/stack_recipe("incomplete servant golem shell", /obj/item/golem_shell/servant, req_amount=1, res_amount=1),
-	))
+GLOBAL_LIST_INIT(adamantine_recipes, list())
 
 /obj/item/stack/sheet/mineral/adamantine
 	name = "adamantine"
@@ -417,34 +415,6 @@ GLOBAL_LIST_INIT(adamantine_recipes, list(
 	merge_type = /obj/item/stack/sheet/mineral/mythril
 
 /*
- * Alien Alloy
- */
-/obj/item/stack/sheet/mineral/abductor
-	name = "alien alloy"
-	icon = 'icons/obj/abductor.dmi'
-	icon_state = "sheet-abductor"
-	inhand_icon_state = "sheet-abductor"
-	singular_name = "alien alloy sheet"
-	sheettype = "abductor"
-	mats_per_unit = list(/datum/material/alloy/alien=MINERAL_MATERIAL_AMOUNT)
-	merge_type = /obj/item/stack/sheet/mineral/abductor
-	material_type = /datum/material/alloy/alien
-	walltype = /turf/closed/wall/mineral/abductor
-
-GLOBAL_LIST_INIT(abductor_recipes, list ( \
-	new/datum/stack_recipe("alien bed", /obj/structure/bed/abductor, 2, one_per_turf = 1, on_floor = 1), \
-	new/datum/stack_recipe("alien locker", /obj/structure/closet/abductor, 2, time = 15, one_per_turf = 1, on_floor = 1), \
-	new/datum/stack_recipe("alien table frame", /obj/structure/table_frame/abductor, 1, time = 15, one_per_turf = 1, on_floor = 1), \
-	new/datum/stack_recipe("alien airlock assembly", /obj/structure/door_assembly/door_assembly_abductor, 4, time = 20, one_per_turf = 1, on_floor = 1), \
-	null, \
-	new/datum/stack_recipe("alien floor tile", /obj/item/stack/tile/mineral/abductor, 1, 4, 20), \
-	))
-
-/obj/item/stack/sheet/mineral/abductor/get_main_recipes()
-	. = ..()
-	. += GLOB.abductor_recipes
-
-/*
  * Coal
  */
 
@@ -480,7 +450,6 @@ GLOBAL_LIST_INIT(abductor_recipes, list ( \
 
 //Metal Hydrogen
 GLOBAL_LIST_INIT(metalhydrogen_recipes, list(
-	new /datum/stack_recipe("incomplete servant golem shell", /obj/item/golem_shell/servant, req_amount=20, res_amount=1),
 	new /datum/stack_recipe("ancient armor", /obj/item/clothing/suit/armor/elder_atmosian, req_amount = 8, res_amount = 1),
 	new /datum/stack_recipe("ancient helmet", /obj/item/clothing/head/helmet/elder_atmosian, req_amount = 5, res_amount = 1),
 	new /datum/stack_recipe("metallic hydrogen axe", /obj/item/fireaxe/metal_h2_axe, req_amount = 15, res_amount = 1),

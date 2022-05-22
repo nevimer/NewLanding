@@ -15,11 +15,7 @@
 	outfit = /datum/outfit/job/warden
 	plasmaman_outfit = /datum/outfit/plasmaman/warden
 
-	paycheck = PAYCHECK_HARD
-	paycheck_department = ACCOUNT_SEC
-
 	display_order = JOB_DISPLAY_ORDER_WARDEN
-	bounty_types = CIV_JOB_SEC
 	departments_list = list(
 		/datum/job_department/security,
 		)
@@ -61,7 +57,5 @@
 	satchel = /obj/item/storage/backpack/satchel/sec
 	duffelbag = /obj/item/storage/backpack/duffelbag/sec
 	box = /obj/item/storage/box/survival/security
-
-	implants = list(/obj/item/implant/mindshield)
 
 	id_trim = /datum/id_trim/job/warden

@@ -708,24 +708,6 @@
 	log_admin("[key_name(usr)] pod-spawned [chosen] at [AREACOORD(usr)]")
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Podspawn Atom") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/datum/admins/proc/spawn_cargo(object as text)
-	set category = "Debug"
-	set desc = "(atom path) Spawn a cargo crate"
-	set name = "Spawn Cargo"
-
-	if(!check_rights(R_SPAWN))
-		return
-
-	var/chosen = pick_closest_path(object, make_types_fancy(subtypesof(/datum/supply_pack)))
-	if(!chosen)
-		return
-	var/datum/supply_pack/S = new chosen
-	S.admin_spawned = TRUE
-	S.generate(get_turf(usr))
-
-	log_admin("[key_name(usr)] spawned cargo pack [chosen] at [AREACOORD(usr)]")
-	SSblackbox.record_feedback("tally", "admin_verb", 1, "Spawn Cargo") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /datum/admins/proc/show_traitor_panel(mob/target_mob in GLOB.mob_list)
 	set category = "Admin.Game"
 	set desc = "Edit mobs's memory and role"
@@ -766,29 +748,6 @@
 	log_admin("[key_name(usr)] toggled guests game entering [!new_guest_ban ? "" : "dis"]allowed.")
 	message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] toggled guests game entering [!new_guest_ban ? "" : "dis"]allowed."))
 	SSblackbox.record_feedback("nested tally", "admin_toggle", 1, list("Toggle Guests", "[!new_guest_ban ? "Enabled" : "Disabled"]")) //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/datum/admins/proc/output_ai_laws()
-	var/ai_number = 0
-	for(var/i in GLOB.silicon_mobs)
-		var/mob/living/silicon/S = i
-		ai_number++
-		if(isAI(S))
-			to_chat(usr, "<b>AI [key_name(S, usr)]'s laws:</b>", confidential = TRUE)
-		else if(iscyborg(S))
-			var/mob/living/silicon/robot/R = S
-			to_chat(usr, "<b>CYBORG [key_name(S, usr)] [R.connected_ai?"(Slaved to: [key_name(R.connected_ai)])":"(Independent)"]: laws:</b>", confidential = TRUE)
-		else if (ispAI(S))
-			to_chat(usr, "<b>pAI [key_name(S, usr)]'s laws:</b>", confidential = TRUE)
-		else
-			to_chat(usr, "<b>SOMETHING SILICON [key_name(S, usr)]'s laws:</b>", confidential = TRUE)
-
-		if (S.laws == null)
-			to_chat(usr, "[key_name(S, usr)]'s laws are null?? Contact a coder.", confidential = TRUE)
-		else
-			S.laws.show_laws(usr)
-	if(!ai_number)
-		to_chat(usr, "<b>No AIs located</b>" , confidential = TRUE)
-
 
 /datum/admins/proc/manage_free_slots()
 	if(!check_rights())

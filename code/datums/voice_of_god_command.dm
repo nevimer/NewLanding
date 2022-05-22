@@ -32,7 +32,7 @@ GLOBAL_LIST_INIT(voice_of_god_commands, init_voice_of_god_commands())
  */
 /proc/voice_of_god(message, mob/living/user, list/span_list, base_multiplier = 1, include_speaker = FALSE, message_admins = TRUE)
 	var/log_message = uppertext(message)
-	var/is_cultie = IS_CULTIST(user)
+	var/is_cultie = FALSE
 	if(LAZYLEN(span_list))
 		if(is_cultie)
 			span_list = list("narsiesmall")
@@ -289,16 +289,6 @@ GLOBAL_LIST_INIT(voice_of_god_commands, init_voice_of_god_commands())
 	var/iteration = 1
 	for(var/mob/living/target as anything in listeners)
 		addtimer(CALLBACK(target, /atom/movable/proc/say, "Who's there?"), 0.5 SECONDS * iteration)
-		iteration++
-
-/// This command forces silicon listeners to state all their laws.
-/datum/voice_of_god_command/state_laws
-	trigger = "state\\s*(your)?\\s*laws"
-
-/datum/voice_of_god_command/state_laws/execute(list/listeners, mob/living/user, power_multiplier = 1, message)
-	var/iteration = 0
-	for(var/mob/living/silicon/target in listeners)
-		addtimer(CALLBACK(target, /mob/living/silicon/proc/statelaws, TRUE), (3 SECONDS * iteration) + 0.5 SECONDS)
 		iteration++
 
 /// This command forces the listeners to take step in a direction chosen by the user, otherwise a random cardinal one.
