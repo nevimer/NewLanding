@@ -86,49 +86,12 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 #define isxenohybrid(A) (is_species(A,/datum/species/xeno))
 #define isroundstartslime(A) (is_species(A,/datum/species/jelly/roundstartslime))
 
-//more carbon mobs
-
-#define isalien(A) (istype(A, /mob/living/carbon/alien))
-
-#define islarva(A) (istype(A, /mob/living/carbon/alien/larva))
-
-#define isalienadult(A) (istype(A, /mob/living/carbon/alien/humanoid) || istype(A, /mob/living/simple_animal/hostile/alien))
-
-#define isalienhunter(A) (istype(A, /mob/living/carbon/alien/humanoid/hunter))
-
-#define isaliensentinel(A) (istype(A, /mob/living/carbon/alien/humanoid/sentinel))
-
-#define isalienroyal(A) (istype(A, /mob/living/carbon/alien/humanoid/royal))
-
-#define isalienqueen(A) (istype(A, /mob/living/carbon/alien/humanoid/royal/queen))
-
-//Silicon mobs
-#define issilicon(A) (istype(A, /mob/living/silicon))
-
-#define issiliconoradminghost(A) (istype(A, /mob/living/silicon) || isAdminGhostAI(A))
-
-#define iscyborg(A) (istype(A, /mob/living/silicon/robot))
-
-#define isAI(A) (istype(A, /mob/living/silicon/ai))
-
-#define ispAI(A) (istype(A, /mob/living/silicon/pai))
-
 //Simple animals
 #define isanimal(A) (istype(A, /mob/living/simple_animal))
-
-#define isrevenant(A) (istype(A, /mob/living/simple_animal/revenant))
-
-#define isbot(A) (istype(A, /mob/living/simple_animal/bot))
-
-#define isshade(A) (istype(A, /mob/living/simple_animal/shade))
 
 #define ismouse(A) (istype(A, /mob/living/simple_animal/mouse))
 
 #define iscow(A) (istype(A, /mob/living/simple_animal/cow))
-
-#define isslime(A) (istype(A, /mob/living/simple_animal/slime))
-
-#define isdrone(A) (istype(A, /mob/living/simple_animal/drone))
 
 #define iscat(A) (istype(A, /mob/living/simple_animal/pet/cat))
 
@@ -142,14 +105,6 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 
 #define isregalrat(A) (istype(A, /mob/living/simple_animal/hostile/regalrat))
 
-#define isswarmer(A) (istype(A, /mob/living/simple_animal/hostile/swarmer))
-
-#define isguardian(A) (istype(A, /mob/living/simple_animal/hostile/guardian))
-
-#define isconstruct(A) (istype(A, /mob/living/simple_animal/hostile/construct))
-
-#define ismegafauna(A) (istype(A, /mob/living/simple_animal/hostile/megafauna))
-
 #define isclown(A) (istype(A, /mob/living/simple_animal/hostile/retaliate/clown))
 
 
@@ -161,8 +116,6 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 #define isnewplayer(A) (istype(A, /mob/dead/new_player))
 
 #define isovermind(A) (istype(A, /mob/camera/blob))
-
-#define issentientdisease(A) (istype(A, /mob/camera/disease))
 
 #define iscameramob(A) (istype(A, /mob/camera))
 

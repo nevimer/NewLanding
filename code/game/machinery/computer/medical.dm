@@ -141,16 +141,6 @@
 					dat += "<tr><td><A href='?src=[REF(src)];print_p=1'>Print Record</A></td></tr>"
 					dat += "<tr><td><A href='?src=[REF(src)];screen=2'>Back</A></td></tr>"
 					dat += "</table>"
-				if(5)
-					dat += "<CENTER><B>Virus Database</B></CENTER>"
-					for(var/Dt in typesof(/datum/disease/))
-						var/datum/disease/Dis = new Dt(0)
-						if(istype(Dis, /datum/disease/advance))
-							continue // TODO (tm): Add advance diseases to the virus database which no one uses.
-						if(!Dis.desc)
-							continue
-						dat += "<br><a href='?src=[REF(src)];vir=[Dt]'>[Dis.name]</a>"
-					dat += "<br><a href='?src=[REF(src)];screen=1'>Back</a>"
 		else
 			dat += "<A href='?src=[REF(src)];login=1'>{Log In}</A>"
 	var/datum/browser/popup = new(user, "med_rec", "Medical Records Console", 600, 400)
@@ -166,7 +156,7 @@
 	if(!(active2 in GLOB.data_core.medical))
 		active2 = null
 
-	if(usr.contents.Find(src) || (in_range(src, usr) && isturf(loc)) || issilicon(usr) || isAdminGhostAI(usr))
+	if(usr.contents.Find(src) || (in_range(src, usr) && isturf(loc)) || isAdminGhostAI(usr))
 		usr.set_machine(src)
 		if(href_list["temp"])
 			temp = null
@@ -194,13 +184,7 @@
 			if(isliving(usr))
 				var/mob/living/L = usr
 				I = L.get_idcard(TRUE)
-			if(issilicon(usr))
-				active1 = null
-				active2 = null
-				authenticated = 1
-				rank = "AI"
-				screen = 1
-			else if(isAdminGhostAI(usr))
+			if(isAdminGhostAI(usr))
 				active1 = null
 				active2 = null
 				authenticated = 1
@@ -223,22 +207,6 @@
 
 				active1 = null
 				active2 = null
-
-			else if(href_list["vir"])
-				var/type = href_list["vir"]
-				var/datum/disease/Dis = new type(0)
-				var/AfS = ""
-				for(var/mob/M in Dis.viable_mobtypes)
-					AfS += " [initial(M.name)];"
-				temp = {"<b>Name:</b> [Dis.name]
-<BR><b>Number of stages:</b> [Dis.max_stages]
-<BR><b>Spread:</b> [Dis.spread_text] Transmission
-<BR><b>Possible Cure:</b> [(Dis.cure_text||"none")]
-<BR><b>Affected Lifeforms:</b>[AfS]
-<BR>
-<BR><b>Notes:</b> [Dis.desc]
-<BR>
-<BR><b>Severity:</b> [Dis.severity]"}
 
 			else if(href_list["del_all"])
 				temp = "Are you sure you wish to delete all records?<br>\n\t<A href='?src=[REF(src)];temp=1;del_all2=1'>Yes</A><br>\n\t<A href='?src=[REF(src)];temp=1'>No</A><br>"
@@ -545,7 +513,7 @@
 
 /obj/machinery/computer/med_data/proc/canUseMedicalRecordsConsole(mob/user, message = 1, record1, record2)
 	if(user && message && authenticated)
-		if(user.canUseTopic(src, !issilicon(user)))
+		if(user.canUseTopic(src))
 			if(!record1 || record1 == active1)
 				if(!record2 || record2 == active2)
 					return TRUE

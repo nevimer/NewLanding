@@ -167,10 +167,6 @@
 	value_mode = VALUE_MODE_NUM
 	config_entry_value = list( //DEFAULTS
 	/mob/living/simple_animal = 1,
-	/mob/living/silicon/pai = 1,
-	/mob/living/carbon/alien/humanoid/hunter = -1,
-	/mob/living/carbon/alien/humanoid/royal/praetorian = 1,
-	/mob/living/carbon/alien/humanoid/royal/queen = 3
 	)
 
 /datum/config_entry/keyed_list/multiplicative_movespeed/ValidateAndSet()
@@ -224,12 +220,6 @@
 
 /datum/config_entry/number/outdated_movedelay/human_delay
 	movedelay_type = /mob/living/carbon/human
-/datum/config_entry/number/outdated_movedelay/robot_delay
-	movedelay_type = /mob/living/silicon/robot
-/datum/config_entry/number/outdated_movedelay/alien_delay
-	movedelay_type = /mob/living/carbon/alien
-/datum/config_entry/number/outdated_movedelay/slime_delay
-	movedelay_type = /mob/living/simple_animal/slime
 /datum/config_entry/number/outdated_movedelay/animal_delay
 	movedelay_type = /mob/living/simple_animal
 /////////////////////////////////////////////////
@@ -251,27 +241,6 @@
 /datum/config_entry/flag/silent_borg
 
 /datum/config_entry/flag/sandbox_autoclose // close the sandbox panel after spawning an item, potentially reducing griff
-
-/datum/config_entry/number/default_laws //Controls what laws the AI spawns with.
-	config_entry_value = 0
-	min_val = 0
-	max_val = 3
-
-/datum/config_entry/number/silicon_max_law_amount
-	config_entry_value = 12
-	min_val = 0
-
-/datum/config_entry/keyed_list/random_laws
-	key_mode = KEY_MODE_TEXT
-	value_mode = VALUE_MODE_FLAG
-
-/datum/config_entry/keyed_list/law_weight
-	key_mode = KEY_MODE_TEXT
-	value_mode = VALUE_MODE_NUM
-	splitter = ","
-
-/datum/config_entry/number/max_law_len
-	config_entry_value = 1024
 
 /datum/config_entry/number/overflow_cap
 	config_entry_value = -1
@@ -348,14 +317,6 @@
 	min_val = 0
 
 /datum/config_entry/flag/dynamic_config_enabled
-
-/datum/config_entry/string/drone_required_role
-	config_entry_value = "Silicon"
-
-/datum/config_entry/number/drone_role_playtime
-	config_entry_value = 14
-	min_val = 0
-	integer = FALSE // It is in hours, but just in case one wants to specify minutes.
 
 /datum/config_entry/flag/sdql_spells
 

@@ -208,18 +208,6 @@
 		switch(href_list["simplemake"])
 			if("observer")
 				M.change_mob_type( /mob/dead/observer , null, null, delmob )
-			if("drone")
-				M.change_mob_type( /mob/living/carbon/alien/humanoid/drone , null, null, delmob )
-			if("hunter")
-				M.change_mob_type( /mob/living/carbon/alien/humanoid/hunter , null, null, delmob )
-			if("queen")
-				M.change_mob_type( /mob/living/carbon/alien/humanoid/royal/queen , null, null, delmob )
-			if("praetorian")
-				M.change_mob_type( /mob/living/carbon/alien/humanoid/royal/praetorian , null, null, delmob )
-			if("sentinel")
-				M.change_mob_type( /mob/living/carbon/alien/humanoid/sentinel , null, null, delmob )
-			if("larva")
-				M.change_mob_type( /mob/living/carbon/alien/larva , null, null, delmob )
 			if("human")
 				var/posttransformoutfit = usr.client.robust_dress_shop()
 				if (!posttransformoutfit)
@@ -229,8 +217,6 @@
 					newmob.equipOutfit(posttransformoutfit)
 			if("monkey")
 				M.change_mob_type( /mob/living/carbon/human/species/monkey , null, null, delmob )
-			if("robot")
-				M.change_mob_type( /mob/living/silicon/robot , null, null, delmob )
 			if("cat")
 				M.change_mob_type( /mob/living/simple_animal/pet/cat , null, null, delmob )
 			if("runtime")
@@ -495,9 +481,6 @@
 		if(!ismob(M))
 			to_chat(usr, "This can only be used on instances of type /mob.", confidential = TRUE)
 			return
-		if(isAI(M))
-			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai.", confidential = TRUE)
-			return
 
 		if(tgui_alert(usr, "Send [key_name(M)] to Prison?", "Message", list("Yes", "No")) != "Yes")
 			return
@@ -543,9 +526,6 @@
 		if(!isliving(M))
 			to_chat(usr, "This can only be used on instances of type /mob/living.", confidential = TRUE)
 			return
-		if(isAI(M))
-			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai.", confidential = TRUE)
-			return
 		var/mob/living/L = M
 
 		for(var/obj/item/I in L)
@@ -568,9 +548,6 @@
 		var/mob/M = locate(href_list["tdome2"])
 		if(!isliving(M))
 			to_chat(usr, "This can only be used on instances of type /mob/living.", confidential = TRUE)
-			return
-		if(isAI(M))
-			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai.", confidential = TRUE)
 			return
 		var/mob/living/L = M
 
@@ -595,9 +572,6 @@
 		if(!isliving(M))
 			to_chat(usr, "This can only be used on instances of type /mob/living.", confidential = TRUE)
 			return
-		if(isAI(M))
-			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai.", confidential = TRUE)
-			return
 		var/mob/living/L = M
 
 		L.Unconscious(100)
@@ -617,9 +591,6 @@
 		var/mob/M = locate(href_list["tdomeobserve"])
 		if(!isliving(M))
 			to_chat(usr, "This can only be used on instances of type /mob/living.", confidential = TRUE)
-			return
-		if(isAI(M))
-			to_chat(usr, "This cannot be used on instances of type /mob/living/silicon/ai.", confidential = TRUE)
 			return
 		var/mob/living/L = M
 
@@ -649,17 +620,6 @@
 		L.revive(full_heal = TRUE, admin_revive = TRUE)
 		message_admins(SPAN_DANGER("Admin [key_name_admin(usr)] healed / revived [key_name_admin(L)]!"))
 		log_admin("[key_name(usr)] healed / Revived [key_name(L)].")
-
-	else if(href_list["makealien"])
-		if(!check_rights(R_SPAWN))
-			return
-
-		var/mob/living/carbon/human/H = locate(href_list["makealien"])
-		if(!istype(H))
-			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human.", confidential = TRUE)
-			return
-
-		usr.client.cmd_admin_alienize(H)
 
 	else if(href_list["makeanimal"])
 		if(!check_rights(R_SPAWN))
@@ -1092,7 +1052,7 @@
 
 		switch(where)
 			if("inhand")
-				if (!iscarbon(usr) && !iscyborg(usr))
+				if (!iscarbon(usr))
 					to_chat(usr, "Can only spawn in hand when you're a carbon mob or cyborg.", confidential = TRUE)
 					where = "onfloor"
 				target = usr

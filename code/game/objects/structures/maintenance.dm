@@ -21,7 +21,6 @@ at the cost of risking a vicious bite.**/
 					/obj/item/restraints/handcuffs/cable/blue = 1,
 					/obj/item/restraints/handcuffs/cable/green = 1,
 					/obj/item/restraints/handcuffs/cable/pink = 1,
-					/obj/item/restraints/handcuffs/alien = 2,
 					/obj/item/coin/bananium = 9,
 					/obj/item/kitchen/knife/butcher = 5,
 					/obj/item/coin/mythril = 1) //the loot table isn't that great and should probably be improved and expanded later.
@@ -55,8 +54,6 @@ at the cost of risking a vicious bite.**/
 
 /obj/structure/moisture_trap/attack_hand(mob/user, list/modifiers)
 	. = ..()
-	if(iscyborg(user) || isalien(user))
-		return
 	if(!CanReachInside(user))
 		to_chat(user, SPAN_WARNING("You need to lie down to reach into [src]."))
 		return
@@ -80,7 +77,7 @@ at the cost of risking a vicious bite.**/
 	to_chat(user, SPAN_WARNING("You find nothing of value..."))
 
 /obj/structure/moisture_trap/attackby(obj/item/I, mob/user, params)
-	if(iscyborg(user) || isalien(user) || !CanReachInside(user))
+	if(!CanReachInside(user))
 		return ..()
 	add_fingerprint(user)
 	if(istype(I, /obj/item/reagent_containers))

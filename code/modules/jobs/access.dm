@@ -4,10 +4,6 @@
 	//check if it doesn't require any access at all
 	if(src.check_access(null))
 		return TRUE
-	if(issilicon(M))
-		if(ispAI(M))
-			return FALSE
-		return TRUE //AI can do whatever it wants
 	if(isAdminGhostAI(M))
 		//Access can't stop the abuse
 		return TRUE
@@ -17,11 +13,6 @@
 		var/mob/living/carbon/human/H = M
 		//if they are holding or wearing a card that has access, that works
 		if(check_access(H.get_active_held_item()) || src.check_access(H.wear_id))
-			return TRUE
-	else if(isalienadult(M))
-		var/mob/living/carbon/george = M
-		//they can only hold things :(
-		if(check_access(george.get_active_held_item()))
 			return TRUE
 	else if(isanimal(M))
 		var/mob/living/simple_animal/A = M

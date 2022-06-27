@@ -98,7 +98,6 @@ GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/run_weather,
 	/client/proc/mass_zombie_infection,
 	/client/proc/mass_zombie_cure,
-	/client/proc/polymorph_all,
 	/client/proc/show_tip,
 	/client/proc/smite,
 	/client/proc/spawn_pollution
@@ -178,8 +177,7 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/datum/admins/proc/create_or_modify_area,
 	/client/proc/check_timer_sources,
 	/client/proc/toggle_cdn,
-	/client/proc/cmd_give_sdql_spell,
-	/client/proc/adventure_manager
+	/client/proc/cmd_give_sdql_spell
 	)
 GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess, /proc/release))
 GLOBAL_PROTECT(admin_verbs_possess)
@@ -662,21 +660,6 @@ GLOBAL_PROTECT(admin_verbs_deadmins)
 		log_admin("[key_name(usr)] removed the spell [removed_spell] from [key_name(removal_target)].")
 		message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] removed the spell [removed_spell] from [key_name_admin(removal_target)]."))
 		SSblackbox.record_feedback("tally", "admin_verb", 1, "Remove Spell") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/give_disease(mob/living/T in GLOB.mob_living_list)
-	set category = "Admin.Fun"
-	set name = "Give Disease"
-	set desc = "Gives a Disease to a mob."
-	if(!istype(T))
-		to_chat(src, SPAN_NOTICE("You can only give a disease to a mob of type /mob/living."), confidential = TRUE)
-		return
-	var/datum/disease/D = input("Choose the disease to give to that guy", "ACHOO") as null|anything in sortList(SSdisease.diseases, /proc/cmp_typepaths_asc)
-	if(!D)
-		return
-	T.ForceContractDisease(new D, FALSE, TRUE)
-	SSblackbox.record_feedback("tally", "admin_verb", 1, "Give Disease") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
-	message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] gave [key_name_admin(T)] the disease [D]."))
 
 /client/proc/object_say(obj/O in world)
 	set category = "Admin.Events"

@@ -465,11 +465,6 @@
 	icon_state = "donkpocketboxpizza"
 	donktype = /obj/item/food/donkpocket/pizza
 
-/obj/item/storage/box/donkpockets/donkpocketgondola
-	name = "box of gondola-flavoured donk-pockets"
-	icon_state = "donkpocketboxgondola"
-	donktype = /obj/item/food/donkpocket/gondola
-
 /obj/item/storage/box/donkpockets/donkpocketberry
 	name = "box of berry-flavoured donk-pockets"
 	icon_state = "donkpocketboxberry"
@@ -619,16 +614,6 @@
 /obj/item/storage/box/zipties/PopulateContents()
 	for(var/i in 1 to 7)
 		new /obj/item/restraints/handcuffs/cable/zipties(src)
-
-/obj/item/storage/box/alienhandcuffs
-	name = "box of spare handcuffs"
-	desc = "A box full of handcuffs."
-	icon_state = "alienbox"
-	illustration = "handcuff"
-
-/obj/item/storage/box/alienhandcuffs/PopulateContents()
-	for(var/i in 1 to 7)
-		new /obj/item/restraints/handcuffs/alien(src)
 
 /obj/item/storage/box/fakesyndiesuit
 	name = "boxed space suit and helmet"

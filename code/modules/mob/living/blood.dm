@@ -199,12 +199,6 @@
 		var/mob/living/carbon/C = AM
 		if(blood_id == C.get_blood_id())//both mobs have the same blood substance
 			if(blood_id == /datum/reagent/blood) //normal blood
-				if(blood_data["viruses"])
-					for(var/thing in blood_data["viruses"])
-						var/datum/disease/D = thing
-						if((D.spread_flags & DISEASE_SPREAD_SPECIAL) || (D.spread_flags & DISEASE_SPREAD_NON_CONTAGIOUS))
-							continue
-						C.ForceContractDisease(D)
 				if(!(blood_data["blood_type"] in get_safe_blood(C.dna.blood_type)))
 					C.reagents.add_reagent(/datum/reagent/toxin, amount * 0.5)
 					return TRUE
@@ -225,13 +219,7 @@
 		//set the blood data
 		blood_data["viruses"] = list()
 
-		for(var/thing in diseases)
-			var/datum/disease/D = thing
-			blood_data["viruses"] += D.Copy()
-
 		blood_data["blood_DNA"] = dna.unique_enzymes
-		if(LAZYLEN(disease_resistances))
-			blood_data["resistances"] = disease_resistances.Copy()
 		var/list/temp_chem = list()
 		for(var/datum/reagent/R in reagents.reagent_list)
 			temp_chem[R.type] = R.volume
@@ -323,7 +311,7 @@
 				qdel(drop)//the drip is replaced by a bigger splatter
 		else
 			T.pollute_turf(/datum/pollutant/metallic_scent, 5)
-			drop = new(T, get_static_viruses())
+			drop = new(T)
 			drop.transfer_mob_blood_dna(src)
 			return
 
@@ -332,7 +320,7 @@
 	// Find a blood decal or create a new one.
 	var/obj/effect/decal/cleanable/blood/B = locate() in T
 	if(!B)
-		B = new /obj/effect/decal/cleanable/blood/splatter(T, get_static_viruses())
+		B = new /obj/effect/decal/cleanable/blood/splatter(T)
 	if(QDELETED(B)) //Give it up
 		return
 	B.bloodiness = min((B.bloodiness + BLOOD_AMOUNT_PER_DECAL), BLOOD_POOL_MAX)
@@ -343,18 +331,3 @@
 /mob/living/carbon/human/add_splatter_floor(turf/T, small_drip)
 	if(!(NOBLOOD in dna.species.species_traits))
 		..()
-
-/mob/living/carbon/alien/add_splatter_floor(turf/T, small_drip)
-	if(!T)
-		T = get_turf(src)
-	var/obj/effect/decal/cleanable/xenoblood/B = locate() in T.contents
-	if(!B)
-		B = new(T)
-	B.add_blood_DNA(list("UNKNOWN DNA" = "X*"))
-
-/mob/living/silicon/robot/add_splatter_floor(turf/T, small_drip)
-	if(!T)
-		T = get_turf(src)
-	var/obj/effect/decal/cleanable/oil/B = locate() in T.contents
-	if(!B)
-		B = new(T)

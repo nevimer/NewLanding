@@ -60,8 +60,6 @@
 	//We don't have a pod
 	ignore += typesof(/obj/effect/pod_landingzone_effect)
 	ignore += typesof(/obj/effect/pod_landingzone)
-	//We don't have a disease to pass in
-	ignore += typesof(/obj/effect/mapping_helpers/component_injector/infective)
 	//It's a trapdoor to nowhere
 	ignore += typesof(/obj/effect/mapping_helpers/trapdoor_placer)
 	//There's no shapeshift to hold
@@ -80,8 +78,6 @@
 	ignore += typesof(/obj/effect/anomaly/grav/high)
 	//See above
 	ignore += typesof(/obj/effect/timestop)
-	//Invoke async in init, skippppp
-	ignore += typesof(/mob/living/silicon/robot/model)
 	//this boi spawns turf changing stuff, and it stacks and causes pain. Let's just not
 	ignore += typesof(/obj/effect/sliding_puzzle)
 	//Stacks baseturfs, can't be tested here

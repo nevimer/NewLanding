@@ -119,21 +119,6 @@
 	air_update_turf(TRUE, FALSE)
 	return ..()
 
-/obj/structure/holosign/barrier/cyborg
-	name = "Energy Field"
-	desc = "A fragile energy field that blocks movement. Excels at blocking lethal projectiles."
-	density = TRUE
-	max_integrity = 10
-	allow_walk = FALSE
-
-/obj/structure/holosign/barrier/cyborg/bullet_act(obj/projectile/P)
-	take_damage((P.damage / 5) , BRUTE, MELEE, 1) //Doesn't really matter what damage flag it is.
-	if(istype(P, /obj/projectile/energy/electrode))
-		take_damage(10, BRUTE, MELEE, 1) //Tasers aren't harmful.
-	if(istype(P, /obj/projectile/beam/disabler))
-		take_damage(5, BRUTE, MELEE, 1) //Disablers aren't harmful.
-	return BULLET_ACT_HIT
-
 /obj/structure/holosign/barrier/medical
 	name = "\improper PENLITE holobarrier"
 	desc = "A holobarrier that uses biometrics to detect human viruses. Denies passing to personnel with easily-detected, malicious viruses. Good for quarantines."
@@ -169,9 +154,6 @@
 		icon_state = "holo_medical-deny"
 
 /obj/structure/holosign/barrier/medical/proc/CheckHuman(mob/living/carbon/human/sickboi)
-	var/threat = sickboi.check_virus()
-	if(get_disease_severity_value(threat) > get_disease_severity_value(DISEASE_SEVERITY_MINOR))
-		return FALSE
 	return TRUE
 
 /obj/structure/holosign/barrier/medical/attack_hand(mob/living/user, list/modifiers)
@@ -180,39 +162,3 @@
 		to_chat(user, SPAN_WARNING("You [force_allaccess ? "deactivate" : "activate"] the biometric scanners.")) //warning spans because you can make the station sick!
 	else
 		return ..()
-
-/obj/structure/holosign/barrier/cyborg/hacked
-	name = "Charged Energy Field"
-	desc = "A powerful energy field that blocks movement. Energy arcs off it."
-	max_integrity = 20
-	var/shockcd = 0
-
-/obj/structure/holosign/barrier/cyborg/hacked/bullet_act(obj/projectile/P)
-	take_damage(P.damage, BRUTE, MELEE, 1) //Yeah no this doesn't get projectile resistance.
-	return BULLET_ACT_HIT
-
-/obj/structure/holosign/barrier/cyborg/hacked/proc/cooldown()
-	shockcd = FALSE
-
-/obj/structure/holosign/barrier/cyborg/hacked/attack_hand(mob/living/user, list/modifiers)
-	. = ..()
-	if(.)
-		return
-	if(!shockcd)
-		if(ismob(user))
-			var/mob/living/M = user
-			M.electrocute_act(15,"Energy Barrier")
-			shockcd = TRUE
-			addtimer(CALLBACK(src, .proc/cooldown), 5)
-
-/obj/structure/holosign/barrier/cyborg/hacked/Bumped(atom/movable/AM)
-	if(shockcd)
-		return
-
-	if(!ismob(AM))
-		return
-
-	var/mob/living/M = AM
-	M.electrocute_act(15,"Energy Barrier")
-	shockcd = TRUE
-	addtimer(CALLBACK(src, .proc/cooldown), 5)

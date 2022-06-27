@@ -354,14 +354,13 @@
 		update_appearance()
 
 /obj/machinery/door/airlock/bumpopen(mob/living/user) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
-	if(!issilicon(usr))
-		if(isElectrified() && shock(user, 100))
+	if(isElectrified() && shock(user, 100))
+		return
+	else if(user.hallucinating() && iscarbon(user) && prob(1) && !operating)
+		var/mob/living/carbon/C = user
+		if(!C.wearing_shock_proof_gloves())
+			new /datum/hallucination/shock(C)
 			return
-		else if(user.hallucinating() && iscarbon(user) && prob(1) && !operating)
-			var/mob/living/carbon/C = user
-			if(!C.wearing_shock_proof_gloves())
-				new /datum/hallucination/shock(C)
-				return
 	if(close_others)
 		for(var/obj/machinery/door/airlock/otherlock as anything in close_others)
 			if(!shuttledocked && !emergency && !otherlock.shuttledocked && !otherlock.emergency && allowed(user))
@@ -620,12 +619,6 @@
 		else
 			. += "It looks very robust."
 
-	if(issilicon(user) && !(machine_stat & BROKEN))
-		. += SPAN_NOTICE("Shift-click [src] to [ density ? "open" : "close"] it.")
-		. += SPAN_NOTICE("Ctrl-click [src] to [ locked ? "raise" : "drop"] its bolts.")
-		. += SPAN_NOTICE("Alt-click [src] to [ secondsElectrified ? "un-electrify" : "permanently electrify"] it.")
-		. += SPAN_NOTICE("Ctrl-Shift-click [src] to [ emergency ? "disable" : "enable"] emergency access.")
-
 /obj/machinery/door/airlock/attack_animal(mob/user, list/modifiers)
 	if(isElectrified() && shock(user, 100))
 		return
@@ -643,7 +636,7 @@
 	. = ..()
 	if(.)
 		return
-	if(!(issilicon(user) || isAdminGhostAI(user)))
+	if(!(isAdminGhostAI(user)))
 		if(isElectrified() && shock(user, 100))
 			return
 
@@ -700,7 +693,7 @@
 
 
 /obj/machinery/door/airlock/attackby(obj/item/C, mob/user, params)
-	if(!issilicon(user) && !isAdminGhostAI(user))
+	if(!isAdminGhostAI(user))
 		if(isElectrified() && shock(user, 75))
 			return
 	add_fingerprint(user)
@@ -1164,31 +1157,6 @@
 		loseMainPower()
 		loseBackupPower()
 
-/obj/machinery/door/airlock/attack_alien(mob/living/carbon/alien/humanoid/user, list/modifiers)
-	if(isElectrified() && shock(user, 100)) //Mmm, fried xeno!
-		add_fingerprint(user)
-		return
-	if(!density) //Already open
-		return ..()
-	if(locked || welded || seal) //Extremely generic, as aliens only understand the basics of how airlocks work.
-		if(user.combat_mode)
-			return ..()
-		to_chat(user, SPAN_WARNING("[src] refuses to budge!"))
-		return
-	add_fingerprint(user)
-	user.visible_message(SPAN_WARNING("[user] begins prying open [src]."),\
-						SPAN_NOTICEALIEN("You begin digging your claws into [src] with all your might!"),\
-						SPAN_WARNING("You hear groaning metal..."))
-	var/time_to_open = 5 //half a second
-	if(hasPower())
-		time_to_open = 5 SECONDS //Powered airlocks take longer to open, and are loud.
-		playsound(src, 'sound/machines/airlock_alien_prying.ogg', 100, TRUE)
-
-
-	if(do_after(user, time_to_open, src))
-		if(density && !open(2)) //The airlock is still closed, but something prevented it opening. (Another player noticed and bolted/welded the airlock in time!)
-			to_chat(user, SPAN_WARNING("Despite your efforts, [src] managed to resist your attempts to open it!"))
-
 /obj/machinery/door/airlock/hostile_lockdown(mob/origin)
 	// Must be powered and have working AI wire.
 	if(canAIControl(src) && !machine_stat)
@@ -1411,7 +1379,7 @@
 			. = TRUE
 
 /obj/machinery/door/airlock/proc/user_allowed(mob/user)
-	return (issilicon(user) && canAIControl(user)) || isAdminGhostAI(user)
+	return (canAIControl(user)) || isAdminGhostAI(user)
 
 /obj/machinery/door/airlock/proc/shock_restore(mob/user)
 	if(!user_allowed(user))

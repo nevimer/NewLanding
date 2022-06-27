@@ -169,8 +169,6 @@
 			new /obj/item/stack/ore/bluespace_crystal(src, 5)
 		if(71 to 72)
 			new /obj/item/toy/plush/snakeplushie(src)
-		if(73 to 74)
-			new /mob/living/simple_animal/pet/gondola(src)
 		if(75 to 76)
 			new /obj/item/bikehorn/airhorn(src)
 		if(77 to 78)
@@ -183,8 +181,6 @@
 			new /obj/item/toy/plush/beeplushie(src)
 		if(85 to 86)
 			new /obj/item/defibrillator/compact(src)
-		if(87) //1% chance
-			new /obj/item/weed_extract(src)
 		if(88)
 			new /obj/item/reagent_containers/food/drinks/bottle/lizardwine(src)
 		if(90)

@@ -305,11 +305,6 @@
 	greyscale_colors = CIRCUIT_COLOR_MEDICAL
 	build_path = /obj/machinery/computer/operating
 
-/obj/item/circuitboard/computer/pandemic
-	name = "PanD.E.M.I.C. 2200 (Computer Board)"
-	greyscale_colors = CIRCUIT_COLOR_MEDICAL
-	build_path = /obj/machinery/computer/pandemic
-
 //Science
 
 /obj/item/circuitboard/computer/launchpad_console
@@ -391,11 +386,3 @@
 /obj/item/circuitboard/computer/mining_shuttle/common
 	name = "Lavaland Shuttle (Computer Board)"
 	build_path = /obj/machinery/computer/shuttle/mining/common
-
-/obj/item/circuitboard/computer/exoscanner_console
-	name = "Scanner Array Control Console (Computer Board)"
-	build_path = /obj/machinery/computer/exoscanner_control
-
-/obj/item/circuitboard/computer/exodrone_console
-	name = "Exploration odrone control console (Computer Board)"
-	build_path = /obj/machinery/computer/exodrone_control_console

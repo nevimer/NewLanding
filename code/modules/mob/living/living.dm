@@ -40,7 +40,6 @@
 
 	remove_from_all_data_huds()
 	GLOB.mob_living_list -= src
-	QDEL_LAZYLIST(diseases)
 	QDEL_NULL(attributes)
 	return ..()
 
@@ -92,16 +91,6 @@
 		var/mob/living/L = M
 		their_combat_mode = L.combat_mode
 		they_can_move = L.mobility_flags & MOBILITY_MOVE
-		//Also spread diseases
-		for(var/thing in diseases)
-			var/datum/disease/D = thing
-			if(D.spread_flags & DISEASE_SPREAD_CONTACT_SKIN)
-				L.ContactContractDisease(D)
-
-		for(var/thing in L.diseases)
-			var/datum/disease/D = thing
-			if(D.spread_flags & DISEASE_SPREAD_CONTACT_SKIN)
-				ContactContractDisease(D)
 
 		//Should stop you pushing a restrained person out of the way
 		if(L.pulledby && L.pulledby != src && HAS_TRAIT(L, TRAIT_RESTRAINED))
@@ -331,16 +320,6 @@
 			var/mob/living/L = M
 
 			SEND_SIGNAL(M, COMSIG_LIVING_GET_PULLED, src)
-			//Share diseases that are spread by touch
-			for(var/thing in diseases)
-				var/datum/disease/D = thing
-				if(D.spread_flags & DISEASE_SPREAD_CONTACT_SKIN)
-					L.ContactContractDisease(D)
-
-			for(var/thing in L.diseases)
-				var/datum/disease/D = thing
-				if(D.spread_flags & DISEASE_SPREAD_CONTACT_SKIN)
-					ContactContractDisease(D)
 
 			if(iscarbon(L))
 				var/mob/living/carbon/C = L
@@ -810,9 +789,6 @@
 	else if(direct & WEST)
 		set_lying_angle(270)
 
-/mob/living/carbon/alien/humanoid/lying_angle_on_movement(direct)
-	return
-
 /mob/living/proc/makeTrail(turf/target_turf, turf/start, direction)
 	if(!has_gravity() || !isturf(start) || !blood_volume)
 		return
@@ -839,7 +815,7 @@
 	if((newdir in GLOB.cardinals) && (prob(50)))
 		newdir = turn(get_dir(target_turf, start), 180)
 	if(!blood_exists)
-		new /obj/effect/decal/cleanable/trail_holder(start, get_static_viruses())
+		new /obj/effect/decal/cleanable/trail_holder(start)
 
 	for(var/obj/effect/decal/cleanable/trail_holder/TH in start)
 		if((!(newdir in TH.existing_dirs) || trail_type == "trails_1" || trail_type == "trails_2") && TH.existing_dirs.len <= 16) //maximum amount of overlays is 16 (all light & heavy directions filled)
@@ -1158,29 +1134,9 @@
 /mob/living/proc/update_stamina()
 	return
 
-/mob/living/carbon/alien/update_stamina()
-	return
-
 /mob/living/throw_at(atom/target, range, speed, mob/thrower, spin=1, diagonals_first = 0, datum/callback/callback, force, gentle = FALSE, quickstart = TRUE)
 	stop_pulling()
 	. = ..()
-
-// Called when we are hit by a bolt of polymorph and changed
-// Generally the mob we are currently in is about to be deleted
-/mob/living/proc/wabbajack_act(mob/living/new_mob)
-	new_mob.name = real_name
-	new_mob.real_name = real_name
-
-	if(mind)
-		mind.transfer_to(new_mob)
-	else
-		new_mob.key = key
-
-	for(var/para in hasparasites())
-		var/mob/living/simple_animal/hostile/guardian/G = para
-		G.summoner = new_mob
-		G.Recall()
-		to_chat(G, SPAN_HOLOPARASITE("Your summoner has changed form!"))
 
 /mob/living/rad_act(amount)
 	. = ..()
@@ -1414,15 +1370,6 @@
 			return FALSE
 	mob_pickup(user)
 	return TRUE
-
-/mob/living/proc/get_static_viruses() //used when creating blood and other infective objects
-	if(!LAZYLEN(diseases))
-		return
-	var/list/datum/disease/result = list()
-	for(var/datum/disease/D in diseases)
-		var/static_virus = D.Copy()
-		result += static_virus
-	return result
 
 /mob/living/reset_perspective(atom/A)
 	if(..())

@@ -390,27 +390,6 @@ or shoot a gun to move around via Newton's 3rd Law of Motion."
 
 	living_owner.succumb(whispered = length(last_whisper) > 0)
 
-//ALIENS
-
-/atom/movable/screen/alert/alien_tox
-	name = "Plasma"
-	desc = "There's flammable plasma in the air. If it lights up, you'll be toast."
-	icon_state = "alien_tox"
-	alerttooltipstyle = "alien"
-
-/atom/movable/screen/alert/alien_fire
-// This alert is temporarily gonna be thrown for all hot air but one day it will be used for literally being on fire
-	name = "Too Hot"
-	desc = "It's too hot! Flee to space or at least away from the flames. Standing on weeds will heal you."
-	icon_state = "alien_fire"
-	alerttooltipstyle = "alien"
-
-/atom/movable/screen/alert/alien_vulnerable
-	name = "Severed Matriarchy"
-	desc = "Your queen has been killed, you will suffer movement penalties and loss of hivemind. A new queen cannot be made until you recover."
-	icon_state = "alien_noqueen"
-	alerttooltipstyle = "alien"
-
 //BLOBS
 
 /atom/movable/screen/alert/nofactory
@@ -438,24 +417,6 @@ or shoot a gun to move around via Newton's 3rd Law of Motion."
 	desc = "You are in stealth and your next attack will do bonus damage!"
 	icon_state = "guardian_instealth"
 	alerttooltipstyle = "parasite"
-
-//SILICONS
-
-/atom/movable/screen/alert/nocell
-	name = "Missing Power Cell"
-	desc = "Unit has no power cell. No modules available until a power cell is reinstalled. Robotics may provide assistance."
-	icon_state = "no_cell"
-
-/atom/movable/screen/alert/emptycell
-	name = "Out of Power"
-	desc = "Unit's power cell has no charge remaining. No modules available until power cell is recharged. \
-Recharging stations are available in robotics, the dormitory bathrooms, and the AI satellite."
-	icon_state = "empty_cell"
-
-/atom/movable/screen/alert/lowcell
-	name = "Low Charge"
-	desc = "Unit's power cell is running low. Recharging stations are available in robotics, the dormitory bathrooms, and the AI satellite."
-	icon_state = "low_cell"
 
 //Ethereal
 

@@ -439,7 +439,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAUMA_TRAIT "trauma"
 /// Trait inherited by experimental surgeries
 #define EXPERIMENTAL_SURGERY_TRAIT "experimental_surgery"
-#define DISEASE_TRAIT "disease"
 #define SPECIES_TRAIT "species"
 #define ORGAN_TRAIT "organ"
 /// cannot be removed without admin intervention
@@ -592,13 +591,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 */
 #define NO_TONGUE_TRAIT "no_tongue_trait"
 
-/// Trait granted by [/mob/living/silicon/robot]
-/// Traits applied to a silicon mob by their model.
-#define MODEL_TRAIT "model_trait"
-
-/// Trait granted by [mob/living/silicon/ai]
-/// Applied when the ai anchors itself
-#define AI_ANCHOR_TRAIT "ai_anchor"
 /// Trait from [/datum/antagonist/nukeop/clownop]
 #define CLOWNOP_TRAIT "clownop"
 
