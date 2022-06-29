@@ -1457,3 +1457,20 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/maintenance/external/port/bow
 	name = "Port Bow External Hull Access"
+
+/area/outdoors
+	icon_state = "mining"
+	has_gravity = STANDARD_GRAVITY
+	flags_1 = NONE
+	always_unpowered = TRUE
+	requires_power = TRUE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	area_flags = VALID_TERRITORY | UNIQUE_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED | MEGAFAUNA_SPAWN_ALLOWED | NO_ALERTS
+	main_ambience = AMBIENCE_AWAY
+	outdoors = TRUE
+
+/area/outdoors/jungle
+	name = "Jungle"
+	main_ambience = AMBIENCE_JUNGLE

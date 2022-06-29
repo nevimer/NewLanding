@@ -1,15 +1,15 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "aa" = (
-/turf/open/floor/plating,
-/area/hallway/primary/central)
+/turf/open/floor/plating/grass,
+/area/outdoors/jungle)
 "ow" = (
 /obj/effect/landmark/observer_start,
-/turf/open/floor/plating,
-/area/hallway/primary/central)
+/turf/open/floor/plating/grass,
+/area/outdoors/jungle)
 "QD" = (
 /obj/effect/landmark/latejoin,
-/turf/open/floor/plating,
-/area/hallway/primary/central)
+/turf/open/floor/plating/grass,
+/area/outdoors/jungle)
 
 (1,1,1) = {"
 aa

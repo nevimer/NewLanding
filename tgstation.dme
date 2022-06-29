@@ -1643,7 +1643,7 @@
 #include "code\modules\lighting\lighting_setup.dm"
 #include "code\modules\lighting\lighting_source.dm"
 #include "code\modules\lighting\lighting_turf.dm"
-#include "code\modules\map_content\hollowhearth\hollowhearth_define.dm"
+#include "code\modules\map_content\testlanding\testlanding_define.dm"
 #include "code\modules\mapping\generate_map_list.dm"
 #include "code\modules\mapping\map_template.dm"
 #include "code\modules\mapping\mapping_helpers.dm"
