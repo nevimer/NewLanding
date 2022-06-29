@@ -530,11 +530,6 @@
 		if(feedback)
 			to_chat(src, SPAN_WARNING("You couldn't move there!"))
 		return FALSE
-	if(!ventcrawling) //let this be handled in atmosmachinery.dm
-		forceMove(target)
-	else
-		var/obj/machinery/atmospherics/pipe = loc
-		pipe.relaymove(src, dir)
 	return TRUE
 
 /// Can this mob move between z levels

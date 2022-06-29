@@ -104,10 +104,6 @@ GLOBAL_LIST_INIT(hailer_phrases, list(
 
 /obj/item/clothing/mask/gas/sechailer/attack_self()
 	halt()
-/obj/item/clothing/mask/gas/sechailer/emag_act(mob/user)
-	if(safety)
-		safety = FALSE
-		to_chat(user, SPAN_WARNING("You silently fry [src]'s vocal circuit with the cryptographic sequencer."))
 
 /obj/item/clothing/mask/gas/sechailer/verb/halt()
 	set category = "Object"

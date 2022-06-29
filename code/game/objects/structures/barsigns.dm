@@ -49,7 +49,6 @@
 
 /obj/structure/sign/barsign/deconstruct(disassembled = TRUE)
 	new /obj/item/stack/sheet/iron(drop_location(), 2)
-	new /obj/item/stack/cable_coil(drop_location(), 2)
 	qdel(src)
 
 /obj/structure/sign/barsign/play_attack_sound(damage_amount, damage_type = BRUTE, damage_flag = 0)
@@ -87,18 +86,6 @@
 			else
 				set_sign(new /datum/barsign/hiddensigns/empbarsign)
 			panel_open = FALSE
-
-	else if(istype(I, /obj/item/stack/cable_coil) && panel_open)
-		var/obj/item/stack/cable_coil/C = I
-		if(!broken)
-			to_chat(user, SPAN_WARNING("This sign is functioning properly!"))
-			return
-
-		if(C.use(2))
-			to_chat(user, SPAN_NOTICE("You replace the burnt wiring."))
-			broken = FALSE
-		else
-			to_chat(user, SPAN_WARNING("You need at least two lengths of cable!"))
 	else
 		return ..()
 
@@ -109,15 +96,6 @@
 		return
 	set_sign(new /datum/barsign/hiddensigns/empbarsign)
 	broken = TRUE
-
-/obj/structure/sign/barsign/emag_act(mob/user)
-	if(broken)
-		to_chat(user, SPAN_WARNING("Nothing interesting happens!"))
-		return
-	to_chat(user, SPAN_NOTICE("You load an illegal barsign into the memory buffer..."))
-	sleep(10 SECONDS)
-	chosen_sign = set_sign(new /datum/barsign/hiddensigns/syndibarsign)
-
 
 /obj/structure/sign/barsign/proc/pick_sign(mob/user)
 	var/picked_name = input(user, "Available Signage", "Bar Sign", name) as null|anything in sortList(get_bar_names())

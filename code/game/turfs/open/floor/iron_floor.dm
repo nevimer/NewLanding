@@ -20,16 +20,6 @@
 	icon_state = base_icon_state
 	return ..()
 
-
-/turf/open/floor/iron/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/telecomms
-	initial_gas_mix = TCOMMS_ATMOS
-
-/turf/open/floor/iron/icemoon
-	initial_gas_mix = PLANETARY_ATMOS
-
 /turf/open/floor/iron/edge
 	icon_state = "floor_edge"
 	base_icon_state = "floor_edge"
@@ -140,21 +130,6 @@
 	base_icon_state = "textured_dark_large"
 	floor_tile = /obj/item/stack/tile/iron/dark/textured_large
 
-/turf/open/floor/iron/dark/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/dark/telecomms
-	initial_gas_mix = TCOMMS_ATMOS
-
-/turf/open/floor/iron/dark/side/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/dark/corner/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/checker/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 /turf/open/floor/iron/white
 	icon_state = "white"
 	base_icon_state = "white"
@@ -220,21 +195,6 @@
 	base_icon_state = "textured_white_large"
 	floor_tile = /obj/item/stack/tile/iron/white/textured_large
 
-/turf/open/floor/iron/white/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/white/telecomms
-	initial_gas_mix = TCOMMS_ATMOS
-
-/turf/open/floor/iron/white/side/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/white/corner/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/iron/cafeteria/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 /turf/open/floor/iron/recharge_floor
 	icon_state = "recharge_floor"
 	base_icon_state = "recharge_floor"
@@ -279,32 +239,18 @@
 	base_icon_state = "showroomfloor"
 	floor_tile = /obj/item/stack/tile/iron/showroomfloor
 
-/turf/open/floor/iron/showroomfloor/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 /turf/open/floor/iron/solarpanel
 	icon_state = "solarpanel"
 	base_icon_state = "solarpanel"
 	floor_tile = /obj/item/stack/tile/iron/solarpanel
-
-/turf/open/floor/iron/solarpanel/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 
 /turf/open/floor/iron/freezer
 	icon_state = "freezerfloor"
 	base_icon_state = "freezerfloor"
 	floor_tile = /obj/item/stack/tile/iron/freezer
 
-/turf/open/floor/iron/freezer/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 /turf/open/floor/iron/kitchen_coldroom
 	name = "cold room floor"
-
-/turf/open/floor/iron/kitchen_coldroom/Initialize(mapload, inherited_virtual_z)
-	initial_gas_mix = KITCHEN_COLDROOM_ATMOS
-	return ..()
 
 /turf/open/floor/iron/kitchen_coldroom/freezerfloor
 	icon_state = "freezerfloor"

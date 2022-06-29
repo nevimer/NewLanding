@@ -233,20 +233,6 @@
 			new framestack(T, framestackamount)
 	qdel(src)
 
-/obj/structure/table/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	switch(the_rcd.mode)
-		if(RCD_DECONSTRUCT)
-			return list("mode" = RCD_DECONSTRUCT, "delay" = 24, "cost" = 16)
-	return FALSE
-
-/obj/structure/table/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	switch(passed_mode)
-		if(RCD_DECONSTRUCT)
-			to_chat(user, SPAN_NOTICE("You deconstruct the table."))
-			qdel(src)
-			return TRUE
-	return FALSE
-
 
 /obj/structure/table/greyscale
 	icon = 'icons/obj/smooth_structures/table_greyscale.dmi'
@@ -576,72 +562,6 @@
 	custom_materials = list(/datum/material/alloy/plastitaniumglass = 2000)
 	buildstack = /obj/item/stack/sheet/plastitaniumglass
 	max_integrity = 300
-
-/*
- * Surgery Tables
- */
-
-/obj/structure/table/optable
-	name = "operating table"
-	desc = "Used for advanced medical procedures."
-	icon = 'icons/obj/surgery.dmi'
-	icon_state = "optable"
-	buildstack = /obj/item/stack/sheet/mineral/silver
-	smoothing_flags = NONE
-	smoothing_groups = null
-	canSmoothWith = null
-	can_buckle = 1
-	buckle_lying = NO_BUCKLE_LYING
-	buckle_requires_restraints = TRUE
-	custom_materials = list(/datum/material/silver = 2000)
-	var/mob/living/carbon/human/patient = null
-	var/obj/machinery/computer/operating/computer = null
-
-/obj/structure/table/optable/Initialize()
-	. = ..()
-	for(var/direction in GLOB.alldirs)
-		computer = locate(/obj/machinery/computer/operating) in get_step(src, direction)
-		if(computer)
-			computer.table = src
-			break
-
-/obj/structure/table/optable/Destroy()
-	. = ..()
-	if(computer && computer.table == src)
-		computer.table = null
-
-/obj/structure/table/optable/tablepush(mob/living/user, mob/living/pushed_mob)
-	pushed_mob.forceMove(loc)
-	pushed_mob.set_resting(TRUE, TRUE)
-	visible_message(SPAN_NOTICE("[user] lays [pushed_mob] on [src]."))
-	get_patient()
-
-/obj/structure/table/optable/proc/get_patient()
-	var/mob/living/carbon/M = locate(/mob/living/carbon) in loc
-	if(M)
-		if(M.resting)
-			set_patient(M)
-	else
-		set_patient(null)
-
-/obj/structure/table/optable/proc/set_patient(new_patient)
-	if(patient)
-		UnregisterSignal(patient, COMSIG_PARENT_QDELETING)
-	patient = new_patient
-	if(patient)
-		RegisterSignal(patient, COMSIG_PARENT_QDELETING, .proc/patient_deleted)
-
-/obj/structure/table/optable/proc/patient_deleted(datum/source)
-	SIGNAL_HANDLER
-	set_patient(null)
-
-/obj/structure/table/optable/proc/check_eligible_patient()
-	get_patient()
-	if(!patient)
-		return FALSE
-	if(ishuman(patient))
-		return TRUE
-	return FALSE
 
 /*
  * Racks

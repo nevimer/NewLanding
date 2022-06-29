@@ -28,32 +28,12 @@
 
 /datum/surgery_step/revive
 	name = "shock body"
-	implements = list(
-		/obj/item/shockpaddles = 100,
-		/obj/item/melee/baton = 75,
-		/obj/item/gun/energy = 60)
+	implements = list()
 	repeatable = TRUE
 	time = 5 SECONDS
 
 /datum/surgery_step/revive/tool_check(mob/user, obj/item/tool)
 	. = TRUE
-	if(istype(tool, /obj/item/shockpaddles))
-		var/obj/item/shockpaddles/paddles = tool
-		if((paddles.req_defib && !paddles.defib.powered) || !paddles.wielded || paddles.cooldown || paddles.busy)
-			to_chat(user, SPAN_WARNING("You need to wield both paddles, and [paddles.defib] must be powered!"))
-			return FALSE
-	if(istype(tool, /obj/item/melee/baton))
-		var/obj/item/melee/baton/baton = tool
-		if(!baton.turned_on)
-			to_chat(user, SPAN_WARNING("[baton] needs to be active!"))
-			return FALSE
-	if(istype(tool, /obj/item/gun/energy))
-		var/obj/item/gun/energy/egun = tool
-		if(egun.chambered && istype(egun.chambered, /obj/item/ammo_casing/energy/electrode))
-			return TRUE
-		else
-			to_chat(user, SPAN_WARNING("You need an electrode for this!"))
-			return FALSE
 
 /datum/surgery_step/revive/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(user, target, SPAN_NOTICE("You prepare to give [target]'s brain the spark of life with [tool]."),

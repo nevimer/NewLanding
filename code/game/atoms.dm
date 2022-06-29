@@ -82,8 +82,6 @@
 	///Modifier that raises/lowers the effect of the amount of a material, prevents small and easy to get items from being death machines.
 	var/material_modifier = 1
 
-	var/datum/wires/wires = null
-
 	var/list/alternate_appearances
 
 
@@ -442,26 +440,6 @@
 				SEND_SIGNAL(M, COMSIG_ATOM_USED_IN_CRAFT, src)
 		parts_list.Cut()
 
-///Take air from the passed in gas mixture datum
-/atom/proc/assume_air(datum/gas_mixture/giver)
-	qdel(giver)
-	return null
-
-///Remove air from this atom
-/atom/proc/remove_air(amount)
-	return null
-
-///Return the current air environment in this atom
-/atom/proc/return_air()
-	if(loc)
-		return loc.return_air()
-	else
-		return null
-
-///Return the air if we can analyze it
-/atom/proc/return_analyzable_air()
-	return null
-
 ///Check if this atoms eye is still alive (probably)
 /atom/proc/check_eye(mob/user)
 	SIGNAL_HANDLER
@@ -533,8 +511,6 @@
  */
 /atom/proc/emp_act(severity)
 	var/protection = SEND_SIGNAL(src, COMSIG_ATOM_EMP_ACT, severity)
-	if(!(protection & EMP_PROTECT_WIRES) && istype(wires))
-		wires.emp_pulse()
 	return protection // Pass the protection value collected here upwards
 
 /**
@@ -859,18 +835,6 @@
 /atom/proc/handle_fall(mob/faller)
 	return
 
-///Respond to the singularity eating this atom
-/atom/proc/singularity_act()
-	return
-
-/**
- * Respond to the singularity pulling on us
- *
- * Default behaviour is to send [COMSIG_ATOM_SING_PULL] and return
- */
-/atom/proc/singularity_pull(obj/singularity/S, current_size)
-	SEND_SIGNAL(src, COMSIG_ATOM_SING_PULL, S, current_size)
-
 
 /**
  * Respond to acid being used on our atom
@@ -879,37 +843,6 @@
  */
 /atom/proc/acid_act(acidpwr, acid_volume)
 	SEND_SIGNAL(src, COMSIG_ATOM_ACID_ACT, acidpwr, acid_volume)
-	return FALSE
-
-/**
- * Respond to an emag being used on our atom
- *
- * Default behaviour is to send [COMSIG_ATOM_EMAG_ACT] and return
- */
-/atom/proc/emag_act(mob/user, obj/item/card/emag/E)
-	SEND_SIGNAL(src, COMSIG_ATOM_EMAG_ACT, user, E)
-
-/**
- * Respond to a radioactive wave hitting this atom
- *
- * Default behaviour is to send [COMSIG_ATOM_RAD_ACT] and return
- */
-/atom/proc/rad_act(strength)
-	SEND_SIGNAL(src, COMSIG_ATOM_RAD_ACT, strength)
-
-
-///Return the values you get when an RCD eats you?
-/atom/proc/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	return FALSE
-
-
-/**
- * Respond to an RCD acting on our item
- *
- * Default behaviour is to send [COMSIG_ATOM_RCD_ACT] and return FALSE
- */
-/atom/proc/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	SEND_SIGNAL(src, COMSIG_ATOM_RCD_ACT, user, the_rcd, passed_mode)
 	return FALSE
 
 /**
@@ -1872,40 +1805,7 @@
  * * otherwise no gravity
  */
 /atom/proc/has_gravity(turf/T)
-	if(!T || !isturf(T))
-		T = get_turf(src)
-
-	if(!T)
-		return 0
-
-	var/list/forced_gravity = list()
-	SEND_SIGNAL(src, COMSIG_ATOM_HAS_GRAVITY, T, forced_gravity)
-	if(!forced_gravity.len)
-		SEND_SIGNAL(T, COMSIG_TURF_HAS_GRAVITY, src, forced_gravity)
-	if(forced_gravity.len)
-		var/max_grav
-		for(var/i in forced_gravity)
-			max_grav = max(max_grav, i)
-		return max_grav
-
-	if(isspaceturf(T)) // Turf never has gravity
-		return 0
-	if(istype(T, /turf/open/openspace)) //openspace in a space area doesn't get gravity
-		if(istype(get_area(T), /area/space))
-			return 0
-
-	var/area/A = get_area(T)
-	if(A.has_gravity) // Areas which always has gravity
-		return A.has_gravity
-	else
-		// See if there's a gravity generator on our map zone
-		var/datum/map_zone/mapzone = T.get_map_zone()
-		if(mapzone.gravity_generators.len)
-			var/max_grav = 0
-			for(var/obj/machinery/gravity_generator/main/G as anything in mapzone.gravity_generators)
-				max_grav = max(G.setting,max_grav)
-			return max_grav
-	return T.virtual_level_trait(ZTRAIT_GRAVITY)
+	return TRUE
 
 
 /**
@@ -2027,3 +1927,11 @@
 		usr.hud_used.screentip_text.maptext = ""
 	else
 		usr.hud_used.screentip_text.maptext = MAPTEXT("<span style='text-align: center'><span style='font-size: 32px'><span style='color:[usr.client.prefs.screentip_color]: 32px'>[name]</span>")
+
+/**
+ * Respond to a radioactive wave hitting this atom
+ *
+ * Default behaviour is to send [COMSIG_ATOM_RAD_ACT] and return
+ */
+/atom/proc/rad_act(strength)
+	SEND_SIGNAL(src, COMSIG_ATOM_RAD_ACT, strength)

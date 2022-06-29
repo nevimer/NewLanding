@@ -103,12 +103,6 @@
 
 	return new trash_type(src)
 
-/obj/item/food/grown/grind_requirements()
-	if(dry_grind && !HAS_TRAIT(src, TRAIT_DRIED))
-		to_chat(usr, SPAN_WARNING("[src] needs to be dry before it can be ground up!"))
-		return
-	return TRUE
-
 /obj/item/food/grown/on_grind()
 	. = ..()
 	var/nutriment = reagents.get_reagent_amount(/datum/reagent/consumable/nutriment)

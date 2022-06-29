@@ -211,24 +211,6 @@ SUBSYSTEM_DEF(id_access)
 		var/datum/id_trim/trim = trim_singletons_by_path[trim_path]
 		centcom_job_templates[trim_path] = trim.assignment
 
-	var/list/all_pda_paths = typesof(/obj/item/pda)
-	var/list/pda_regions = PDA_PAINTING_REGIONS
-	for(var/pda_path in all_pda_paths)
-		if(!(pda_path in pda_regions))
-			continue
-
-		var/list/region_whitelist = pda_regions[pda_path]
-		for(var/access_txt in sub_department_managers_tgui)
-			var/list/manager_info = sub_department_managers_tgui[access_txt]
-			var/list/manager_regions = manager_info["regions"]
-			for(var/whitelisted_region in region_whitelist)
-				if(!(whitelisted_region in manager_regions))
-					continue
-				var/list/manager_pdas = manager_info["pdas"]
-				var/obj/item/pda/fake_pda = pda_path
-				manager_pdas[pda_path] = initial(fake_pda.name)
-				station_pda_templates[pda_path] = initial(fake_pda.name)
-
 /// Set up dictionary to convert wildcard names to flags.
 /datum/controller/subsystem/id_access/proc/setup_wildcard_dict()
 	wildcard_flags_by_wildcard[WILDCARD_NAME_ALL] = WILDCARD_FLAG_ALL
@@ -414,36 +396,6 @@ SUBSYSTEM_DEF(id_access)
 	id_card.clear_access()
 	id_card.update_label()
 	id_card.update_icon()
-
-/**
- * Applies a trim to a chameleon card. This is purely visual, utilising the card's override vars.
- *
- * Arguments:
- * * id_card - The chameleon card to apply the trim visuals to.
-* * trim_path - A trim path to apply to the card. Grabs the trim's associated singleton and applies it.
- * * check_forged - Boolean value. If TRUE, will not overwrite the card's assignment if the card has been forged.
- */
-/datum/controller/subsystem/id_access/proc/apply_trim_to_chameleon_card(obj/item/card/id/advanced/chameleon/id_card, trim_path, check_forged = TRUE)
-	var/datum/id_trim/trim = trim_singletons_by_path[trim_path]
-	id_card.trim_icon_override = trim.trim_icon
-	id_card.trim_state_override = trim.trim_state
-	id_card.trim_assignment_override = trim.assignment
-
-	if(!check_forged || !id_card.forged)
-		id_card.assignment = trim.assignment
-
-	// We'll let the chameleon action update the card's label as necessary instead of doing it here.
-
-/**
- * Removes a trim from a chameleon ID card.
- *
- * Arguments:
- * * id_card - The ID card to remove the trim from.
- */
-/datum/controller/subsystem/id_access/proc/remove_trim_from_chameleon_card(obj/item/card/id/advanced/chameleon/id_card)
-	id_card.trim_icon_override = null
-	id_card.trim_state_override = null
-	id_card.trim_assignment_override = null
 
 /**
  * Adds the accesses associated with a trim to an ID card.

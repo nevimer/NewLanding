@@ -134,10 +134,6 @@
 			step(src, dir)
 		if(71 to 83)
 			step(src, dir)
-		if(65 to 70)
-			var/obj/machinery/light/L = locate(/obj/machinery/light) in view(4, src)
-			if(L)
-				L.flicker()
 		if(62 to 64)
 			playsound(loc,pick('sound/hallucinations/i_see_you1.ogg', 'sound/hallucinations/i_see_you2.ogg'), 50, TRUE, ignore_walls = FALSE)
 		if(61)
@@ -287,14 +283,6 @@
 	tastes = list("bacon" = 4, "bun" = 2)
 	foodtypes = GRAIN | MEAT
 	custom_premium_price = PAYCHECK_ASSISTANT * 1.6
-
-/obj/item/food/burger/empoweredburger
-	name = "empowered burger"
-	desc = "It's shockingly good, if you live off of electricity that is."
-	icon_state = "empoweredburger"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 5, /datum/reagent/consumable/nutriment/protein = 5, /datum/reagent/consumable/nutriment/vitamin = 1, /datum/reagent/consumable/liquidelectricity/enriched = 5)
-	tastes = list("bun" = 2, "pure electricity" = 4)
-	foodtypes = GRAIN | TOXIC
 
 /obj/item/food/burger/crab
 	name = "crab burger"

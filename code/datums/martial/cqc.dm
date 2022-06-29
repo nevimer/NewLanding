@@ -221,19 +221,3 @@
 	to_chat(usr, "[SPAN_NOTICE("Consecutive CQC")]: Disarm Disarm Harm. Mainly offensive move, huge damage and decent stamina damage.")
 
 	to_chat(usr, "<b><i>In addition, by having your throw mode on when being attacked, you enter an active defense mode where you have a chance to block and sometimes even counter attacks done to you.</i></b>")
-
-///Subtype of CQC. Only used for the chef.
-/datum/martial_art/cqc/under_siege
-	name = "Close Quarters Cooking"
-	var/list/kitchen_areas
-
-/// Refreshes the valid areas from the cook job singleton, otherwise uses the default kitchen area as a fallback option. See also [/datum/job/cook/New].
-/datum/martial_art/cqc/under_siege/proc/refresh_valid_areas()
-	var/datum/job/cook/cook_job = SSjob.GetJobType(/datum/job/cook)
-	kitchen_areas = cook_job.kitchen_areas.Copy()
-
-/// Limits where the chef's CQC can be used to only whitelisted areas.
-/datum/martial_art/cqc/under_siege/can_use(mob/living/owner)
-	if(!is_type_in_list(get_area(owner), kitchen_areas))
-		return FALSE
-	return ..()

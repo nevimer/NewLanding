@@ -126,31 +126,8 @@
 /datum/quirk/monochromatic/add()
 	quirk_holder.add_client_colour(/datum/client_colour/monochrome)
 
-/datum/quirk/monochromatic/post_add()
-	if(is_detective_job(quirk_holder.mind.assigned_role))
-		to_chat(quirk_holder, SPAN_BOLDANNOUNCE("Mmm. Nothing's ever clear on this station. It's all shades of gray..."))
-		quirk_holder.playsound_local(quirk_holder, 'sound/ambience/ambidet1.ogg', 50, FALSE)
-
 /datum/quirk/monochromatic/remove()
 	quirk_holder.remove_client_colour(/datum/client_colour/monochrome)
-
-/datum/quirk/item_quirk/needswayfinder
-	name = "Navigationally Challenged"
-	desc = "Lacking familiarity with certain stations, you start with a wayfinding pinpointer where available."
-	value = 0
-	medical_record_text = "Patient demonstrates a keen ability to get lost."
-
-/datum/quirk/item_quirk/needswayfinder/add_unique()
-	if(!GLOB.wayfindingbeacons.len)
-		return
-
-	var/mob/living/carbon/human/human_holder = quirk_holder
-
-	var/obj/item/pinpointer/wayfinding/wayfinder = new(get_turf(quirk_holder))
-	wayfinder.owner = human_holder.real_name
-	wayfinder.from_quirk = TRUE
-
-	give_item_to_holder(wayfinder, list(LOCATION_LPOCKET = ITEM_SLOT_LPOCKET, LOCATION_RPOCKET = ITEM_SLOT_RPOCKET, LOCATION_BACKPACK = ITEM_SLOT_BACKPACK, LOCATION_HANDS = ITEM_SLOT_HANDS))
 
 /datum/quirk/item_quirk/bald
 	name = "Smooth-Headed"

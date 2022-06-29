@@ -96,8 +96,6 @@
 	if(!.)
 		return
 	for(var/obj/item/gun in target.GetAllContents())
-		if(!isgun(gun) && !istype(gun, /obj/item/flamethrower))
-			continue
 		SEND_SIGNAL(gun, COMSIG_ITEM_RECHARGED)
 
 /obj/effect/powerup/speed

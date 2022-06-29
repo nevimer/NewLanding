@@ -54,16 +54,6 @@
 
 
 /mob/living/carbon/human/calculate_affecting_pressure(pressure)
-	var/chest_covered = FALSE
-	var/head_covered = FALSE
-	for(var/obj/item/clothing/equipped in get_equipped_items())
-		if((equipped.body_parts_covered & CHEST) && (equipped.clothing_flags & STOPSPRESSUREDAMAGE))
-			chest_covered = TRUE
-		if((equipped.body_parts_covered & HEAD) && (equipped.clothing_flags & STOPSPRESSUREDAMAGE))
-			head_covered = TRUE
-
-	if(chest_covered && head_covered)
-		return ONE_ATMOSPHERE
 	return pressure
 
 
@@ -82,7 +72,7 @@
 	if(!dna.species.breathe(src))
 		..()
 
-/mob/living/carbon/human/check_breath(datum/gas_mixture/breath)
+/mob/living/carbon/human/check_breath()
 
 	var/L = getorganslot(ORGAN_SLOT_LUNGS)
 
@@ -109,15 +99,11 @@
 	else
 		if(istype(L, /obj/item/organ/lungs))
 			var/obj/item/organ/lungs/lun = L
-			lun.check_breath(breath,src)
+			lun.check_breath(src)
 
 /// Environment handlers for species
-/mob/living/carbon/human/handle_environment(datum/gas_mixture/environment, delta_time, times_fired)
-	// If we are in a cryo bed do not process life functions
-	if(istype(loc, /obj/machinery/atmospherics/components/unary/cryo_cell))
-		return
-
-	dna.species.handle_environment(src, environment, delta_time, times_fired)
+/mob/living/carbon/human/handle_environment(delta_time, times_fired)
+	dna.species.handle_environment(src, delta_time, times_fired)
 
 /**
  * Adjust the core temperature of a mob

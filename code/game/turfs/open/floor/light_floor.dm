@@ -132,18 +132,6 @@
 /turf/open/floor/light/attackby(obj/item/C, mob/user, params)
 	if(..())
 		return
-	if(istype(C, /obj/item/light/bulb)) //only for light tiles
-		var/obj/item/light/bulb/B = C
-		if(B.status)/// check if broken
-			to_chat(user, SPAN_DANGER("The light bulb is broken!"))
-			return
-		if(state && user.temporarilyRemoveItemFromInventory(C))
-			qdel(C)
-			state = LIGHTFLOOR_FINE //fixing it by bashing it with a light bulb, fun eh?
-			update_appearance()
-			to_chat(user, SPAN_NOTICE("You replace the light bulb."))
-		else
-			to_chat(user, SPAN_NOTICE("The light bulb seems fine, no need to replace it."))
 
 /turf/open/floor/light/emp_act(severity)
 	. = ..()

@@ -51,20 +51,6 @@
 	. = ..()
 	add_cell_sample()
 
-/mob/living/simple_animal/hostile/tree/Life(delta_time = SSMOBS_DT, times_fired)
-	..()
-	if(!is_tree || !isopenturf(loc))
-		return
-	var/turf/open/T = src.loc
-	if(!T.air || !T.air.gases[/datum/gas/carbon_dioxide])
-		return
-
-	var/co2 = T.air.gases[/datum/gas/carbon_dioxide][MOLES]
-	if(co2 > 0 && DT_PROB(13, delta_time))
-		var/amt = min(co2, 9)
-		T.air.gases[/datum/gas/carbon_dioxide][MOLES] -= amt
-		T.atmos_spawn_air("o2=[amt]")
-
 /mob/living/simple_animal/hostile/tree/AttackingTarget()
 	. = ..()
 	if(iscarbon(target))
@@ -91,16 +77,6 @@
 	faction = list()
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	is_tree = FALSE
-
-/mob/living/simple_animal/hostile/tree/festivus/attack_hand(mob/living/carbon/human/user, list/modifiers)
-	. = ..()
-	if(!user.combat_mode)
-		visible_message(SPAN_WARNING("[src] crackles with static electricity!"))
-		for(var/obj/item/stock_parts/cell/C in range(2, get_turf(src)))
-			C.give(75)
-		for(var/obj/machinery/power/apc/A in range(2, get_turf(src)))
-			if(A.cell)
-				A.cell.give(75)
 
 /mob/living/simple_animal/hostile/tree/festivus/add_cell_sample()
 	return

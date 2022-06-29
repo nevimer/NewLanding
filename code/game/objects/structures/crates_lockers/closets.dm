@@ -551,17 +551,6 @@
 	else if(secure && broken)
 		to_chat(user, SPAN_WARNING("\The [src] is broken!"))
 
-/obj/structure/closet/emag_act(mob/user)
-	if(secure && !broken)
-		if(user)
-			user.visible_message(SPAN_WARNING("Sparks fly from [src]!"),
-							SPAN_WARNING("You scramble [src]'s lock, breaking it open!"),
-							SPAN_HEAR("You hear a faint electrical spark."))
-		playsound(src, "sparks", 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-		broken = TRUE
-		locked = FALSE
-		update_appearance()
-
 /obj/structure/closet/get_remote_view_fullscreens(mob/user)
 	if(user.stat == DEAD || !(user.sight & (SEEOBJS|SEEMOBS)))
 		user.overlay_fullscreen("remote_view", /atom/movable/screen/fullscreen/impaired, HUD_IMPAIRMENT_HALF_BLIND)
@@ -592,10 +581,6 @@
 			SSexplosions.med_mov_atom += contents
 		if(EXPLODE_LIGHT)
 			SSexplosions.low_mov_atom += contents
-
-/obj/structure/closet/singularity_act()
-	dump_contents()
-	..()
 
 /obj/structure/closet/AllowDrop()
 	return TRUE

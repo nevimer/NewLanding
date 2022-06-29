@@ -134,21 +134,7 @@
 /// Attack the ice cream vat to get some ice cream. This will change as new ways of getting ice cream are added.
 /datum/component/ice_cream_holder/proc/on_item_attack_obj(obj/item/source, obj/target, mob/user)
 	SIGNAL_HANDLER
-	if(!istype(target, /obj/machinery/icecream_vat))
-		return
-	var/obj/machinery/icecream_vat/dispenser = target
-	if(length(scoops) < max_scoops)
-		if(dispenser.product_types[dispenser.selected_flavour] > 0)
-			var/datum/ice_cream_flavour/flavour = GLOB.ice_cream_flavours[dispenser.selected_flavour]
-			if(flavour.add_flavour(src, dispenser.beaker?.reagents.total_volume ? dispenser.beaker.reagents : null))
-				dispenser.visible_message("[icon2html(dispenser, viewers(source))] [SPAN_INFO("[user] scoops delicious [dispenser.selected_flavour] ice cream into [source].")]")
-				dispenser.product_types[dispenser.selected_flavour]--
-				INVOKE_ASYNC(dispenser, /obj/machinery/icecream_vat.proc/updateDialog)
-		else
-			to_chat(user, SPAN_WARNING("There is not enough ice cream left!"))
-	else
-		to_chat(user, SPAN_WARNING("[source] can't hold anymore ice cream!"))
-	return COMPONENT_CANCEL_ATTACK_CHAIN
+	return
 
 /////ICE CREAM FLAVOUR DATUM STUFF
 

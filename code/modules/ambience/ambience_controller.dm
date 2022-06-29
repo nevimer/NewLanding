@@ -67,10 +67,8 @@
 		qdel(src)
 	var/mob/client_mob = client.mob
 
-	/// Update multiplier from jukeboxes
-	var/datum/jukebox_controller/jb_controller = client.jukebox_controller
-	var/jukebox_volume = jb_controller ? jb_controller.loudest_jukebox_volume : 0
-	jukebox_volume_multiplier = 1 - (min((jukebox_volume * JUKEBOX_AMBIENCE_CLAMP_PER_VOLUME), JUKEBOX_AMBIENCE_CLAMP_MAXIMUM) / 100)
+	//var/jukebox_volume = 0
+	//jukebox_volume_multiplier = 1 - (min((jukebox_volume * JUKEBOX_AMBIENCE_CLAMP_PER_VOLUME), JUKEBOX_AMBIENCE_CLAMP_MAXIMUM) / 100)
 	// Dont try and play ambience for new players
 	if(isnewplayer(client_mob))
 		return
@@ -375,11 +373,7 @@
 
 	/// This will not be updated if the user position does not change, but that's fine.
 	mob_pressure_factor = 1
-	var/datum/gas_mixture/source_env = mob_turf.return_air()
-	if(source_env)
-		var/pressure = source_env.return_pressure()
-		if(pressure < ONE_ATMOSPHERE)
-			mob_pressure_factor = max((pressure - SOUND_MINIMUM_PRESSURE)/(ONE_ATMOSPHERE - SOUND_MINIMUM_PRESSURE), 0)
+
 	needs_position_updates = TRUE
 	return TRUE
 
@@ -453,11 +447,6 @@
 		return
 	source_turf = turf_to_set
 	pressure_factor = 1
-	var/datum/gas_mixture/source_env = source_turf.return_air()
-	if(source_env)
-		var/pressure = source_env.return_pressure()
-		if(pressure < ONE_ATMOSPHERE)
-			pressure_factor = max((pressure - SOUND_MINIMUM_PRESSURE)/(ONE_ATMOSPHERE - SOUND_MINIMUM_PRESSURE), 0)
 
 /datum/managed_ambience/proc/update_position_and_pressure_factor(mob_pressure_factor, mob_x, mob_y, datum/ambient_sound/sound_datum)
 	if(!mob_x || !source_turf)

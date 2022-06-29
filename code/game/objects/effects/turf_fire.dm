@@ -72,27 +72,6 @@
 /obj/effect/abstract/turf_fire/proc/process_waste()
 	var/turf/open/open_turf = loc
 	open_turf.pollute_list_turf(list(/datum/pollutant/smoke = 12, /datum/pollutant/carbon_air_pollution = 5), POLLUTION_ACTIVE_EMITTER_CAP)
-	if(open_turf.planetary_atmos)
-		return TRUE
-	var/list/air_gases = open_turf.air?.gases
-	if(!air_gases)
-		return FALSE
-	var/oxy = air_gases[/datum/gas/oxygen] ? air_gases[/datum/gas/oxygen][MOLES] : 0
-	if (oxy < 0.5)
-		return FALSE
-	var/datum/gas_mixture/cached_air = open_turf.air
-	var/temperature = cached_air.temperature
-	var/old_heat_capacity = cached_air.heat_capacity()
-	var/burn_rate = TURF_FIRE_BURN_RATE_BASE + fire_power * TURF_FIRE_BURN_RATE_PER_POWER
-	if(burn_rate > oxy)
-		burn_rate = oxy
-	air_gases[/datum/gas/oxygen][MOLES] = air_gases[/datum/gas/oxygen][MOLES] - burn_rate
-	ASSERT_GAS(/datum/gas/carbon_dioxide,cached_air)
-	air_gases[/datum/gas/carbon_dioxide][MOLES] += burn_rate * TURF_FIRE_BURN_CARBON_DIOXIDE_MULTIPLIER
-	var/new_heat_capacity = cached_air.heat_capacity()
-	var/energy_released = burn_rate * TURF_FIRE_ENERGY_PER_BURNED_OXY_MOL
-	cached_air.temperature = (temperature * old_heat_capacity + energy_released) / new_heat_capacity
-	open_turf.air_update_turf(TRUE)
 	return TRUE
 
 /obj/effect/abstract/turf_fire/process()
@@ -106,8 +85,6 @@
 		if(!process_waste())
 			qdel(src)
 			return
-		if(open_turf.air.temperature < TURF_FIRE_REQUIRED_TEMP)
-			fire_power -= TURF_FIRE_POWER_LOSS_ON_LOW_TEMP
 		fire_power--
 		if(fire_power <= 0)
 			qdel(src)

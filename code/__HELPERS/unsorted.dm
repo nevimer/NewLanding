@@ -276,39 +276,9 @@ Turf and target are separate in case you want to teleport some distance from a t
 		moblist.Add(M)
 	for(var/mob/dead/new_player/M in sortmob)
 		moblist.Add(M)
-	for(var/mob/living/simple_animal/slime/M in sortmob)
-		moblist.Add(M)
 	for(var/mob/living/simple_animal/M in sortmob)
 		moblist.Add(M)
 	return moblist
-
-// Format a power value in W, kW, MW, or GW.
-/proc/DisplayPower(powerused)
-	if(powerused < 1000) //Less than a kW
-		return "[powerused] W"
-	else if(powerused < 1000000) //Less than a MW
-		return "[round((powerused * 0.001),0.01)] kW"
-	else if(powerused < 1000000000) //Less than a GW
-		return "[round((powerused * 0.000001),0.001)] MW"
-	return "[round((powerused * 0.000000001),0.0001)] GW"
-
-// Format an energy value in J, kJ, MJ, or GJ. 1W = 1J/s.
-/proc/DisplayJoules(units)
-	if (units < 1000) // Less than a kJ
-		return "[round(units, 0.1)] J"
-	else if (units < 1000000) // Less than a MJ
-		return "[round(units * 0.001, 0.01)] kJ"
-	else if (units < 1000000000) // Less than a GJ
-		return "[round(units * 0.000001, 0.001)] MJ"
-	return "[round(units * 0.000000001, 0.0001)] GJ"
-
-// Format an energy value measured in Power Cell units.
-/proc/DisplayEnergy(units)
-	// APCs process every (SSmachines.wait * 0.1) seconds, and turn 1 W of
-	// excess power into GLOB.CELLRATE energy units when charging cells.
-	// With the current configuration of wait=20 and CELLRATE=0.002, this
-	// means that one unit is 1 kJ.
-	return DisplayJoules(units * SSmachines.wait * 0.1 / GLOB.CELLRATE)
 
 /proc/get_mob_by_ckey(key)
 	if(!key)
@@ -649,22 +619,16 @@ this may seem bad, but you're atleast as close to the center of the atom as poss
 Checks if that loc and dir has an item on the wall
 */
 GLOBAL_LIST_INIT(WALLITEMS, typecacheof(list(
-	/obj/machinery/power/apc, /obj/machinery/airalarm, /obj/item/radio/intercom,
 	/obj/structure/extinguisher_cabinet, /obj/structure/reagent_dispensers/peppertank,
-	/obj/machinery/status_display, /obj/machinery/requests_console, /obj/machinery/light_switch, /obj/structure/sign,
-	/obj/machinery/newscaster, /obj/machinery/firealarm, /obj/structure/noticeboard, /obj/machinery/button,
-	/obj/machinery/computer/security/telescreen, /obj/machinery/embedded_controller/radio/simple_vent_controller,
-	/obj/item/storage/secure/safe, /obj/machinery/door_timer, /obj/machinery/flasher, /obj/machinery/keycard_auth,
-	/obj/structure/mirror, /obj/structure/fireaxecabinet, /obj/machinery/computer/security/telescreen/entertainment,
+	/obj/structure/sign,
+	/obj/item/storage/secure/safe,
+	/obj/structure/mirror, /obj/structure/fireaxecabinet,
 	/obj/structure/sign/picture_frame
 	)))
 
-GLOBAL_LIST_INIT(WALLITEMS_EXTERNAL, typecacheof(list(
-	/obj/machinery/camera, /obj/structure/camera_assembly,
-	/obj/structure/light_construct, /obj/machinery/light)))
+GLOBAL_LIST_INIT(WALLITEMS_EXTERNAL, typecacheof(list()))
 
-GLOBAL_LIST_INIT(WALLITEMS_INVERSE, typecacheof(list(
-	/obj/structure/light_construct, /obj/machinery/light)))
+GLOBAL_LIST_INIT(WALLITEMS_INVERSE, typecacheof(list()))
 
 
 /proc/gotwallitem(loc, dir, check_external = 0)
@@ -1223,13 +1187,6 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 	if(!dest_turf)
 		return FALSE
 	for(var/obj/turf_content in dest_turf)
-		if(istype(turf_content, /obj/machinery/door/window))
-			if((turf_content.dir == test_dir) || is_fulltile)
-				return FALSE
-		if(istype(turf_content, /obj/structure/windoor_assembly))
-			var/obj/structure/windoor_assembly/windoor_assembly = turf_content
-			if(windoor_assembly.dir == test_dir || is_fulltile)
-				return FALSE
 		if(istype(turf_content, /obj/structure/window))
 			var/obj/structure/window/window_structure = turf_content
 			if(window_structure.dir == test_dir || window_structure.fulltile || is_fulltile)

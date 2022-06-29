@@ -61,7 +61,7 @@
 
 /obj/effect/baseturf_helper/asteroid/airless
 	name = "asteroid airless baseturf editor"
-	baseturf = /turf/open/floor/plating/asteroid/airless
+	baseturf = /turf/open/floor/plating/asteroid
 
 /obj/effect/baseturf_helper/asteroid/basalt
 	name = "asteroid basalt baseturf editor"
@@ -69,7 +69,7 @@
 
 /obj/effect/baseturf_helper/asteroid/snow
 	name = "asteroid snow baseturf editor"
-	baseturf = /turf/open/floor/plating/asteroid/snow
+	baseturf = /turf/open/floor/plating/asteroid
 
 /obj/effect/baseturf_helper/beach/sand
 	name = "beach sand baseturf editor"
@@ -85,7 +85,7 @@
 
 /obj/effect/baseturf_helper/lava_land/surface
 	name = "lavaland baseturf editor"
-	baseturf = /turf/open/lava/smooth/lava_land_surface
+	baseturf = /turf/open/lava/smooth
 
 
 /obj/effect/mapping_helpers
@@ -96,84 +96,6 @@
 /obj/effect/mapping_helpers/Initialize()
 	..()
 	return late ? INITIALIZE_HINT_LATELOAD : INITIALIZE_HINT_QDEL
-
-
-//airlock helpers
-/obj/effect/mapping_helpers/airlock
-	layer = DOOR_HELPER_LAYER
-
-/obj/effect/mapping_helpers/airlock/Initialize(mapload)
-	. = ..()
-	if(!mapload)
-		log_mapping("[src] spawned outside of mapload!")
-		return
-	var/obj/machinery/door/airlock/airlock = locate(/obj/machinery/door/airlock) in loc
-	if(!airlock)
-		log_mapping("[src] failed to find an airlock at [AREACOORD(src)]")
-	else
-		payload(airlock)
-
-/obj/effect/mapping_helpers/airlock/proc/payload(obj/machinery/door/airlock/payload)
-	return
-
-/obj/effect/mapping_helpers/airlock/cyclelink_helper
-	name = "airlock cyclelink helper"
-	icon_state = "airlock_cyclelink_helper"
-
-/obj/effect/mapping_helpers/airlock/cyclelink_helper/payload(obj/machinery/door/airlock/airlock)
-	if(airlock.cyclelinkeddir)
-		log_mapping("[src] at [AREACOORD(src)] tried to set [airlock] cyclelinkeddir, but it's already set!")
-	else
-		airlock.cyclelinkeddir = dir
-
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi
-	name = "airlock multi-cyclelink helper"
-	icon_state = "airlock_multicyclelink_helper"
-	var/cycle_id
-
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi/payload(obj/machinery/door/airlock/airlock)
-	if(airlock.closeOtherId)
-		log_mapping("[src] at [AREACOORD(src)] tried to set [airlock] closeOtherId, but it's already set!")
-	else
-		airlock.closeOtherId = cycle_id
-
-/obj/effect/mapping_helpers/airlock/locked
-	name = "airlock lock helper"
-	icon_state = "airlock_locked_helper"
-
-/obj/effect/mapping_helpers/airlock/locked/payload(obj/machinery/door/airlock/airlock)
-	if(airlock.locked)
-		log_mapping("[src] at [AREACOORD(src)] tried to bolt [airlock] but it's already locked!")
-	else
-		airlock.locked = TRUE
-
-
-/obj/effect/mapping_helpers/airlock/unres
-	name = "airlock unresctricted side helper"
-	icon_state = "airlock_unres_helper"
-
-/obj/effect/mapping_helpers/airlock/unres/payload(obj/machinery/door/airlock/airlock)
-	airlock.unres_sides ^= dir
-
-/obj/effect/mapping_helpers/airlock/abandoned
-	name = "airlock abandoned helper"
-	icon_state = "airlock_abandoned"
-
-/obj/effect/mapping_helpers/airlock/abandoned/payload(obj/machinery/door/airlock/airlock)
-	if(airlock.abandoned)
-		log_mapping("[src] at [AREACOORD(src)] tried to make [airlock] abandoned but it's already abandoned!")
-	else
-		airlock.abandoned = TRUE
-
-/obj/effect/mapping_helpers/airlock/cutaiwire
-	name = "airlock cut ai wire helper"
-	icon_state = "airlock_cutaiwire"
-
-/obj/effect/mapping_helpers/airlock/cutaiwire/payload(obj/machinery/door/airlock/airlock)
-	if(airlock.cutAiWire)
-		log_mapping("[src] at [AREACOORD(src)] tried to cut the ai wire on [airlock] but it's already cut!")
-	else
-		airlock.cutAiWire = TRUE
 
 //needs to do its thing before spawn_rivers() is called
 INITIALIZE_IMMEDIATE(/obj/effect/mapping_helpers/no_lava)
@@ -251,40 +173,6 @@ INITIALIZE_IMMEDIATE(/obj/effect/mapping_helpers/no_lava)
 				var/obj/item/organ/O = part
 				O.organ_flags |= ORGAN_FROZEN
 		j.update_appearance()
-	qdel(src)
-
-//lets mappers place notes on airlocks with custom info or a pre-made note from a path
-/obj/effect/mapping_helpers/airlock_note_placer
-	name = "Airlock Note Placer"
-	late = TRUE
-	icon_state = "airlocknoteplacer"
-	var/note_info //for writing out custom notes without creating an extra paper subtype
-	var/note_name //custom note name
-	var/note_path //if you already have something wrote up in a paper subtype, put the path here
-
-/obj/effect/mapping_helpers/airlock_note_placer/LateInitialize()
-	var/turf/turf = get_turf(src)
-	if(note_path && !istype(note_path, /obj/item/paper)) //don't put non-paper in the paper slot thank you
-		log_mapping("[src] at [x],[y] had an improper note_path path, could not place paper note.")
-		qdel(src)
-	if(locate(/obj/machinery/door/airlock) in turf)
-		var/obj/machinery/door/airlock/found_airlock = locate(/obj/machinery/door/airlock) in turf
-		if(note_path)
-			found_airlock.note = note_path
-			found_airlock.update_appearance()
-			qdel(src)
-		if(note_info)
-			var/obj/item/paper/paper = new /obj/item/paper(src)
-			if(note_name)
-				paper.name = note_name
-			paper.info = "[note_info]"
-			found_airlock.note = paper
-			paper.forceMove(found_airlock)
-			found_airlock.update_appearance()
-			qdel(src)
-		log_mapping("[src] at [x],[y] had no note_path or note_info, cannot place paper note.")
-		qdel(src)
-	log_mapping("[src] at [x],[y] could not find an airlock on current turf, cannot place paper note.")
 	qdel(src)
 
 //This helper applies traits to things on the map directly.
@@ -386,21 +274,3 @@ INITIALIZE_IMMEDIATE(/obj/effect/mapping_helpers/no_lava)
 	icon_cache[url] = I
 	query_in_progress = FALSE
 	return I
-
-/**
- * ## trapdoor placer!
- *
- * This places an unlinked trapdoor in the tile its on (so someone with a remote needs to link it up first)
- * Admins may spawn this in the round for additional trapdoors if they so desire
- * if YOU want to learn more about trapdoors, read about the component at trapdoor.dm
- * note: this is not a turf subtype because the trapdoor needs the type of the turf to turn back into
- */
-/obj/effect/mapping_helpers/trapdoor_placer
-	name = "trapdoor placer"
-	late = TRUE
-	icon_state = "trapdoor"
-
-/obj/effect/mapping_helpers/trapdoor_placer/LateInitialize()
-	var/turf/component_target = get_turf(src)
-	component_target.AddComponent(/datum/component/trapdoor, starts_open = FALSE)
-	qdel(src)

@@ -16,8 +16,6 @@
 	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_OPEN_FLOOR)
 	canSmoothWith = list(SMOOTH_GROUP_OPEN_FLOOR, SMOOTH_GROUP_TURF_OPEN)
 
-	thermal_conductivity = 0.04
-	heat_capacity = 10000
 	intact = TRUE
 	tiled_dirt = TRUE
 
@@ -103,10 +101,6 @@
 /turf/open/floor/is_shielded()
 	for(var/obj/structure/A in contents)
 		return 1
-
-/turf/open/floor/update_icon()
-	. = ..()
-	update_visuals()
 
 /turf/open/floor/attack_paw(mob/user, list/modifiers)
 	return attack_hand(user, modifiers)
@@ -211,129 +205,8 @@
 		return null
 	return new floor_tile(src)
 
-/turf/open/floor/singularity_pull(S, current_size)
-	..()
-	var/sheer = FALSE
-	switch(current_size)
-		if(STAGE_THREE)
-			if(prob(30))
-				sheer = TRUE
-		if(STAGE_FOUR)
-			if(prob(50))
-				sheer = TRUE
-		if(STAGE_FIVE to INFINITY)
-			if(prob(70))
-				sheer = TRUE
-			else if(prob(50) && (/turf/open/space in baseturfs))
-				ReplaceWithLattice()
-	if(sheer)
-		if(has_tile())
-			remove_tile(null, TRUE, TRUE, TRUE)
-
 /turf/open/floor/acid_melt()
 	ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
-
-/turf/open/floor/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	switch(the_rcd.mode)
-		if(RCD_FLOORWALL)
-			return rcd_result_with_memory(
-				list("mode" = RCD_FLOORWALL, "delay" = 2 SECONDS, "cost" = 16),
-				src, RCD_MEMORY_WALL,
-			)
-		if(RCD_AIRLOCK)
-			if(the_rcd.airlock_glass)
-				return list("mode" = RCD_AIRLOCK, "delay" = 50, "cost" = 20)
-			else
-				return list("mode" = RCD_AIRLOCK, "delay" = 50, "cost" = 16)
-		if(RCD_DECONSTRUCT)
-			return list("mode" = RCD_DECONSTRUCT, "delay" = 50, "cost" = 33)
-		if(RCD_WINDOWGRILLE)
-			return rcd_result_with_memory(
-				list("mode" = RCD_WINDOWGRILLE, "delay" = 1 SECONDS, "cost" = 4),
-				src, RCD_MEMORY_WINDOWGRILLE,
-			)
-		if(RCD_MACHINE)
-			return list("mode" = RCD_MACHINE, "delay" = 20, "cost" = 25)
-		if(RCD_COMPUTER)
-			return list("mode" = RCD_COMPUTER, "delay" = 20, "cost" = 25)
-		if(RCD_FURNISHING)
-			return list("mode" = RCD_FURNISHING, "delay" = the_rcd.furnish_delay, "cost" = the_rcd.furnish_cost)
-	return FALSE
-
-/turf/open/floor/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	switch(passed_mode)
-		if(RCD_FLOORWALL)
-			to_chat(user, SPAN_NOTICE("You build a wall."))
-			var/turf/closed/wall/placed_wall = PlaceOnTop(/turf/closed/wall)
-			placed_wall.set_wall_information(/datum/material/iron)
-			return TRUE
-		if(RCD_AIRLOCK)
-			for(var/obj/machinery/door/door in src)
-				if(door.sub_door)
-					continue
-				to_chat(user, SPAN_NOTICE("There is another door here!"))
-				return FALSE
-			if(ispath(the_rcd.airlock_type, /obj/machinery/door/window))
-				to_chat(user, SPAN_NOTICE("You build a windoor."))
-				var/obj/machinery/door/window/new_window = new the_rcd.airlock_type(src, user.dir)
-				if(the_rcd.airlock_electronics)
-					new_window.req_access = the_rcd.airlock_electronics.accesses.Copy()
-					new_window.req_one_access = the_rcd.airlock_electronics.one_access
-					new_window.unres_sides = the_rcd.airlock_electronics.unres_sides
-				new_window.autoclose = TRUE
-				new_window.update_appearance()
-				return TRUE
-			to_chat(user, SPAN_NOTICE("You build an airlock."))
-			var/obj/machinery/door/airlock/new_airlock = new the_rcd.airlock_type(src)
-			new_airlock.electronics = new /obj/item/electronics/airlock(new_airlock)
-			if(the_rcd.airlock_electronics)
-				new_airlock.electronics.accesses = the_rcd.airlock_electronics.accesses.Copy()
-				new_airlock.electronics.one_access = the_rcd.airlock_electronics.one_access
-				new_airlock.electronics.unres_sides = the_rcd.airlock_electronics.unres_sides
-			if(new_airlock.electronics.one_access)
-				new_airlock.req_one_access = new_airlock.electronics.accesses
-			else
-				new_airlock.req_access = new_airlock.electronics.accesses
-			if(new_airlock.electronics.unres_sides)
-				new_airlock.unres_sides = new_airlock.electronics.unres_sides
-			new_airlock.autoclose = TRUE
-			new_airlock.update_appearance()
-			return TRUE
-		if(RCD_DECONSTRUCT)
-			if(!ScrapeAway(flags = CHANGETURF_INHERIT_AIR))
-				return FALSE
-			to_chat(user, SPAN_NOTICE("You deconstruct [src]."))
-			return TRUE
-		if(RCD_WINDOWGRILLE)
-			if(locate(/obj/structure/grille) in src)
-				return FALSE
-			to_chat(user, SPAN_NOTICE("You construct the grille."))
-			var/obj/structure/grille/new_grille = new(src)
-			new_grille.set_anchored(TRUE)
-			return TRUE
-		if(RCD_MACHINE)
-			if(locate(/obj/structure/frame/machine) in src)
-				return FALSE
-			var/obj/structure/frame/machine/new_machine = new(src)
-			new_machine.state = 2
-			new_machine.icon_state = "box_1"
-			new_machine.set_anchored(TRUE)
-			return TRUE
-		if(RCD_COMPUTER)
-			if(locate(/obj/structure/frame/computer) in src)
-				return FALSE
-			var/obj/structure/frame/computer/new_computer = new(src)
-			new_computer.set_anchored(TRUE)
-			new_computer.state = 1
-			new_computer.setDir(the_rcd.computer_dir)
-			return TRUE
-		if(RCD_FURNISHING)
-			if(locate(the_rcd.furnish_type) in src)
-				return FALSE
-			var/atom/new_furnish = new the_rcd.furnish_type(src)
-			new_furnish.setDir(user.dir)
-			return TRUE
-	return FALSE
 
 /turf/open/floor/proc/try_place_tile(obj/item/C, mob/user, can_reinforce, considered_broken)
 	if(istype(C, /obj/item/stack/rods) && can_reinforce)

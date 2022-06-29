@@ -21,37 +21,16 @@
 		switch(level)
 			if(SEC_LEVEL_GREEN)
 				minor_announce(CONFIG_GET(string/alert_green), "Attention! Security level lowered to green:")
-				if(SSshuttle.emergency.mode == SHUTTLE_CALL || SSshuttle.emergency.mode == SHUTTLE_RECALL)
-					if(SSsecurity_level.current_level >= SEC_LEVEL_RED)
-						SSshuttle.emergency.modTimer(4)
-					else
-						SSshuttle.emergency.modTimer(2)
 			if(SEC_LEVEL_BLUE)
 				if(SSsecurity_level.current_level < SEC_LEVEL_BLUE)
 					minor_announce(CONFIG_GET(string/alert_blue_upto), "Attention! Security level elevated to blue:",1)
-					if(SSshuttle.emergency.mode == SHUTTLE_CALL || SSshuttle.emergency.mode == SHUTTLE_RECALL)
-						SSshuttle.emergency.modTimer(0.5)
-				else
-					minor_announce(CONFIG_GET(string/alert_blue_downto), "Attention! Security level lowered to blue:")
-					if(SSshuttle.emergency.mode == SHUTTLE_CALL || SSshuttle.emergency.mode == SHUTTLE_RECALL)
-						SSshuttle.emergency.modTimer(2)
 			if(SEC_LEVEL_RED)
 				if(SSsecurity_level.current_level < SEC_LEVEL_RED)
 					minor_announce(CONFIG_GET(string/alert_red_upto), "Attention! Code red!",1)
-					if(SSshuttle.emergency.mode == SHUTTLE_CALL || SSshuttle.emergency.mode == SHUTTLE_RECALL)
-						if(SSsecurity_level.current_level == SEC_LEVEL_GREEN)
-							SSshuttle.emergency.modTimer(0.25)
-						else
-							SSshuttle.emergency.modTimer(0.5)
 				else
 					minor_announce(CONFIG_GET(string/alert_red_downto), "Attention! Code red!")
 			if(SEC_LEVEL_DELTA)
 				minor_announce(CONFIG_GET(string/alert_delta), "Attention! Delta security level reached!",1)
-				if(SSshuttle.emergency.mode == SHUTTLE_CALL || SSshuttle.emergency.mode == SHUTTLE_RECALL)
-					if(SSsecurity_level.current_level == SEC_LEVEL_GREEN)
-						SSshuttle.emergency.modTimer(0.25)
-					else if(SSsecurity_level.current_level == SEC_LEVEL_BLUE)
-						SSshuttle.emergency.modTimer(0.5)
 
 		SSsecurity_level.set_level(level)
 

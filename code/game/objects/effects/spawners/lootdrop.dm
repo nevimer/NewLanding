@@ -43,16 +43,6 @@
 			/obj/item/storage/box/donkpockets/donkpockethonk = 1,
 		)
 
-/obj/effect/spawner/lootdrop/arcade_boards
-	name = "arcade board spawner"
-	lootdoubles = FALSE
-	loot = list()
-
-/obj/effect/spawner/lootdrop/arcade_boards/Initialize(mapload)
-	loot += subtypesof(/obj/item/circuitboard/computer/arcade)
-	return ..()
-
-
 /obj/effect/spawner/lootdrop/armory_contraband
 	name = "armory contraband gun spawner"
 	lootdoubles = FALSE
@@ -89,11 +79,8 @@
 				/obj/item/storage/fancy/cigarettes = 3,
 				/obj/item/clothing/mask/cigarette/rollie/cannabis = 4,
 				/obj/item/toy/crayon/spraycan = 2,
-				/obj/item/crowbar = 1,
-				/obj/item/assembly/flash/handheld = 1,
 				/obj/item/restraints/handcuffs/cable/zipties = 1,
 				/obj/item/restraints/handcuffs = 1,
-				/obj/item/radio/off = 1,
 				/obj/item/lighter = 3,
 				/obj/item/storage/box/matches = 3,
 				/obj/item/reagent_containers/syringe/contraband/space_drugs = 1,
@@ -116,7 +103,6 @@
 				/obj/item/kitchen/knife/shiv/carrot = 1,
 				/obj/item/kitchen/knife = 1,
 				/obj/item/storage/wallet/random = 1,
-				/obj/item/pda = 1
 				)
 
 /obj/effect/spawner/lootdrop/gambling
@@ -137,8 +123,6 @@
 				/obj/effect/spawner/lootdrop/cigbutt = 8,
 				/obj/item/reagent_containers/syringe = 5,
 				/obj/item/food/deadmouse = 2,
-				/obj/item/light/tube/broken = 3,
-				/obj/item/light/tube/broken = 1,
 				/obj/item/trash/candle = 1)
 
 /obj/effect/spawner/lootdrop/cigbutt
@@ -278,15 +262,6 @@
 	name = "8 x maintenance loot spawner"
 	lootcount = 8
 
-/obj/effect/spawner/lootdrop/crate_spawner
-	name = "lootcrate spawner" //USE PROMO CODE "SELLOUT" FOR 20% OFF!
-	lootdoubles = FALSE
-
-	loot = list(
-				/obj/structure/closet/crate/secure/loot = 20,
-				"" = 80
-				)
-
 /obj/effect/spawner/lootdrop/memeorgans
 	name = "meme organ spawner"
 	loot = list(
@@ -298,7 +273,6 @@
 		/obj/item/organ/tongue/fly,
 		/obj/item/organ/tongue/snail,
 		/obj/item/organ/tongue/lizard,
-		/obj/item/organ/tongue/ethereal,
 		/obj/item/organ/tongue/robot,
 		/obj/item/organ/tongue/zombie,
 		/obj/item/organ/appendix,
@@ -419,14 +393,6 @@
 		/obj/item/stack/spacecash/c1000 = 5,
 		/obj/item/stack/spacecash/c10000 = 1
 	)
-
-/// Space loot spawner. Couple of random bits of technology-adjacent stuff including anomaly cores and BEPIS techs.
-/obj/effect/spawner/lootdrop/space/fancytech
-	lootcount = 2
-	loot = list(
-		/obj/item/camera_bug = 1
-	)
-
 
 /// Mail loot spawner. Drop pool of advanced medical tools typically from research. Not endgame content.
 /obj/effect/spawner/lootdrop/space/fancytool/advmedicalonly
@@ -627,27 +593,6 @@
 		/obj/item/mining_scanner = 1,
 		/obj/item/t_scanner = 1,
 		/obj/item/healthanalyzer = 1,
-		/obj/item/analyzer = 1,
-		/obj/item/radio = 1
-	)
-
-/obj/effect/spawner/lootdrop/powercell
-	name = "powercell spawner"
-	loot = list(
-		/obj/item/stock_parts/cell = 1,
-		/obj/item/stock_parts/cell/crap = 1,
-		/obj/item/stock_parts/cell/upgraded = 1,
-		/obj/item/stock_parts/cell/upgraded/plus = 1,
-		/obj/item/stock_parts/cell/high = 1
-	)
-
-/obj/effect/spawner/lootdrop/bomb_supply
-	name = "bomb supply spawner"
-	loot = list(
-		/obj/item/assembly/igniter = 1,
-		/obj/item/assembly/prox_sensor = 1,
-		/obj/item/assembly/signaler = 1,
-		/obj/item/assembly/timer = 1
 	)
 
 /obj/effect/spawner/lootdrop/toolbox
@@ -663,15 +608,11 @@
 	name = "tech supply spawner"
 	loot = list(
 		/obj/effect/spawner/lootdrop/toolbox = 1,
-		/obj/effect/spawner/lootdrop/bomb_supply = 1,
-		/obj/effect/spawner/lootdrop/powercell = 1,
 		/obj/effect/spawner/lootdrop/scanner = 1,
 		/obj/effect/spawner/lootdrop/tool = 1,
 		/obj/item/storage/belt/utility = 1,
 		/obj/item/clothing/gloves/color/yellow = 1,
 		/obj/item/clothing/gloves/color/fyellow = 1,
-		/obj/item/stack/cable_coil = 1,
-		/obj/item/assembly/flash = 1
 	)
 
 /obj/effect/spawner/lootdrop/tech_supply/five
@@ -685,7 +626,6 @@
 		/obj/effect/spawner/lootdrop/medicine/five = 1,
 		/obj/effect/spawner/lootdrop/medkit = 1,
 		/obj/item/bodybag = 1,
-		/obj/machinery/iv_drip = 1,
 		/obj/structure/closet/crate/freezer/blood = 1,
 		/obj/structure/closet/crate/freezer/surplus_limbs = 1,
 		/obj/item/storage/backpack/duffelbag/med/surgery = 1,
@@ -729,15 +669,6 @@
 		/obj/item/storage/firstaid/brute = 1
 	)
 
-/obj/effect/spawner/lootdrop/hardsuit
-	name = "hardsuit spawner"
-	loot = list(
-		/obj/item/clothing/suit/space/hardsuit/security = 1,
-		/obj/item/clothing/suit/space/hardsuit/mining = 1,
-		/obj/item/clothing/suit/space/hardsuit/medical = 1,
-		/obj/item/clothing/suit/space/hardsuit/engine = 1
-	)
-
 /obj/effect/spawner/lootdrop/contraband
 	name = "contraband spawner"
 	loot = list(
@@ -760,7 +691,6 @@
 		/obj/item/storage/fancy/cigarettes/cigpack_shadyjims = 1,
 		/obj/item/clothing/mask/gas/syndicate = 1,
 		/obj/item/clothing/neck/necklace/dope = 1,
-		/obj/item/melee/baton/cattleprod = 1
 	)
 
 /obj/effect/spawner/lootdrop/alcohol_bottle
@@ -779,16 +709,6 @@
 		/obj/item/reagent_containers/food/drinks/bottle/kahlua = 1
 	)
 
-/obj/effect/spawner/lootdrop/energy_weapon
-	name = "energy weapon spawner"
-	loot = list(
-		/obj/item/gun/energy/e_gun = 1,
-		/obj/item/gun/energy/e_gun/mini = 1,
-		/obj/item/gun/energy/laser/hellgun = 1,
-		/obj/item/gun/energy/e_gun/nuclear = 1,
-		/obj/item/gun/energy/taser = 1
-	)
-
 /obj/effect/spawner/lootdrop/ballistic_weapon
 	name = "ballistic weapon spawner"
 	loot = list(
@@ -802,13 +722,11 @@
 	loot = list(
 		/obj/item/gun/ballistic/automatic/pistol = 1,
 		/obj/item/gun/ballistic/automatic/pistol/m1911 = 1,
-		/obj/item/gun/energy/e_gun/mini = 1
 	)
 
 /obj/effect/spawner/lootdrop/melee_weapon
 	name = "melee weapon spawner"
 	loot = list(
-		/obj/item/melee/baton/loaded = 1,
 		/obj/item/switchblade = 1,
 		/obj/item/kitchen/knife/combat/survival = 1
 	)
@@ -857,10 +775,8 @@
 /obj/effect/spawner/lootdrop/away_loot
 	name = "away loot spawner"
 	loot = list(
-		/obj/effect/spawner/lootdrop/energy_weapon = 1,
 		/obj/effect/spawner/lootdrop/ballistic_weapon = 1,
 		/obj/effect/spawner/lootdrop/contraband = 1,
-		/obj/effect/spawner/lootdrop/hardsuit = 1,
 		/obj/effect/spawner/lootdrop/medicine/five = 1,
 		/obj/effect/spawner/lootdrop/tech_supply/five = 1,
 		/obj/effect/spawner/lootdrop/space/material = 1,

@@ -4,7 +4,6 @@
 	/datum/surgery_step/mechanic_unwrench,
 	/datum/surgery_step/pry_off_plating/fullbody,
 	/datum/surgery_step/cut_wires/fullbody,
-	/datum/surgery_step/replace_wires/fullbody,
 	/datum/surgery_step/prepare_electronics,
 	/datum/surgery_step/add_plating/fullbody,
 	/datum/surgery_step/weld_plating/fullbody,
@@ -38,15 +37,6 @@
 	display_results(user, target, SPAN_NOTICE("You begin to weld [target]'s plating..."),
 			"[user] begins to weld [target]'s plating.",
 			"[user] begins to weld [target]'s plating.")
-
-/datum/surgery_step/replace_wires/fullbody
-	time = 72
-	cableamount = 15
-
-/datum/surgery_step/replace_wires/fullbody/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, SPAN_NOTICE("You begin to replace [target]'s wiring..."),
-			"[user] begins to replace [target]'s wiring.",
-			"[user] begins to replace [target]'s wiring.")
 
 /datum/surgery_step/add_plating/fullbody
 	time = 120

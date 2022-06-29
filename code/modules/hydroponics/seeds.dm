@@ -174,9 +174,6 @@
 /obj/item/seeds/bullet_act(obj/projectile/Proj) //Works with the Somatoray to modify plant variables.
 	if(istype(Proj, /obj/projectile/energy/florayield))
 		var/rating = 1
-		if(istype(loc, /obj/machinery/hydroponics))
-			var/obj/machinery/hydroponics/H = loc
-			rating = H.rating
 
 		if(yield == 0)//Oh god don't divide by zero you'll doom us all.
 			adjust_yield(1 * rating)
@@ -190,68 +187,11 @@
 /obj/item/seeds/proc/getYield()
 	var/return_yield = yield
 
-	var/obj/machinery/hydroponics/parent = loc
-	if(istype(loc, /obj/machinery/hydroponics))
-		if(parent.yieldmod == 0)
-			return_yield = min(return_yield, 1)//1 if above zero, 0 otherwise
-		else
-			return_yield *= (parent.yieldmod)
-
 	return return_yield
 
 
 /obj/item/seeds/proc/harvest(mob/user)
-	///Reference to the tray/soil the seeds are planted in.
-	var/obj/machinery/hydroponics/parent = loc //for ease of access
-	///Count used for creating the correct amount of results to the harvest.
-	var/t_amount = 0
-	///List of plants all harvested from the same batch.
-	var/list/result = list()
-	///Tile of the harvester to deposit the growables.
-	var/output_loc = parent.Adjacent(user) ? user.loc : parent.loc //needed for TK
-	///Name of the grown products.
-	var/product_name
-	///The Number of products produced by the plant, typically the yield. Modified by certain traits.
-	var/product_count = getYield()
-
-	while(t_amount < product_count)
-		var/obj/item/food/grown/t_prod
-		if(instability >= 30 && (seed_flags & MUTATE_EARLY) && LAZYLEN(mutatelist) && prob(instability/3))
-			var/obj/item/seeds/mutated_seed = pick(mutatelist)
-			t_prod = initial(mutated_seed.product)
-			if(!t_prod)
-				continue
-			mutated_seed = new mutated_seed
-			for(var/datum/plant_gene/trait/trait in parent.myseed.genes)
-				if((trait.mutability_flags & PLANT_GENE_MUTATABLE) && trait.can_add(mutated_seed))
-					mutated_seed.genes += trait
-			t_prod = new t_prod(output_loc, mutated_seed)
-			t_prod.transform = initial(t_prod.transform)
-			t_prod.transform *= TRANSFORM_USING_VARIABLE(t_prod.seed.potency, 100) + 0.5
-			ADD_TRAIT(t_prod, TRAIT_PLANT_WILDMUTATE, user)
-			t_amount++
-			if(t_prod.seed)
-				t_prod.seed.set_instability(round(instability * 0.5))
-			continue
-		else
-			t_prod = new product(output_loc, src)
-		if(parent.myseed.plantname != initial(parent.myseed.plantname))
-			t_prod.name = lowertext(parent.myseed.plantname)
-		if(productdesc)
-			t_prod.desc = productdesc
-		t_prod.seed.name = parent.myseed.name
-		t_prod.seed.desc = parent.myseed.desc
-		t_prod.seed.plantname = parent.myseed.plantname
-		result.Add(t_prod) // User gets a consumable
-		if(!t_prod)
-			return
-		t_amount++
-		product_name = parent.myseed.plantname
-	if(product_count >= 1)
-		SSblackbox.record_feedback("tally", "food_harvested", product_count, product_name)
-	parent.update_tray(user)
-
-	return result
+	return
 
 /**
  * This is where plant chemical products are handled.

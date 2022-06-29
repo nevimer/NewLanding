@@ -151,9 +151,6 @@
 	if(!istype(recharge_rune))
 		return
 	. = COMPONENT_NO_AFTERATTACK
-	if(!istype(parent, /obj/item/clothing/suit/space/hardsuit/shielded/wizard))
-		to_chat(user, SPAN_WARNING("The rune can only be used on battlemage armour!"))
-		return
 
 	current_charges += recharge_rune.restored_charges
 	to_chat(user, SPAN_NOTICE("You charge \the [parent]. It can now absorb [current_charges] hits."))

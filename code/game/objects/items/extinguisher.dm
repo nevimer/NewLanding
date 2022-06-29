@@ -76,23 +76,6 @@
 	. = ..()
 	refill()
 
-/obj/item/extinguisher/ComponentInitialize()
-	. = ..()
-	if(tank_holder_icon_state)
-		AddComponent(/datum/component/container_item/tank_holder, tank_holder_icon_state)
-
-/obj/item/extinguisher/advanced
-	name = "advanced fire extinguisher"
-	desc = "Used to stop thermonuclear fires from spreading inside your engine."
-	icon_state = "foam_extinguisher0"
-	inhand_icon_state = "foam_extinguisher"
-	tank_holder_icon_state = "holder_foam_extinguisher"
-	dog_fashion = null
-	chem = /datum/reagent/firefighting_foam
-	tanktype = /obj/structure/reagent_dispensers/foamtank
-	sprite_name = "foam_extinguisher"
-	precision = TRUE
-
 /obj/item/extinguisher/suicide_act(mob/living/carbon/user)
 	if (!safety && (reagents.total_volume >= 1))
 		user.visible_message(SPAN_SUICIDE("[user] puts the nozzle to [user.p_their()] mouth. It looks like [user.p_theyre()] trying to extinguish the spark of life!"))

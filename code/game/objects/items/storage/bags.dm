@@ -205,7 +205,6 @@
 		/obj/item/food/grown,
 		/obj/item/seeds,
 		/obj/item/grown,
-		/obj/item/reagent_containers/honeycomb,
 		/obj/item/graft,
 		))
 ////////
@@ -221,8 +220,6 @@
 	set desc = "Activate to convert your plants into plantable seeds."
 	if(usr.incapacitated())
 		return
-	for(var/obj/item/O in contents)
-		seedify(O, 1)
 
 // -----------------------------
 //        Sheet Snatcher
@@ -444,13 +441,7 @@
 	STR.insert_preposition = "in"
 	STR.set_holdable(list(
 		/obj/item/stack/ore/bluespace_crystal,
-		/obj/item/assembly,
-		/obj/item/stock_parts,
 		/obj/item/reagent_containers/glass/beaker,
-		/obj/item/stack/cable_coil,
-		/obj/item/circuitboard,
-		/obj/item/electronics,
-		/obj/item/wallframe/camera
 		))
 
 /obj/item/storage/bag/harpoon_quiver

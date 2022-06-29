@@ -93,8 +93,7 @@
 	if(iseffect(movable_atom)) //sparks don't teleport
 		return
 	if(movable_atom.anchored)
-		if(!(ismecha(movable_atom) && mech_sized))
-			return
+		return
 
 	if(ismovable(movable_atom))
 		///You will appear adjacent to the beacon
@@ -130,8 +129,7 @@
 	switch(rand_roll)
 		if(WORMHOLE_DESTAB_FIRE)
 			/// Create a small fire at both of the spots where anomalies used to be.
-			turf_one.atmos_spawn_air("o2=20;plasma=40;TEMP=600")
-			turf_two.atmos_spawn_air("o2=20;plasma=40;TEMP=600")
+			return
 		if(WORMHOLE_DESTAB_EMP)
 			/// EMP at both spots of where the anomalies used to be.
 			empulse(turf_one, 4, 1)

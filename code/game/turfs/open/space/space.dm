@@ -4,11 +4,6 @@
 	name = "\proper space"
 	intact = 0
 
-	temperature = TCMB
-	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
-	heat_capacity = 700000
-
-	var/static/datum/gas_mixture/immutable/space/space_gas = new
 	plane = PLANE_SPACE
 	layer = SPACE_LAYER
 	light_power = 0.25
@@ -31,7 +26,6 @@
 	if(inherited_virtual_z)
 		virtual_z = inherited_virtual_z
 	icon_state = SPACE_ICON_STATE
-	air = space_gas
 	vis_contents.Cut() //removes inherited overlays
 	visibilityChanged()
 
@@ -52,9 +46,6 @@
 	if(!IS_DYNAMIC_LIGHTING(src) && IS_DYNAMIC_LIGHTING(A))
 		add_overlay(/obj/effect/fullbright)
 
-	if(requires_activation)
-		SSair.add_to_active(src, TRUE)
-
 	if (light_system == STATIC_LIGHT && light_power && light_range)
 		update_light()
 
@@ -71,22 +62,6 @@
 	ComponentInitialize()
 
 	return INITIALIZE_HINT_NORMAL
-
-/turf/open/space/Initalize_Atmos(times_fired)
-	return
-
-/turf/open/space/TakeTemperature(temp)
-
-/turf/open/space/AfterChange()
-	..()
-	atmos_overlay_types = null
-
-/turf/open/space/Assimilate_Air()
-	return
-
-//IT SHOULD RETURN NULL YOU MONKEY, WHY IN TARNATION WHAT THE FUCKING FUCK
-/turf/open/space/remove_air(amount)
-	return null
 
 /turf/open/space/proc/update_starlight()
 	if(CONFIG_GET(flag/starlight))
@@ -152,9 +127,6 @@
 /turf/open/space/MakeSlippery(wet_setting, min_wet_time, wet_time_to_add, max_wet_time, permanent)
 	return
 
-/turf/open/space/singularity_act()
-	return
-
 /turf/open/space/can_have_cabling()
 	if(locate(/obj/structure/lattice/catwalk, src))
 		return TRUE
@@ -168,28 +140,6 @@
 	underlay_appearance.icon_state = SPACE_ICON_STATE
 	underlay_appearance.plane = PLANE_SPACE
 	return TRUE
-
-
-/turf/open/space/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	if(!CanBuildHere())
-		return FALSE
-
-	switch(the_rcd.mode)
-		if(RCD_FLOORWALL)
-			var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-			if(L)
-				return list("mode" = RCD_FLOORWALL, "delay" = 0, "cost" = 1)
-			else
-				return list("mode" = RCD_FLOORWALL, "delay" = 0, "cost" = 3)
-	return FALSE
-
-/turf/open/space/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	switch(passed_mode)
-		if(RCD_FLOORWALL)
-			to_chat(user, SPAN_NOTICE("You build a floor."))
-			PlaceOnTop(/turf/open/floor/plating, flags = CHANGETURF_INHERIT_AIR)
-			return TRUE
-	return FALSE
 
 /turf/open/space/openspace
 	icon = 'icons/turf/floors.dmi'

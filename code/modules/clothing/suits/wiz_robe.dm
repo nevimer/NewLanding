@@ -151,36 +151,6 @@
 
 //Shielded Armour
 
-/obj/item/clothing/suit/space/hardsuit/shielded/wizard
-	name = "battlemage armour"
-	desc = "Not all wizards are afraid of getting up close and personal."
-	icon_state = "battlemage"
-	inhand_icon_state = "battlemage"
-	recharge_delay = 0 // no auto-recharge
-	max_charges = 15
-	shield_icon = "shield-red"
-	min_cold_protection_temperature = ARMOR_MIN_TEMP_PROTECT
-	max_heat_protection_temperature = ARMOR_MAX_TEMP_PROTECT
-	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/shielded/wizard
-	armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 30, BOMB = 20, BIO = 20, RAD = 20, FIRE = 100, ACID = 100)
-	slowdown = 0
-	resistance_flags = FIRE_PROOF | ACID_PROOF
-	fitted_bodytypes = BODYTYPE_DIGITIGRADE
-
-/obj/item/clothing/head/helmet/space/hardsuit/shielded/wizard
-	name = "battlemage helmet"
-	desc = "A suitably impressive helmet."
-	icon_state = "battlemage"
-	inhand_icon_state = "battlemage"
-	min_cold_protection_temperature = ARMOR_MIN_TEMP_PROTECT
-	max_heat_protection_temperature = ARMOR_MAX_TEMP_PROTECT
-	armor = list(MELEE = 30, BULLET = 20, LASER = 20, ENERGY = 30, BOMB = 20, BIO = 20, RAD = 20, FIRE = 100, ACID = 100)
-	actions_types = null //No inbuilt light
-	resistance_flags = FIRE_PROOF | ACID_PROOF
-
-/obj/item/clothing/head/helmet/space/hardsuit/shielded/wizard/attack_self(mob/user)
-	return
-
 // The actual code for this is handled in the shielded component, see [/datum/component/shielded/proc/check_recharge_rune]
 /obj/item/wizard_armour_charge
 	name = "battlemage shield charges"

@@ -70,11 +70,11 @@
 /proc/load_map_config(filename = "data/next_map.json", default_to_box, delete_after, error_if_missing = TRUE)
 	var/datum/map_config/config
 	if (default_to_box)
-		config = new /datum/map_config/hollowhearth()
+		config = new /datum/map_config/testlanding()
 		return config
 	config = LoadConfig(filename, error_if_missing)
 	if (!config)
-		config = new /datum/map_config/hollowhearth()  // Fall back to Box
+		config = new /datum/map_config/testlanding()  // Fall back to Box
 	if (delete_after)
 		fdel(filename)
 	return config

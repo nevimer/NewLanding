@@ -63,21 +63,7 @@
 	if(requires_tech)
 		. = FALSE
 
-	var/turf/patient_turf = get_turf(patient)
-
-	//Get the relevant operating computer
-	var/obj/machinery/computer/operating/opcomputer
-	var/obj/structure/table/optable/optable = locate(/obj/structure/table/optable, patient_turf)
-	if(optable?.computer)
-		opcomputer = optable.computer
-	if(!opcomputer)
-		return
-	if(opcomputer.machine_stat & (NOPOWER|BROKEN))
-		return .
-	if(replaced_by in opcomputer.advanced_surgeries)
-		return FALSE
-	if(type in opcomputer.advanced_surgeries)
-		return TRUE
+	return TRUE
 
 /datum/surgery/proc/next_step(mob/living/user, modifiers)
 	if(location != user.zone_selected)

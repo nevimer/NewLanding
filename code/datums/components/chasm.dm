@@ -6,8 +6,6 @@
 
 	var/static/list/falling_atoms = list() // Atoms currently falling into chasms
 	var/static/list/forbidden_types = typecacheof(list(
-		/obj/singularity,
-		/obj/energy_ball,
 		/obj/docking_port,
 		/obj/structure/lattice,
 		/obj/projectile,

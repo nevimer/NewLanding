@@ -4,7 +4,6 @@
 	icon_state = "window"
 	density = TRUE
 	layer = ABOVE_OBJ_LAYER //Just above doors
-	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = TRUE //initially is 0 for tile smoothing
 	flags_1 = ON_BORDER_1 | RAD_PROTECT_CONTENTS_1
 	max_integrity = 25
@@ -67,7 +66,6 @@
 
 	flags_1 |= ALLOW_DARK_PAINTS_1
 	RegisterSignal(src, COMSIG_OBJ_PAINTED, .proc/on_painted)
-	AddElement(/datum/element/atmos_sensitive, mapload)
 
 	var/static/list/loc_connections = list(
 		COMSIG_ATOM_EXIT = .proc/on_exit,
@@ -79,27 +77,6 @@
 /obj/structure/window/ComponentInitialize()
 	. = ..()
 	AddComponent(/datum/component/simple_rotation, ROTATION_ALTCLICK | ROTATION_CLOCKWISE | ROTATION_COUNTERCLOCKWISE | ROTATION_VERBS ,null,CALLBACK(src, .proc/can_be_rotated),CALLBACK(src,.proc/after_rotation))
-
-/obj/structure/window/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	switch(the_rcd.mode)
-		if(RCD_DECONSTRUCT)
-			return list("mode" = RCD_DECONSTRUCT, "delay" = 20, "cost" = 5)
-	return FALSE
-
-/obj/structure/window/rcd_act(mob/user, obj/item/construction/rcd/the_rcd)
-	switch(the_rcd.mode)
-		if(RCD_DECONSTRUCT)
-			to_chat(user, SPAN_NOTICE("You deconstruct the window."))
-			qdel(src)
-			return TRUE
-	return FALSE
-
-/obj/structure/window/singularity_pull(S, current_size)
-	..()
-	if(anchored && current_size >= STAGE_TWO)
-		set_anchored(FALSE)
-	if(current_size >= STAGE_FIVE)
-		deconstruct(FALSE)
 
 /obj/structure/window/CanAllowThrough(atom/movable/mover, turf/target)
 	. = ..()
@@ -115,9 +92,6 @@
 	if(istype(mover, /obj/structure/window))
 		var/obj/structure/window/moved_window = mover
 		return valid_window_location(loc, moved_window.dir, is_fulltile = moved_window.fulltile)
-
-	if(istype(mover, /obj/structure/windoor_assembly) || istype(mover, /obj/machinery/door/window))
-		return valid_window_location(loc, mover.dir, is_fulltile = FALSE)
 
 	return TRUE
 
@@ -307,13 +281,6 @@
 	update_nearby_icons()
 	return ..()
 
-
-/obj/structure/window/Move()
-	var/turf/T = loc
-	. = ..()
-	if(anchored)
-		move_update_air(T)
-
 /obj/structure/window/CanAtmosPass(turf/T, vertical = FALSE)
 	if(!anchored || !density)
 		return TRUE
@@ -341,12 +308,6 @@
 		return
 	crack_overlay = mutable_appearance('icons/obj/structures.dmi', "damage[ratio]", -(layer+0.1), appearance_flags = RESET_COLOR)
 	. += crack_overlay
-
-/obj/structure/window/should_atmos_process(datum/gas_mixture/air, exposed_temperature)
-	return exposed_temperature > T0C + heat_resistance
-
-/obj/structure/window/atmos_expose(datum/gas_mixture/air, exposed_temperature)
-	take_damage(round(air.return_volume() / 100), BURN, 0, 0)
 
 /obj/structure/window/get_dumping_location(obj/item/storage/source,mob/user)
 	return null
@@ -496,10 +457,6 @@
 	glass_type = /obj/item/stack/sheet/plasmaglass
 	rad_insulation = RAD_NO_INSULATION
 
-/obj/structure/window/plasma/Initialize(mapload, direct)
-	. = ..()
-	RemoveElement(/datum/element/atmos_sensitive)
-
 /obj/structure/window/plasma/spawnDebris(location)
 	. = list()
 	. += new /obj/item/shard/plasma(location)
@@ -533,8 +490,6 @@
 	explosion_block = 2
 	glass_type = /obj/item/stack/sheet/plasmarglass
 
-/obj/structure/window/plasma/reinforced/BlockSuperconductivity()
-	return TRUE
 //entirely copypasted code
 //take this out when construction is made a component or otherwise modularized in some way
 /obj/structure/window/plasma/reinforced/attackby(obj/item/I, mob/living/user, params)

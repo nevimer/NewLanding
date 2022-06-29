@@ -85,14 +85,6 @@
 	else if(user != src && istype(user,/mob/living/simple_animal/hostile/regalrat))
 		. += SPAN_WARNING("Who is this foolish false king? This will not stand!")
 
-/mob/living/simple_animal/hostile/regalrat/handle_environment(datum/gas_mixture/environment)
-	. = ..()
-	if(stat == DEAD || !environment || !environment.gases[/datum/gas/miasma])
-		return
-	var/miasma_percentage = environment.gases[/datum/gas/miasma][MOLES] / environment.total_moles()
-	if(miasma_percentage>=0.25)
-		heal_bodypart_damage(1)
-
 /mob/living/simple_animal/hostile/regalrat/AttackingTarget()
 	if (DOING_INTERACTION(src, "regalrat"))
 		return
@@ -149,7 +141,6 @@
 /datum/action/cooldown/domain/Trigger()
 	. = ..()
 	var/turf/T = get_turf(owner)
-	T.atmos_spawn_air("miasma=4;TEMP=[T20C]")
 	switch (rand(1,10))
 		if (8)
 			new /obj/effect/decal/cleanable/vomit(T)
@@ -284,23 +275,6 @@
 			else
 				return TRUE
 	return ..()
-
-/mob/living/simple_animal/hostile/rat/handle_automated_action()
-	. = ..()
-	if(prob(40))
-		var/turf/open/floor/F = get_turf(src)
-		if(istype(F) && !F.intact)
-			var/obj/structure/cable/C = locate() in F
-			if(C && prob(15))
-				if(C.avail())
-					visible_message(SPAN_WARNING("[src] chews through the [C]. It's toast!"))
-					playsound(src, 'sound/effects/sparks2.ogg', 100, TRUE)
-					C.deconstruct()
-					death()
-			else if(C?.avail())
-				visible_message(SPAN_WARNING("[src] chews through the [C]. It looks unharmed!"))
-				playsound(src, 'sound/effects/sparks2.ogg', 100, TRUE)
-				C.deconstruct()
 
 /mob/living/simple_animal/hostile/rat/AttackingTarget()
 	. = ..()

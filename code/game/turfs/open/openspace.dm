@@ -22,9 +22,6 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 	var/can_cover_up = TRUE
 	var/can_build_on = TRUE
 
-/turf/open/openspace/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 /turf/open/openspace/Initialize(mapload, inherited_virtual_z) // handle plane and layer here so that they don't cover other obs/turfs in Dream Maker
 	. = ..()
 	overlays += GLOB.openspace_backdrop_one_for_all //Special grey square for projecting backdrop darkness filter on it.
@@ -123,58 +120,3 @@ GLOBAL_DATUM_INIT(openspace_backdrop_one_for_all, /atom/movable/openspace_backdr
 				to_chat(user, SPAN_WARNING("You need one floor tile to build a floor!"))
 		else
 			to_chat(user, SPAN_WARNING("The plating is going to need some support! Place iron rods first."))
-
-/turf/open/openspace/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	if(!CanBuildHere())
-		return FALSE
-
-	switch(the_rcd.mode)
-		if(RCD_FLOORWALL)
-			var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-			if(L)
-				return list("mode" = RCD_FLOORWALL, "delay" = 0, "cost" = 1)
-			else
-				return list("mode" = RCD_FLOORWALL, "delay" = 0, "cost" = 3)
-	return FALSE
-
-/turf/open/openspace/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	switch(passed_mode)
-		if(RCD_FLOORWALL)
-			to_chat(user, SPAN_NOTICE("You build a floor."))
-			PlaceOnTop(/turf/open/floor/plating, flags = CHANGETURF_INHERIT_AIR)
-			return TRUE
-	return FALSE
-
-/turf/open/openspace/icemoon
-	name = "ice chasm"
-	baseturfs = /turf/open/openspace/icemoon
-	initial_gas_mix = PLANETARY_ATMOS
-	planetary_atmos = TRUE
-	var/replacement_turf = /turf/open/floor/plating/asteroid/snow/icemoon
-	/// Replaces itself with replacement_turf if the turf below this one is in a no ruins allowed area (usually ruins themselves)
-	var/protect_ruin = TRUE
-	/// If true mineral turfs below this openspace turf will be mined automatically
-	var/drill_below = TRUE
-
-/turf/open/openspace/icemoon/Initialize(mapload, inherited_virtual_z)
-	. = ..()
-	var/turf/T = below()
-	//I wonder if I should error here
-	if(!T)
-		return
-	if(T.turf_flags & NO_RUINS && protect_ruin)
-		ChangeTurf(replacement_turf, null, CHANGETURF_IGNORE_AIR)
-		return
-	if(!ismineralturf(T) || !drill_below)
-		return
-	var/turf/closed/mineral/M = T
-	M.mineralAmt = 0
-	M.gets_drilled()
-	baseturfs = /turf/open/openspace/icemoon //This is to ensure that IF random turf generation produces a openturf, there won't be other turfs assigned other than openspace.
-
-/turf/open/openspace/icemoon/keep_below
-	drill_below = FALSE
-
-/turf/open/openspace/icemoon/ruins
-	protect_ruin = FALSE
-	drill_below = FALSE

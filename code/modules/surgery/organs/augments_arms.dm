@@ -198,25 +198,6 @@
 		owner.adjustFireLoss(25)
 		organ_flags |= ORGAN_FAILING
 
-
-/obj/item/organ/cyberimp/arm/gun/laser
-	name = "arm-mounted laser implant"
-	desc = "A variant of the arm cannon implant that fires lethal laser beams. The cannon emerges from the subject's arm and remains inside when not in use."
-	icon_state = "arm_laser"
-	items_to_create = list(/obj/item/gun/energy/laser/mounted/augment)
-
-/obj/item/organ/cyberimp/arm/gun/laser/l
-	zone = BODY_ZONE_L_ARM
-
-/obj/item/organ/cyberimp/arm/gun/taser
-	name = "arm-mounted taser implant"
-	desc = "A variant of the arm cannon implant that fires electrodes and disabler shots. The cannon emerges from the subject's arm and remains inside when not in use."
-	icon_state = "arm_taser"
-	items_to_create = list(/obj/item/gun/energy/e_gun/advtaser/mounted)
-
-/obj/item/organ/cyberimp/arm/gun/taser/l
-	zone = BODY_ZONE_L_ARM
-
 /obj/item/organ/cyberimp/arm/esword
 	name = "arm-mounted energy blade"
 	desc = "An illegal and highly dangerous cybernetic implant that can project a deadly blade of concentrated energy."
@@ -226,30 +207,6 @@
 	name = "integrated medical beamgun"
 	desc = "A cybernetic implant that allows the user to project a healing beam from their hand."
 	items_to_create = list(/obj/item/gun/medbeam)
-
-
-/obj/item/organ/cyberimp/arm/flash
-	name = "integrated high-intensity photon projector" //Why not
-	desc = "An integrated projector mounted onto a user's arm that is able to be used as a powerful flash."
-	items_to_create = list(/obj/item/assembly/flash/armimplant)
-
-/obj/item/organ/cyberimp/arm/flash/Initialize()
-	. = ..()
-	for(var/datum/weakref/created_item in items_list)
-		var/obj/potential_flash = created_item.resolve()
-		if(!istype(/obj/item/assembly/flash/armimplant, potential_flash))
-			continue
-		var/obj/item/assembly/flash/armimplant/flash = potential_flash
-		flash.arm = WEAKREF(src) // Todo: wipe single letter vars out of assembly code
-
-/obj/item/organ/cyberimp/arm/flash/Extend()
-	. = ..()
-	active_item.set_light_range(7)
-	active_item.set_light_on(TRUE)
-
-/obj/item/organ/cyberimp/arm/flash/Retract()
-	active_item.set_light_on(FALSE)
-	return ..()
 
 /obj/item/organ/cyberimp/arm/surgery
 	name = "surgical toolset implant"

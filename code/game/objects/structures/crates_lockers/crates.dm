@@ -154,7 +154,6 @@
 	new /obj/item/reagent_containers/blood/o_minus(src)
 	new /obj/item/reagent_containers/blood/o_plus(src)
 	new /obj/item/reagent_containers/blood/lizard(src)
-	new /obj/item/reagent_containers/blood/ethereal(src)
 	for(var/i in 1 to 3)
 		new /obj/item/reagent_containers/blood/random(src)
 
@@ -195,28 +194,10 @@
 	name = "\improper RCD crate"
 	icon_state = "engi_crate"
 
-/obj/structure/closet/crate/rcd/PopulateContents()
-	..()
-	for(var/i in 1 to 4)
-		new /obj/item/rcd_ammo(src)
-	new /obj/item/construction/rcd(src)
-
 /obj/structure/closet/crate/science
 	name = "science crate"
 	desc = "A science crate."
 	icon_state = "scicrate"
-
-/obj/structure/closet/crate/solarpanel_small
-	name = "budget solar panel crate"
-	icon_state = "engi_e_crate"
-
-/obj/structure/closet/crate/solarpanel_small/PopulateContents()
-	..()
-	for(var/i in 1 to 13)
-		new /obj/item/solar_assembly(src)
-	new /obj/item/circuitboard/computer/solar_control(src)
-	new /obj/item/paper/guides/jobs/engi/solars(src)
-	new /obj/item/electronics/tracker(src)
 
 /obj/structure/closet/crate/goldcrate
 	name = "gold crate"
@@ -248,13 +229,8 @@
 
 /obj/structure/closet/crate/build_your_shuttle/PopulateContents()
 	. = ..()
-	new /obj/item/circuitboard/computer/shuttle_common_docks(src)
-	new /obj/item/pipe_dispenser(src)
-	new /obj/item/construction/rcd(src)
 	new /obj/item/storage/toolbox/mechanical(src)
 	new /obj/item/storage/toolbox/electrical(src)
-	new /obj/item/electronics/apc(src)
-	new /obj/item/electronics/airalarm(src)
 
 /obj/structure/closet/crate/build_your_shuttle_extra
 	icon_state = "engi_crate"

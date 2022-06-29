@@ -133,7 +133,7 @@
 		INVOKE_ASYNC(src, .proc/jedi_spin, user)
 
 /obj/item/dualsaber/proc/jedi_spin(mob/living/user)
-	dance_rotate(user, CALLBACK(user, /mob.proc/dance_flip))
+	return
 
 /obj/item/dualsaber/proc/impale(mob/living/user)
 	to_chat(user, SPAN_WARNING("You twirl around a bit before losing your balance and impaling yourself on [src]."))

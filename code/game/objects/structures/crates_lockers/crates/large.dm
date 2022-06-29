@@ -44,7 +44,3 @@
 			to_chat(user, SPAN_WARNING("You need a crowbar to pry this open!"))
 			return FALSE //Just stop. Do nothing. Don't turn into an invisible sprite. Don't open like a locker.
 					//The large crate has no non-attack interactions other than the crowbar, anyway.
-
-/obj/structure/closet/crate/large/air_can/PopulateContents()
-	. = ..()
-	new /obj/machinery/portable_atmospherics/canister/air(src)

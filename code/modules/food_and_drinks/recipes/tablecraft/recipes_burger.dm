@@ -290,16 +290,6 @@
 	result = /obj/item/food/burger/baconburger
 	subcategory = CAT_BURGER
 
-/datum/crafting_recipe/food/empoweredburger
-	name = "Empowered Burger"
-	reqs = list(
-			/obj/item/stack/sheet/mineral/plasma = 2,
-			/obj/item/food/bun = 1
-	)
-
-	result = /obj/item/food/burger/empoweredburger
-	subcategory = CAT_BURGER
-
 /datum/crafting_recipe/food/crabburger
 	name = "Crab Burger"
 	reqs = list(

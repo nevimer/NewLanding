@@ -25,7 +25,7 @@
 
 /datum/surgery_step/robot_heal
 	name = "repair body (welder/cable)"
-	implements = list(TOOL_WELDER = 100, /obj/item/stack/cable_coil = 100)
+	implements = list(TOOL_WELDER = 100)
 	repeatable = TRUE
 	time = 15
 	var/healsbrute = FALSE

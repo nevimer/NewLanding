@@ -4,47 +4,17 @@
 	organ_type = /obj/item/organ/tail
 	icon = 'icons/mob/sprite_accessory/tails.dmi'
 	special_render_case = TRUE
-	special_icon_case = TRUE
-	special_colorize = TRUE
 	relevent_layers = list(BODY_BEHIND_LAYER, BODY_FRONT_LAYER)
 	/// A generalisation of the tail-type, e.g. lizard or feline, for hardsuit or other sprites
 	var/general_type
 
 /datum/sprite_accessory/tails/get_special_render_state(mob/living/carbon/human/H)
 	// Hardsuit tail spriting
-	if(general_type && H.wear_suit && istype(H.wear_suit, /obj/item/clothing/suit/space/hardsuit))
-		var/obj/item/clothing/suit/space/hardsuit/HS = H.wear_suit
-		if(HS.hardsuit_tail_colors)
-			return "[general_type]_hardsuit"
-
 	var/obj/item/organ/tail/T = H.getorganslot(ORGAN_SLOT_TAIL)
 	if(T && T.wagging)
 		return "[icon_state]_wagging"
 
 	return icon_state
-
-/datum/sprite_accessory/tails/get_special_icon(mob/living/carbon/human/H, passed_state)
-	var/returned = icon
-	if(passed_state == "[general_type]_hardsuit") //Guarantees we're wearing a hardsuit, skip checks
-		var/obj/item/clothing/suit/space/hardsuit/HS = H.wear_suit
-		if(HS.hardsuit_tail_colors)
-			returned = 'icons/mob/sprite_accessory/tails_hardsuit.dmi'
-	return returned
-
-/datum/sprite_accessory/tails/get_special_render_colour(mob/living/carbon/human/H, passed_state)
-	if(passed_state == "[general_type]_hardsuit") //Guarantees we're wearing a hardsuit, skip checks
-		var/obj/item/clothing/suit/space/hardsuit/HS = H.wear_suit
-		if(HS.hardsuit_tail_colors)
-			//Currently this way, when I have more time I'll write a hex -> matrix converter to pre-bake them instead
-			var/list/finished_list = list()
-			finished_list += ReadRGB("[HS.hardsuit_tail_colors[1]]0")
-			finished_list += ReadRGB("[HS.hardsuit_tail_colors[2]]0")
-			finished_list += ReadRGB("[HS.hardsuit_tail_colors[3]]0")
-			finished_list += list(0,0,0,255)
-			for(var/index in 1 to finished_list.len)
-				finished_list[index] /= 255
-			return finished_list
-	return null
 
 /datum/sprite_accessory/tails/lizard
 	recommended_species = list("lizard", "silverlizard", "ashlizard", "mammal", "unathi")
@@ -92,10 +62,6 @@
 		if(H.try_hide_mutant_parts)
 			return TRUE
 		if(H.wear_suit.flags_inv & HIDEJUMPSUIT)
-			if(istype(H.wear_suit, /obj/item/clothing/suit/space/hardsuit))
-				var/obj/item/clothing/suit/space/hardsuit/HS = H.wear_suit
-				if(HS.hardsuit_tail_colors)
-					return FALSE
 			return TRUE
 	return FALSE
 

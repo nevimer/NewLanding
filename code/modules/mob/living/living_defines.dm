@@ -3,7 +3,6 @@
 	sight = 0
 	see_in_dark = 2
 	hud_possible = list(HEALTH_HUD,STATUS_HUD,ANTAG_HUD,NANITE_HUD,DIAG_NANITE_FULL_HUD)
-	pressure_resistance = 10
 
 	hud_type = /datum/hud/living
 
@@ -142,7 +141,6 @@
 	var/worn_slot_flags = NONE //if it can be held, can it be equipped to any slots? (think pAI's on head)
 
 	var/radiation = 0 ///If the mob is irradiated.
-	var/ventcrawl_layer = PIPING_LAYER_DEFAULT
 	var/losebreath = 0
 
 	var/slowed_by_drag = TRUE ///Whether the mob is slowed down when dragging another prone mob

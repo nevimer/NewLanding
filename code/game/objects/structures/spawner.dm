@@ -24,15 +24,6 @@
 		return
 	return ..()
 
-
-/obj/structure/spawner/syndicate
-	name = "warp beacon"
-	icon = 'icons/obj/device.dmi'
-	icon_state = "syndbeacon"
-	spawn_text = "warps in from"
-	mob_types = list(/mob/living/simple_animal/hostile/syndicate/ranged)
-	faction = list(ROLE_SYNDICATE)
-
 /obj/structure/spawner/skeleton
 	name = "bone pit"
 	desc = "A pit full of bones, and some still seem to be moving..."

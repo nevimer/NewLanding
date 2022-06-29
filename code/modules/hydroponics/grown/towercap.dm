@@ -240,13 +240,7 @@
 		return
 
 /obj/structure/bonfire/proc/CheckOxygen()
-	if(isopenturf(loc))
-		var/turf/open/O = loc
-		if(O.air)
-			var/loc_gases = O.air.gases
-			if(loc_gases[/datum/gas/oxygen] && loc_gases[/datum/gas/oxygen][MOLES] >= 5)
-				return TRUE
-	return FALSE
+	return TRUE
 
 /obj/structure/bonfire/proc/StartBurning()
 	if(!burning && CheckOxygen())
@@ -297,7 +291,7 @@
 		extinguish()
 		return
 	var/turf/open/my_turf = get_turf(src)
-	if(istype(my_turf) && !my_turf.planetary_atmos) //Pollute, but only when we're not on planetary atmos
+	if(istype(my_turf)) //Pollute, but only when we're not on planetary atmos
 		my_turf.pollute_list_turf(list(/datum/pollutant/smoke = 15, /datum/pollutant/carbon_air_pollution = 5), POLLUTION_ACTIVE_EMITTER_CAP)
 	if(!grill)
 		Burn(delta_time)

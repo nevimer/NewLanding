@@ -288,36 +288,6 @@
 			else
 				return
 
-	else if(istype(I, /obj/item/barcodescanner))
-		var/obj/item/barcodescanner/scanner = I
-		if(!scanner.computer)
-			to_chat(user, SPAN_ALERT("[I]'s screen flashes: 'No associated computer found!'"))
-		else
-			switch(scanner.mode)
-				if(0)
-					scanner.book = src
-					to_chat(user, SPAN_NOTICE("[I]'s screen flashes: 'Book stored in buffer.'"))
-				if(1)
-					scanner.book = src
-					scanner.computer.buffer_book = name
-					to_chat(user, SPAN_NOTICE("[I]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'"))
-				if(2)
-					scanner.book = src
-					for(var/datum/borrowbook/b in scanner.computer.checkouts)
-						if(b.bookname == name)
-							scanner.computer.checkouts.Remove(b)
-							to_chat(user, SPAN_NOTICE("[I]'s screen flashes: 'Book stored in buffer. Book has been checked in.'"))
-							return
-					to_chat(user, SPAN_NOTICE("[I]'s screen flashes: 'Book stored in buffer. No active check-out record found for current title.'"))
-				if(3)
-					scanner.book = src
-					for(var/obj/item/book in scanner.computer.inventory)
-						if(book == src)
-							to_chat(user, SPAN_ALERT("[I]'s screen flashes: 'Book stored in buffer. Title already present in inventory, aborting to avoid duplicate entry.'"))
-							return
-					scanner.computer.inventory.Add(src)
-					to_chat(user, SPAN_NOTICE("[I]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'"))
-
 	else if((istype(I, /obj/item/kitchen/knife) || I.tool_behaviour == TOOL_WIRECUTTER) && !(flags_1 & HOLOGRAM_1))
 		to_chat(user, SPAN_NOTICE("You begin to carve out [title]..."))
 		if(do_after(user, 30, target = src))
@@ -337,46 +307,6 @@
 		return
 	else
 		..()
-
-
-/*
- * Barcode Scanner
- */
-/obj/item/barcodescanner
-	name = "barcode scanner"
-	icon = 'icons/obj/library.dmi'
-	icon_state ="scanner"
-	desc = "A fabulous tool if you need to scan a barcode."
-	throw_speed = 3
-	throw_range = 5
-	w_class = WEIGHT_CLASS_TINY
-	var/obj/machinery/computer/bookmanagement/computer //Associated computer - Modes 1 to 3 use this
-	var/obj/item/book/book //Currently scanned book
-	var/mode = 0 //0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
-
-/obj/item/barcodescanner/attack_self(mob/user)
-	mode += 1
-	if(mode > 3)
-		mode = 0
-	to_chat(user, "[src] Status Display:")
-	var/modedesc
-	switch(mode)
-		if(0)
-			modedesc = "Scan book to local buffer."
-		if(1)
-			modedesc = "Scan book to local buffer and set associated computer buffer to match."
-		if(2)
-			modedesc = "Scan book to local buffer, attempt to check in scanned book."
-		if(3)
-			modedesc = "Scan book to local buffer, attempt to add book to general inventory."
-		else
-			modedesc = "ERROR"
-	to_chat(user, " - Mode [mode] : [modedesc]")
-	if(computer)
-		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
-	else
-		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-	to_chat(user, "\n")
 
 
 #undef BOOKCASE_UNANCHORED

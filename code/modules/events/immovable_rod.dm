@@ -192,12 +192,6 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 	special_target = null
 	walk_in_direction(dir)
 
-/obj/effect/immovablerod/singularity_act()
-	return
-
-/obj/effect/immovablerod/singularity_pull()
-	return
-
 /obj/effect/immovablerod/Bump(atom/clong)
 	if(prob(10))
 		playsound(src, 'sound/effects/bang.ogg', 50, TRUE)
@@ -205,19 +199,6 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 
 	if(special_target && clong == special_target)
 		complete_trajectory()
-
-	// If rod meets rod, they collapse into a singularity. Yes, this means that if two wizard rods collide,
-	// they ALSO collapse into a singulo.
-	if(istype(clong, /obj/effect/immovablerod))
-		visible_message(SPAN_DANGER("[src] collides with [clong]! This cannot end well."))
-		var/datum/effect_system/smoke_spread/smoke = new
-		smoke.set_up(2, get_turf(src))
-		smoke.start()
-		var/obj/singularity/bad_luck = new(get_turf(src))
-		bad_luck.energy = 800
-		qdel(clong)
-		qdel(src)
-		return
 
 	// If we Bump into a turf, turf go boom.
 	if(isturf(clong))

@@ -17,7 +17,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/ooccolor = "#c43b23"
 	var/asaycolor = "#ff4500" //This won't change the color for current admins, only incoming ones.
 	/// If we spawn an ERT as an admin and choose to spawn as the briefing officer, we'll be given this outfit
-	var/brief_outfit = /datum/outfit/centcom/commander
+	var/brief_outfit = /datum/outfit/job/assistant
 	var/enable_tips = TRUE
 	var/tip_delay = 500 //tip delay in milliseconds
 
@@ -211,8 +211,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/list/languages = list()
 	/// Whether this client has gotten their interview accepted at any point in time.
 	var/interview_accepted = FALSE
-	/// Jukebox pref. It's not in a flag anywhere because the flags need to be split around first and this pref is important enough to implement now
-	var/hear_jukebox = TRUE
 	/// Admin pref to hear storyteller logging, because bitfield is full lol.
 	var/hear_storyteller = TRUE
 	/// Customized character attributed. In difference from the base value
@@ -484,16 +482,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 					dat += "<h3>Tertiary Color</h3>"
 					dat += "<a href='?_src_=prefs;preference=mutant_color3;task=input'><span class='color_holder_box' style='background-color:#[features["mcolor3"]]'></span></a><BR>"
-
-					if(istype(pref_species, /datum/species/ethereal)) //not the best thing to do tbf but I dont know whats better.
-
-						if(!use_skintones)
-							dat += APPEARANCE_CATEGORY_COLUMN
-
-						dat += "<h3>Ethereal Color</h3>"
-
-						dat += "<a href='?_src_=prefs;preference=color_ethereal;task=input'><span class='color_holder_box' style='background-color:#[features["ethcolor"]]'></span></a><BR>"
-
 
 					if((EYECOLOR in pref_species.species_traits) && !(NOEYESPRITES in pref_species.species_traits))
 
@@ -2195,12 +2183,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 							features["mcolor3"] = sanitize_hexcolor(new_mutantcolor, 6)
 						if(!allow_advanced_colors)
 							reset_colors()
-
-				if("color_ethereal")
-					needs_update = TRUE
-					var/new_etherealcolor = input(user, "Choose your ethereal color", "Character Preference") as null|anything in GLOB.color_list_ethereal
-					if(new_etherealcolor)
-						features["ethcolor"] = GLOB.color_list_ethereal[new_etherealcolor]
 
 
 				/*if("tail_lizard")

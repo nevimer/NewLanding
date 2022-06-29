@@ -114,16 +114,7 @@
 #define SAUNA_OVEN_HEATING_POWER 20000
 
 /obj/structure/sauna_oven/proc/generate_heat(turf/open/location)
-	var/datum/gas_mixture/enviroment = location.return_air()
-	var/heat_capacity = enviroment.heat_capacity()
-	var/required_energy = abs(enviroment.temperature - SAUNA_OVEN_TARGET_TEMPERATURE) * heat_capacity
-	required_energy = min(required_energy, SAUNA_OVEN_HEATING_POWER)
-	if(required_energy <= 0)
-		return
-	var/delta_temperature = required_energy / heat_capacity
-	if(delta_temperature)
-		enviroment.temperature += delta_temperature
-		air_update_turf(FALSE, FALSE)
+	return
 
 #undef SAUNA_OVEN_TARGET_TEMPERATURE
 #undef SAUNA_OVEN_HEATING_POWER

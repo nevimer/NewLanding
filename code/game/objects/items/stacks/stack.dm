@@ -105,12 +105,6 @@
 	for(var/i in 1 to length(grind_results)) //This should only call if it's ground, so no need to check if grind_results exists
 		grind_results[grind_results[i]] *= get_amount() //Gets the key at position i, then the reagent amount of that key, then multiplies it by stack size
 
-/obj/item/stack/grind_requirements()
-	if(is_cyborg)
-		to_chat(usr, SPAN_WARNING("[src] is electronically synthesized in your chassis and can't be ground up!"))
-		return
-	return TRUE
-
 /obj/item/stack/proc/get_main_recipes()
 	SHOULD_CALL_PARENT(TRUE)
 	return list()//empty list
@@ -488,10 +482,6 @@
 	add_hiddenprint_list(from.return_hiddenprints())
 	fingerprintslast  = from.fingerprintslast
 	//TODO bloody overlay
-
-/obj/item/stack/microwave_act(obj/machinery/microwave/M)
-	if(istype(M) && M.dirty < 100)
-		M.dirty += amount
 
 /*
  * Recipe datum

@@ -35,20 +35,6 @@
 /turf/open/chasm/MakeDry()
 	return
 
-/turf/open/chasm/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	switch(the_rcd.mode)
-		if(RCD_FLOORWALL)
-			return list("mode" = RCD_FLOORWALL, "delay" = 0, "cost" = 3)
-	return FALSE
-
-/turf/open/chasm/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	switch(passed_mode)
-		if(RCD_FLOORWALL)
-			to_chat(user, SPAN_NOTICE("You build a floor."))
-			PlaceOnTop(/turf/open/floor/plating, flags = CHANGETURF_INHERIT_AIR)
-			return TRUE
-	return FALSE
-
 /turf/open/chasm/get_smooth_underlay_icon(mutable_appearance/underlay_appearance, turf/asking_turf, adjacency_dir)
 	underlay_appearance.icon = 'icons/turf/floors.dmi'
 	underlay_appearance.icon_state = "basalt"
@@ -82,38 +68,3 @@
 				to_chat(user, SPAN_WARNING("You need one floor tile to build a floor!"))
 		else
 			to_chat(user, SPAN_WARNING("The plating is going to need some support! Place iron rods first."))
-
-// Chasms for Lavaland, with planetary atmos and lava glow
-/turf/open/chasm/lavaland
-	initial_gas_mix = PLANETARY_ATMOS
-	planetary_atmos = TRUE
-	baseturfs = /turf/open/chasm/lavaland
-	light_range = 1.9 //slightly less range than lava
-	light_power = 0.65 //less bright, too
-	light_color = LIGHT_COLOR_LAVA //let's just say you're falling into lava, that makes sense right
-
-// Chasms for Ice moon, with planetary atmos and glow
-/turf/open/chasm/icemoon
-	icon = 'icons/turf/floors/icechasms.dmi'
-	icon_state = "icechasms-255"
-	base_icon_state = "icechasms"
-	initial_gas_mix = PLANETARY_ATMOS
-	planetary_atmos = TRUE
-	baseturfs = /turf/open/chasm/icemoon
-	light_range = 1.9
-	light_power = 0.65
-	light_color = LIGHT_COLOR_PURPLE
-
-// Chasms for the jungle, with planetary atmos and a different icon
-/turf/open/chasm/jungle
-	icon = 'icons/turf/floors/junglechasm.dmi'
-	icon_state = "junglechasm-255"
-	base_icon_state = "junglechasm"
-	initial_gas_mix = OPENTURF_LOW_PRESSURE
-	planetary_atmos = TRUE
-	baseturfs = /turf/open/chasm/jungle
-
-/turf/open/chasm/jungle/get_smooth_underlay_icon(mutable_appearance/underlay_appearance, turf/asking_turf, adjacency_dir)
-	underlay_appearance.icon = 'icons/turf/floors.dmi'
-	underlay_appearance.icon_state = "dirt"
-	return TRUE

@@ -185,12 +185,6 @@
 	rate = 0.15
 	mutability_flags = PLANT_GENE_GRAFTABLE
 
-/datum/plant_gene/reagent/liquidelectricity
-	name = "Enriched Liquid Electricity"
-	reagent_id = /datum/reagent/consumable/liquidelectricity/enriched
-	rate = 0.1
-	mutability_flags = PLANT_GENE_GRAFTABLE
-
 /datum/plant_gene/reagent/carbon
 	name = "Carbon"
 	reagent_id = /datum/reagent/carbon
@@ -364,75 +358,6 @@
 	SEND_SIGNAL(our_plant, COMSIG_PLANT_ON_SLIP, slipped_target)
 
 /*
- * Cell recharging trait. Charges all mob's power cells to (potency*rate)% mark when eaten.
- * Generates sparks on squash.
- * Small (potency * rate) chance to shock squish or slip target for (potency * rate) damage.
- * Also affects plant batteries see capatative cell production datum
- */
-/datum/plant_gene/trait/cell_charge
-	name = "Electrical Activity"
-	rate = 0.2
-	mutability_flags = PLANT_GENE_REMOVABLE | PLANT_GENE_MUTATABLE | PLANT_GENE_GRAFTABLE
-
-/datum/plant_gene/trait/cell_charge/on_new_plant(obj/item/our_plant, newloc)
-	. = ..()
-	if(!.)
-		return
-
-	var/obj/item/seeds/our_seed = our_plant.get_plant_seed()
-	if(our_seed.get_gene(/datum/plant_gene/trait/squash))
-		// If we have the squash gene, let that handle slipping
-		RegisterSignal(our_plant, COMSIG_PLANT_ON_SQUASH, .proc/zap_target)
-	else
-		RegisterSignal(our_plant, COMSIG_PLANT_ON_SLIP, .proc/zap_target)
-
-	RegisterSignal(our_plant, COMSIG_FOOD_EATEN, .proc/recharge_cells)
-
-/*
- * Zaps the target with a stunning shock.
- *
- * our_plant - our source plant, shocking the target
- * target - the atom being zapped by our plant
- */
-/datum/plant_gene/trait/cell_charge/proc/zap_target(obj/item/our_plant, atom/target)
-	SIGNAL_HANDLER
-
-	if(!iscarbon(target))
-		return
-
-	our_plant.investigate_log("zapped [key_name(target)] at [AREACOORD(target)]. Last touched by: [our_plant.fingerprintslast].", INVESTIGATE_BOTANY)
-	var/mob/living/carbon/target_carbon = target
-	var/obj/item/seeds/our_seed = our_plant.get_plant_seed()
-	var/power = our_seed.potency * rate
-	if(prob(power))
-		target_carbon.electrocute_act(round(power), our_plant, 1, SHOCK_NOGLOVES)
-
-/*
- * Recharges every cell the person is holding for a bit based on plant potency.
- *
- * our_plant - our source plant, that we consumed to charge the cells
- * eater - the mob that bit the plant
- * feeder - the mob that feed the eater the plant
- */
-/datum/plant_gene/trait/cell_charge/proc/recharge_cells(obj/item/our_plant, mob/living/eater, mob/feeder)
-	SIGNAL_HANDLER
-
-	to_chat(eater, SPAN_NOTICE("You feel energized as you bite into [our_plant]."))
-	var/batteries_recharged = FALSE
-	var/obj/item/seeds/our_seed = our_plant.get_plant_seed()
-	for(var/obj/item/stock_parts/cell/found_cell in eater.GetAllContents())
-		var/newcharge = min(our_seed.potency * 0.01 * found_cell.maxcharge, found_cell.maxcharge)
-		if(found_cell.charge < newcharge)
-			found_cell.charge = newcharge
-			if(isobj(found_cell.loc))
-				var/obj/cell_location = found_cell.loc
-				cell_location.update_appearance() //update power meters and such
-			found_cell.update_appearance()
-			batteries_recharged = TRUE
-	if(batteries_recharged)
-		to_chat(eater, SPAN_NOTICE("Your batteries are recharged!"))
-
-/*
  * Makes the plant glow. Makes the plant in tray glow, too.
  * Adds (1.4 + potency * rate) light range and (potency * (rate + 0.01)) light_power to products.
  */
@@ -603,59 +528,6 @@
 	mutability_flags = PLANT_GENE_REMOVABLE | PLANT_GENE_MUTATABLE | PLANT_GENE_GRAFTABLE
 
 /*
- * Allows a plant to be turned into a battery when cabling is applied.
- * 100 potency plants are made into 2 mj batteries.
- * Plants with electrical activity has their capacities massively increased (up to 40 mj at 100 potency)
- */
-/datum/plant_gene/trait/battery
-	name = "Capacitive Cell Production"
-	mutability_flags = PLANT_GENE_REMOVABLE | PLANT_GENE_MUTATABLE | PLANT_GENE_GRAFTABLE
-
-/datum/plant_gene/trait/battery/on_new_plant(obj/item/our_plant, newloc)
-	. = ..()
-	if(!.)
-		return
-
-	RegisterSignal(our_plant, COMSIG_PARENT_ATTACKBY, .proc/make_battery)
-
-/*
- * When a plant with this gene is hit (attackby) with cables, we turn it into a battery.
- *
- * our_plant - our plant being hit
- * hit_item - the item we're hitting the plant with
- * user - the person hitting the plant with an item
- */
-/datum/plant_gene/trait/battery/proc/make_battery(obj/item/our_plant, obj/item/hit_item, mob/user)
-	SIGNAL_HANDLER
-
-	if(!istype(hit_item, /obj/item/stack/cable_coil))
-		return
-
-	var/obj/item/seeds/our_seed = our_plant.get_plant_seed()
-	var/obj/item/stack/cable_coil/cabling = hit_item
-	if(!cabling.use(5))
-		to_chat(user, SPAN_WARNING("You need five lengths of cable to make a [our_plant] battery!"))
-		return
-
-	to_chat(user, SPAN_NOTICE("You add some cable to [our_plant] and slide it inside the battery encasing."))
-	var/obj/item/stock_parts/cell/potato/pocell = new /obj/item/stock_parts/cell/potato(user.loc)
-	pocell.icon_state = our_plant.icon_state
-	pocell.maxcharge = our_seed.potency * 20
-
-	// The secret of potato supercells!
-	var/datum/plant_gene/trait/cell_charge/electrical_gene = our_seed.get_gene(/datum/plant_gene/trait/cell_charge)
-	if(electrical_gene) // Cell charge max is now 40MJ or otherwise known as 400KJ (Same as bluespace power cells)
-		pocell.maxcharge *= (electrical_gene.rate * 100)
-	pocell.charge = pocell.maxcharge
-	pocell.name = "[our_plant.name] battery"
-	pocell.desc = "A rechargeable plant-based power cell. This one has a rating of [DisplayEnergy(pocell.maxcharge)], and you should not swallow it."
-
-	if(our_plant.reagents.has_reagent(/datum/reagent/toxin/plasma, 2))
-		pocell.rigged = TRUE
-
-	qdel(our_plant)
-
-/*
  * Injects a number of chemicals from the plant when you throw it at someone or they slip on it.
  * At 0 potency it can inject 1 unit of its chemicals, while at 100 potency it can inject 20 units.
  */
@@ -752,8 +624,6 @@
 	if(!.)
 		return FALSE
 
-	RegisterSignal(new_seed, COMSIG_PLANT_ON_GROW, .proc/try_spread)
-
 	return TRUE
 /*
  * Attempt to find an adjacent tray we can spread to.
@@ -761,48 +631,6 @@
  * our_seed - our plant's seed, what spreads to other trays
  * our_tray - the hydroponics tray we're currently in
  */
-/datum/plant_gene/trait/invasive/proc/try_spread(obj/item/seeds/our_seed, obj/machinery/hydroponics/our_tray)
-	SIGNAL_HANDLER
-
-	if(prob(100 - (5 * (11 - our_seed.production))))
-		return
-
-	for(var/step_dir in GLOB.alldirs)
-		var/obj/machinery/hydroponics/spread_tray = locate() in get_step(our_tray, step_dir)
-		if(spread_tray && prob(15))
-			if(!our_tray.Adjacent(spread_tray))
-				continue //Don't spread through things we can't go through.
-
-			spread_seed(spread_tray, our_tray)
-
-/*
- * Actually spread the plant to the tray we found in try_spread.
- *
- * target_tray - the tray we're spreading to
- * origin_tray - the tray we're currently in
- */
-/datum/plant_gene/trait/invasive/proc/spread_seed(obj/machinery/hydroponics/target_tray, obj/machinery/hydroponics/origin_tray)
-	if(target_tray.myseed) // Check if there's another seed in the next tray.
-		if(target_tray.myseed.type == origin_tray.myseed.type && !target_tray.dead)
-			return FALSE // It should not destroy its own kind.
-		target_tray.visible_message(SPAN_WARNING("The [target_tray.myseed.plantname] is overtaken by [origin_tray.myseed.plantname]!"))
-		QDEL_NULL(target_tray.myseed)
-	target_tray.myseed = origin_tray.myseed.Copy()
-	target_tray.age = 0
-	target_tray.dead = FALSE
-	target_tray.plant_health = target_tray.myseed.endurance
-	target_tray.lastcycle = world.time
-	target_tray.harvest = FALSE
-	target_tray.weedlevel = 0 // Reset
-	target_tray.pestlevel = 0 // Reset
-	target_tray.update_appearance()
-	target_tray.visible_message(SPAN_WARNING("The [origin_tray.myseed.plantname] spreads!"))
-	if(target_tray.myseed)
-		target_tray.name = "[initial(target_tray.name)] ([target_tray.myseed.plantname])"
-	else
-		target_tray.name = initial(target_tray.name)
-
-	return TRUE
 
 /**
  * A plant trait that causes the plant's food reagents to ferment instead.

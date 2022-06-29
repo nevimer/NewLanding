@@ -155,13 +155,6 @@
 	var/amt = max(0, ((force - (move_resist * MOVE_FORCE_CRUSH_RATIO)) / (move_resist * MOVE_FORCE_CRUSH_RATIO)) * 10)
 	take_damage(amt, BRUTE)
 
-/obj/singularity_act()
-	SSexplosions.high_mov_atom += src
-	if(src && !QDELETED(src))
-		qdel(src)
-	return 2
-
-
 ///// ACID
 
 GLOBAL_DATUM_INIT(acid_overlay, /mutable_appearance, mutable_appearance('icons/effects/effects.dmi', "acid"))

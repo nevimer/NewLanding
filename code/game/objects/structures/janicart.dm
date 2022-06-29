@@ -11,7 +11,6 @@
 	var/obj/item/mop/mymop
 	var/obj/item/pushbroom/mybroom
 	var/obj/item/reagent_containers/spray/cleaner/myspray
-	var/obj/item/lightreplacer/myreplacer
 	var/signs = 0
 	var/max_signs = 4
 
@@ -69,12 +68,6 @@
 			update_appearance()
 		else
 			to_chat(user, fail_msg)
-	else if(istype(I, /obj/item/lightreplacer))
-		if(!myreplacer)
-			var/obj/item/lightreplacer/l=I
-			l.janicart_insert(user,src)
-		else
-			to_chat(user, fail_msg)
 	else if(istype(I, /obj/item/clothing/suit/caution))
 		if(signs < max_signs)
 			put_in_cart(I, user)
@@ -107,8 +100,6 @@
 		items += list("Broom" = image(icon = mybroom.icon, icon_state = mybroom.icon_state))
 	if(myspray)
 		items += list("Spray bottle" = image(icon = myspray.icon, icon_state = myspray.icon_state))
-	if(myreplacer)
-		items += list("Light replacer" = image(icon = myreplacer.icon, icon_state = myreplacer.icon_state))
 	var/obj/item/clothing/suit/caution/sign = locate() in src
 	if(sign)
 		items += list("Sign" = image(icon = sign.icon, icon_state = sign.icon_state))
@@ -144,12 +135,6 @@
 			user.put_in_hands(myspray)
 			to_chat(user, SPAN_NOTICE("You take [myspray] from [src]."))
 			myspray = null
-		if("Light replacer")
-			if(!myreplacer)
-				return
-			user.put_in_hands(myreplacer)
-			to_chat(user, SPAN_NOTICE("You take [myreplacer] from [src]."))
-			myreplacer = null
 		if("Sign")
 			if(signs <= 0)
 				return
@@ -184,8 +169,6 @@
 		. += "cart_broom"
 	if(myspray)
 		. += "cart_spray"
-	if(myreplacer)
-		. += "cart_replacer"
 	if(signs)
 		. += "cart_sign[signs]"
 	if(reagents.total_volume > 0)

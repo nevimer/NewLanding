@@ -2,7 +2,6 @@
 	name = "Santa Claus"
 
 	uniform = /obj/item/clothing/under/color/red
-	suit = /obj/item/clothing/suit/space/santa
 	back = /obj/item/storage/backpack/santabag
 	backpack_contents = list(
 		/obj/item/a_gift/anything = 5,

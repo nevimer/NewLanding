@@ -58,7 +58,6 @@
 			new /obj/item/flashlight/glowstick(src)
 		if(3)
 			new /obj/item/flashlight/flare(src)
-	new /obj/item/radio/off(src)
 
 /obj/item/storage/toolbox/emergency/old
 	name = "rusty red toolbox"
@@ -79,7 +78,6 @@
 	new /obj/item/wrench(src)
 	new /obj/item/weldingtool(src)
 	new /obj/item/crowbar(src)
-	new /obj/item/analyzer(src)
 	new /obj/item/wirecutters(src)
 
 /obj/item/storage/toolbox/mechanical/old
@@ -104,17 +102,12 @@
 	material_flags = NONE
 
 /obj/item/storage/toolbox/electrical/PopulateContents()
-	var/pickedcolor = pick("red","yellow","green","blue","pink","orange","cyan","white")
 	new /obj/item/screwdriver(src)
 	new /obj/item/wirecutters(src)
 	new /obj/item/t_scanner(src)
 	new /obj/item/crowbar(src)
-	new /obj/item/stack/cable_coil(src,MAXCOIL,pickedcolor)
-	new /obj/item/stack/cable_coil(src,MAXCOIL,pickedcolor)
 	if(prob(5))
 		new /obj/item/clothing/gloves/color/yellow(src)
-	else
-		new /obj/item/stack/cable_coil(src,MAXCOIL,pickedcolor)
 
 /obj/item/storage/toolbox/syndicate
 	name = "suspicious looking toolbox"
@@ -155,14 +148,6 @@
 /obj/item/storage/toolbox/artistic/PopulateContents()
 	new /obj/item/storage/crayons(src)
 	new /obj/item/crowbar(src)
-	new /obj/item/stack/pipe_cleaner_coil/red(src)
-	new /obj/item/stack/pipe_cleaner_coil/yellow(src)
-	new /obj/item/stack/pipe_cleaner_coil/blue(src)
-	new /obj/item/stack/pipe_cleaner_coil/green(src)
-	new /obj/item/stack/pipe_cleaner_coil/pink(src)
-	new /obj/item/stack/pipe_cleaner_coil/orange(src)
-	new /obj/item/stack/pipe_cleaner_coil/cyan(src)
-	new /obj/item/stack/pipe_cleaner_coil/white(src)
 
 /obj/item/storage/toolbox/ammo
 	name = "ammo box"

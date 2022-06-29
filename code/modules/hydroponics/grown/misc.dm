@@ -19,16 +19,7 @@
 	graft_gene = /datum/plant_gene/trait/plant_type/weed_hardy
 
 /obj/item/seeds/starthistle/harvest(mob/user)
-	var/obj/machinery/hydroponics/parent = loc
-	var/seed_count = yield
-	if(prob(getYield() * 20))
-		seed_count++
-		var/output_loc = parent.Adjacent(user) ? user.loc : parent.loc
-		for(var/i in 1 to seed_count)
-			var/obj/item/seeds/starthistle/harvestseeds = Copy()
-			harvestseeds.forceMove(output_loc)
-
-	parent.update_tray()
+	return
 
 // Corpse flower
 /obj/item/seeds/starthistle/corpse_flower
@@ -39,7 +30,6 @@
 	plantname = "Corpse flower"
 	production = 2
 	growing_icon = 'icons/obj/hydroponics/growing_flowers.dmi'
-	genes = list(/datum/plant_gene/trait/gas_production)
 	mutatelist = list()
 	reagents_add = list(/datum/reagent/toxin/formaldehyde = 0.1)
 
@@ -215,10 +205,6 @@
 	foodtypes = VEGETABLES
 	juice_results = list(/datum/reagent/consumable/aloejuice = 0)
 	distill_reagent = /datum/reagent/consumable/ethanol/tequila
-
-/obj/item/food/grown/aloe/microwave_act(obj/machinery/microwave/M)
-	new /obj/item/stack/medical/aloe(drop_location(), 2)
-	qdel(src)
 
 /obj/item/seeds/shrub
 	name = "pack of shrub seeds"

@@ -212,12 +212,9 @@
 	return
 
 /// So we can check all occupants when we bump a door to see if anyone has access
-/datum/component/riding/proc/vehicle_bump(atom/movable/movable_parent, obj/machinery/door/possible_bumped_door)
+/datum/component/riding/proc/vehicle_bump(atom/movable/movable_parent, atom/target)
 	SIGNAL_HANDLER
-	if(!istype(possible_bumped_door))
-		return
-	for(var/occupant in movable_parent.buckled_mobs)
-		INVOKE_ASYNC(possible_bumped_door, /obj/machinery/door/.proc/bumpopen, occupant)
+	return
 
 /datum/component/riding/proc/Unbuckle(atom/movable/M)
 	addtimer(CALLBACK(parent, /atom/movable/.proc/unbuckle_mob, M), 0, TIMER_UNIQUE)

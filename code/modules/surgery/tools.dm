@@ -239,12 +239,6 @@
 		if(do_after(user, 10, target = O))
 			advanced_surgeries |= D.surgeries
 		return TRUE
-	if(istype(O, /obj/machinery/computer/operating))
-		to_chat(user, SPAN_NOTICE("You copy surgery protocols from [O] into [src]."))
-		var/obj/machinery/computer/operating/OC = O
-		if(do_after(user, 10, target = O))
-			advanced_surgeries |= OC.advanced_surgeries
-		return TRUE
 	return
 
 /obj/item/scalpel/advanced

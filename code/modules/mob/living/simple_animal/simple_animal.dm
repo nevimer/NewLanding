@@ -306,49 +306,18 @@
 	if(pulledby && pulledby.grab_state >= GRAB_KILL && atmos_requirements["min_oxy"])
 		. = FALSE //getting choked
 
-	if(isturf(loc) && isopenturf(loc))
-		var/turf/open/ST = loc
-		if(ST.air)
-			var/ST_gases = ST.air.gases
-			ST.air.assert_gases(arglist(GLOB.hardcoded_gases))
+	return TRUE
 
-			var/tox = ST_gases[/datum/gas/plasma][MOLES]
-			var/oxy = ST_gases[/datum/gas/oxygen][MOLES]
-			var/n2  = ST_gases[/datum/gas/nitrogen][MOLES]
-			var/co2 = ST_gases[/datum/gas/carbon_dioxide][MOLES]
-
-			ST.air.garbage_collect()
-
-			if(atmos_requirements["min_oxy"] && oxy < atmos_requirements["min_oxy"])
-				. = FALSE
-			else if(atmos_requirements["max_oxy"] && oxy > atmos_requirements["max_oxy"])
-				. = FALSE
-			else if(atmos_requirements["min_tox"] && tox < atmos_requirements["min_tox"])
-				. = FALSE
-			else if(atmos_requirements["max_tox"] && tox > atmos_requirements["max_tox"])
-				. = FALSE
-			else if(atmos_requirements["min_n2"] && n2 < atmos_requirements["min_n2"])
-				. = FALSE
-			else if(atmos_requirements["max_n2"] && n2 > atmos_requirements["max_n2"])
-				. = FALSE
-			else if(atmos_requirements["min_co2"] && co2 < atmos_requirements["min_co2"])
-				. = FALSE
-			else if(atmos_requirements["max_co2"] && co2 > atmos_requirements["max_co2"])
-				. = FALSE
-		else
-			if(atmos_requirements["min_oxy"] || atmos_requirements["min_tox"] || atmos_requirements["min_n2"] || atmos_requirements["min_co2"])
-				. = FALSE
-
-/mob/living/simple_animal/proc/environment_temperature_is_safe(datum/gas_mixture/environment)
+/mob/living/simple_animal/proc/environment_temperature_is_safe()
 	. = TRUE
-	var/areatemp = get_temperature(environment)
+	var/areatemp = T20C
 	if((areatemp < minbodytemp) || (areatemp > maxbodytemp))
 		. = FALSE
 
-/mob/living/simple_animal/handle_environment(datum/gas_mixture/environment, delta_time, times_fired)
+/mob/living/simple_animal/handle_environment(delta_time, times_fired)
 	var/atom/A = loc
 	if(isturf(A))
-		var/areatemp = get_temperature(environment)
+		var/areatemp = T20C
 		var/temp_delta = areatemp - bodytemperature
 		if(abs(temp_delta) > 5)
 			if(temp_delta < 0)
@@ -357,12 +326,7 @@
 			else
 				adjust_bodytemperature(clamp(temp_delta * delta_time / 10, 0, temp_delta))
 
-	if(!environment_air_is_safe() && unsuitable_atmos_damage)
-		adjustHealth(unsuitable_atmos_damage * delta_time)
-		if(unsuitable_atmos_damage > 0)
-			throw_alert("not_enough_oxy", /atom/movable/screen/alert/not_enough_oxy)
-	else
-		clear_alert("not_enough_oxy")
+	clear_alert("not_enough_oxy")
 
 	handle_temperature_damage(delta_time, times_fired)
 
@@ -475,10 +439,6 @@
 	if (isliving(the_target))
 		var/mob/living/L = the_target
 		if(L.stat != CONSCIOUS)
-			return FALSE
-	if (ismecha(the_target))
-		var/obj/vehicle/sealed/mecha/M = the_target
-		if(LAZYLEN(M.occupants))
 			return FALSE
 	return TRUE
 

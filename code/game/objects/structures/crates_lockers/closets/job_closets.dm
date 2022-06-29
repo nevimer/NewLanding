@@ -9,7 +9,6 @@
 	..()
 	var/static/items_inside = list(
 		/obj/item/clothing/head/that = 2,
-		/obj/item/radio/headset/headset_srv = 2,
 		/obj/item/clothing/under/suit/sl = 2,
 		/obj/item/clothing/under/rank/civilian/bartender = 2,
 		/obj/item/clothing/accessory/waistcoat = 2,
@@ -18,7 +17,6 @@
 		/obj/item/reagent_containers/rag = 2,
 		/obj/item/storage/box/beanbag = 1,
 		/obj/item/clothing/suit/armor/vest/alt = 1,
-		/obj/item/circuitboard/machine/dish_drive = 1,
 		/obj/item/clothing/glasses/sunglasses/reagent = 1,
 		/obj/item/clothing/neck/petcollar = 1,
 		/obj/item/storage/belt/bandolier = 1)
@@ -33,12 +31,9 @@
 	..()
 	var/static/items_inside = list(
 		/obj/item/clothing/under/suit/waiter = 2,
-		/obj/item/radio/headset/headset_srv = 2,
 		/obj/item/clothing/accessory/waistcoat = 2,
 		/obj/item/clothing/suit/apron/chef = 3,
 		/obj/item/clothing/head/soft/mime = 2,
-		/obj/item/storage/box/mousetraps = 2,
-		/obj/item/circuitboard/machine/dish_drive = 1,
 		/obj/item/clothing/suit/toggle/chef = 1,
 		/obj/item/clothing/under/rank/civilian/chef = 1,
 		/obj/item/clothing/head/chefhat = 1,
@@ -53,7 +48,6 @@
 /obj/structure/closet/jcloset/PopulateContents()
 	..()
 	new /obj/item/clothing/under/rank/civilian/janitor(src)
-	new /obj/item/cartridge/janitor(src)
 	new /obj/item/clothing/gloves/color/black(src)
 	new /obj/item/clothing/head/soft/purple(src)
 	new /obj/item/paint_remover(src)
@@ -62,7 +56,6 @@
 	for(var/i in 1 to 3)
 		new /obj/item/clothing/suit/caution(src)
 	new /obj/item/holosign_creator(src)
-	new /obj/item/lightreplacer(src)
 	new /obj/item/soap(src)
 	new /obj/item/storage/bag/trash(src)
 	new /obj/item/clothing/shoes/galoshes(src)
@@ -143,7 +136,7 @@
 		/obj/item/clothing/shoes/sneakers/black = 3,
 		/obj/item/clothing/gloves/fingerless = 3,
 		/obj/item/clothing/head/soft = 3,
-		/obj/item/radio/headset/headset_cargo = 1)
+		)
 	generate_items_inside(items_inside,src)
 
 /obj/structure/closet/wardrobe/atmospherics_yellow
@@ -286,7 +279,6 @@
 		/obj/item/clothing/under/rank/rnd/scientist = 3,
 		/obj/item/clothing/suit/toggle/labcoat/science = 3,
 		/obj/item/clothing/shoes/sneakers/white = 3,
-		/obj/item/radio/headset/headset_sci = 2,
 		/obj/item/clothing/mask/gas = 3)
 	generate_items_inside(items_inside,src)
 	return

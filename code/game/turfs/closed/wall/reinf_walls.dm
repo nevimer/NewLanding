@@ -9,7 +9,6 @@
 	plating_material = /datum/material/alloy/plasteel
 	explosion_block = 2
 	rad_insulation = RAD_HEAVY_INSULATION
-	heat_capacity = 312500 //a little over 5 cm thick , 312500 for 1 m by 2.5 m by 0.25 m plasteel wall. also indicates the temperature at wich the wall will melt (currently only able to melt with H/E pipes)
 
 /turf/closed/wall/r_wall/syndicate
 	name = "hull"
@@ -19,9 +18,6 @@
 	reinf_material = /datum/material/iron
 	plating_material = /datum/material/alloy/plastitanium
 	color = "#3a313a" //To display in mapping softwares
-
-/turf/closed/wall/r_wall/syndicate/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	return FALSE
 
 /turf/closed/wall/r_wall/syndicate/nodiagonal
 

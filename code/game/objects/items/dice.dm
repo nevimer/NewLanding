@@ -222,12 +222,6 @@
 	. = ..()
 	. += "[icon_state]-[result]"
 
-/obj/item/dice/microwave_act(obj/machinery/microwave/M)
-	if(microwave_riggable)
-		rigged = DICE_BASICALLY_RIGGED
-		rigged_value = result
-	..(M)
-
 /// A special kind of dice, new type because it is completely different.
 /obj/item/deathroll_dice
 	name = "deathroll die"
@@ -255,12 +249,6 @@
 	result = initial(result)
 	to_chat(user, SPAN_NOTICE("You reset \the [src]."))
 	update_appearance()
-
-/obj/item/deathroll_dice/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
-		return
-	to_chat(user, SPAN_WARNING("You overload \the [src]'s random seed computing core."))
-	obj_flags |= EMAGGED
 
 /obj/item/deathroll_dice/update_overlays()
 	. = ..()

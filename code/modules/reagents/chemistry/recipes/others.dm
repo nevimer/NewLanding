@@ -156,7 +156,6 @@
 	var/turf/exposed_turf = get_turf(holder.my_atom)
 	if(!exposed_turf)
 		return
-	exposed_turf.atmos_spawn_air("n2o=[equilibrium.step_target_vol/2];TEMP=[holder.chem_temp]")
 	clear_products(holder, equilibrium.step_target_vol)
 
 /datum/chemical_reaction/nitrous_oxide/overheated(datum/reagents/holder, datum/equilibrium/equilibrium, step_volume_added)
@@ -435,12 +434,6 @@
 			M.vomit(blood = TRUE, stun = TRUE) //not having a redo of itching powder (hopefully)
 	new /mob/living/carbon/human/species/monkey(location, TRUE)
 
-//water electrolysis
-/datum/chemical_reaction/electrolysis
-	results = list(/datum/reagent/oxygen = 1.5, /datum/reagent/hydrogen = 3)
-	required_reagents = list(/datum/reagent/consumable/liquidelectricity = 1, /datum/reagent/water = 5)
-	reaction_tags = REACTION_TAG_EASY | REACTION_TAG_CHEMICAL
-
 //butterflium
 /datum/chemical_reaction/butterflium
 	required_reagents = list(/datum/reagent/colorful_reagent = 1, /datum/reagent/medicine/omnizine = 1, /datum/reagent/medicine/strange_reagent = 1, /datum/reagent/consumable/nutriment = 1)
@@ -670,82 +663,3 @@
 	purity_min = 0
 	mix_message = "The mixture's colors swirl together."
 	reaction_tags = REACTION_TAG_EASY | REACTION_TAG_CHEMICAL
-
-/datum/chemical_reaction/eigenstate
-	results = list(/datum/reagent/eigenstate = 1)
-	required_reagents = list(/datum/reagent/bluespace = 1, /datum/reagent/stable_plasma = 1, /datum/reagent/consumable/caramel = 1)
-	mix_message = "the reaction zaps suddenly!"
-	mix_sound = 'sound/chemistry/bluespace.ogg'
-	//FermiChem vars:
-	required_temp = 350
-	optimal_temp =  600
-	overheat_temp = 650
-	optimal_ph_min = 9
-	optimal_ph_max = 12
-	determin_ph_range = 5
-	temp_exponent_factor = 1.5
-	ph_exponent_factor = 3
-	thermic_constant = 12
-	H_ion_release = -0.05
-	rate_up_lim = 10
-	purity_min = 0.4
-	reaction_flags = REACTION_HEAT_ARBITARY
-	reaction_tags = REACTION_TAG_HARD | REACTION_TAG_UNIQUE | REACTION_TAG_OTHER
-
-/datum/chemical_reaction/eigenstate/reaction_finish(datum/reagents/holder, datum/equilibrium/reaction, react_vol)
-	. = ..()
-	var/turf/open/location = get_turf(holder.my_atom)
-	if(reaction.data["ducts_teleported"] == TRUE) //If we teleported an duct, then we reconnect it at the end
-		for(var/obj/item/stack/ducts/duct in range(location, 3))
-			duct.check_attach_turf(duct.loc)
-
-	var/datum/reagent/eigenstate/eigen = holder.has_reagent(/datum/reagent/eigenstate)
-	if(!eigen)
-		return
-	if(location)
-		eigen.location_created = location
-		eigen.data["location_created"] = location
-
-	do_sparks(5,FALSE,location)
-	playsound(location, 'sound/effects/phasein.ogg', 80, TRUE)
-
-/datum/chemical_reaction/eigenstate/overheated(datum/reagents/holder, datum/equilibrium/equilibrium, step_volume_added)
-	. = ..()
-	if(!off_cooldown(holder, equilibrium, 0.5, "eigen"))
-		return
-	var/turf/location = get_turf(holder.my_atom)
-	do_sparks(3,FALSE,location)
-	playsound(location, 'sound/effects/phasein.ogg', 80, TRUE)
-	for(var/mob/living/nearby_mob in range(location, 3))
-		do_sparks(3,FALSE,nearby_mob)
-		do_teleport(nearby_mob, get_turf(holder.my_atom), 3, no_effects=TRUE)
-		nearby_mob.Knockdown(20, TRUE)
-		nearby_mob.add_atom_colour("#cebfff", WASHABLE_COLOUR_PRIORITY)
-		to_chat()
-		do_sparks(3,FALSE,nearby_mob)
-	clear_products(holder, step_volume_added)
-
-/datum/chemical_reaction/eigenstate/overly_impure(datum/reagents/holder, datum/equilibrium/equilibrium, step_volume_added)
-	if(!off_cooldown(holder, equilibrium, 1, "eigen"))
-		return
-	var/turf/location = get_turf(holder.my_atom)
-	do_sparks(3,FALSE,location)
-	holder.chem_temp += 10
-	playsound(location, 'sound/effects/phasein.ogg', 80, TRUE)
-	for(var/obj/machinery/duct/duct in range(location, 3))
-		do_teleport(duct, location, 3, no_effects=TRUE)
-		equilibrium.data["ducts_teleported"] = TRUE //If we teleported a duct - call the process in
-	var/lets_not_go_crazy = 15 //Teleport 15 items at max
-	var/list/items = list()
-	for(var/obj/item/item in range(location, 3))
-		items += item
-	shuffle(items)
-	for(var/obj/item/item in items)
-		do_teleport(item, location, 3, no_effects=TRUE)
-		lets_not_go_crazy -= 1
-		item.add_atom_colour("#c4b3fd", WASHABLE_COLOUR_PRIORITY)
-		if(!lets_not_go_crazy)
-			clear_products(holder, step_volume_added)
-			return
-	clear_products(holder, step_volume_added)
-	holder.my_atom.audible_message(SPAN_NOTICE("[icon2html(holder.my_atom, viewers(DEFAULT_MESSAGE_RANGE, src))] The reaction gives out a fizz, teleporting items everywhere!"))

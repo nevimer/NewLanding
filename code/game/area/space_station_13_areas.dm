@@ -84,18 +84,15 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/ai_monitored/aisat/exterior
 	name = "AI Satellite Exterior"
 	icon_state = "ai"
-	airlock_wires = /datum/wires/airlock/ai
 
 /area/ai_monitored/command/storage/satellite
 	name = "AI Satellite Maint"
 	icon_state = "ai_storage"
 	main_ambience = AMBIENCE_DANGER
-	airlock_wires = /datum/wires/airlock/ai
 
 //AI - Turret_protected
 
 /area/ai_monitored/turret_protected
-	airlock_wires = /datum/wires/airlock/ai
 
 /area/ai_monitored/turret_protected/ai_upload
 	name = "AI Upload Chamber"
@@ -155,7 +152,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Generic Maintenance"
 	main_ambience = AMBIENCE_MAINT
 	area_flags = BLOBS_ALLOWED | UNIQUE_AREA | CULT_PERMITTED
-	airlock_wires = /datum/wires/airlock/maint
 	sound_environment = SOUND_AREA_TUNNEL_ENCLOSED
 
 //Maintenance - Departmental
@@ -459,7 +455,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/command
 	name = "Command"
 	icon_state = "Bridge"
-	airlock_wires = /datum/wires/airlock/command
 	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /area/command/bridge
@@ -563,7 +558,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/ai_monitored/command/nuke_storage
 	name = "Vault"
 	icon_state = "nuke_storage"
-	airlock_wires = /datum/wires/airlock/command
 
 //Commons
 
@@ -683,7 +677,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 //Service
 
 /area/service
-	airlock_wires = /datum/wires/airlock/service
 
 /area/service/cafeteria
 	name = "Cafeteria"
@@ -707,7 +700,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	mood_bonus = 5
 	mood_message = "<span class='nicegreen'>I love being in the bar!</span>\n"
 	mood_trait = TRAIT_EXTROVERT
-	airlock_wires = /datum/wires/airlock/service
 	sound_environment = SOUND_AREA_WOODFLOOR
 
 /area/service/bar/Initialize(mapload)
@@ -818,7 +810,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/service/hydroponics
 	name = "Hydroponics"
 	icon_state = "hydro"
-	airlock_wires = /datum/wires/airlock/service
 	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /area/service/hydroponics/upper
@@ -842,7 +833,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/engineering
 	main_ambience = AMBIENCE_ENGI
-	airlock_wires = /datum/wires/airlock/engineering
 	sound_environment = SOUND_AREA_LARGE_ENCLOSED
 
 /area/engineering/engine_smes
@@ -937,7 +927,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	area_flags = UNIQUE_AREA
 	flags_1 = NONE
 	main_ambience = AMBIENCE_ENGI
-	airlock_wires = /datum/wires/airlock/engineering
 	sound_environment = SOUND_AREA_SPACE
 
 /area/solars/fore
@@ -1022,7 +1011,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Medical"
 	icon_state = "medbay1"
 	main_ambience = AMBIENCE_MEDICAL
-	airlock_wires = /datum/wires/airlock/medbay
 	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /area/medical/abandoned
@@ -1142,7 +1130,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Security"
 	icon_state = "security"
 	main_ambience = AMBIENCE_DANGER
-	airlock_wires = /datum/wires/airlock/security
 	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /area/security/office
@@ -1290,7 +1277,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	name = "Armory"
 	icon_state = "armory"
 	main_ambience = AMBIENCE_DANGER
-	airlock_wires = /datum/wires/airlock/security
 
 /area/ai_monitored/security/armory/upper
 	name = "Upper Armory"
@@ -1300,7 +1286,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/cargo
 	name = "Quartermasters"
 	icon_state = "quart"
-	airlock_wires = /datum/wires/airlock/service
 	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /area/cargo/sorting
@@ -1347,7 +1332,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /area/science
 	name = "Science Division"
 	icon_state = "science"
-	airlock_wires = /datum/wires/airlock/science
 	sound_environment = SOUND_AREA_STANDARD_STATION
 
 /area/science/breakroom
@@ -1433,7 +1417,6 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 // Telecommunications Satellite
 
 /area/tcommsat
-	airlock_wires = /datum/wires/airlock/engineering
 	network_root_id = STATION_NETWORK_ROOT // They should of unpluged the router before they left
 	main_ambience = AMBIENCE_TCOMM
 
@@ -1474,3 +1457,20 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 /area/maintenance/external/port/bow
 	name = "Port Bow External Hull Access"
+
+/area/outdoors
+	icon_state = "mining"
+	has_gravity = STANDARD_GRAVITY
+	flags_1 = NONE
+	always_unpowered = TRUE
+	requires_power = TRUE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	area_flags = VALID_TERRITORY | UNIQUE_AREA | CAVES_ALLOWED | FLORA_ALLOWED | MOB_SPAWN_ALLOWED | MEGAFAUNA_SPAWN_ALLOWED | NO_ALERTS
+	main_ambience = AMBIENCE_AWAY
+	outdoors = TRUE
+
+/area/outdoors/jungle
+	name = "Jungle"
+	main_ambience = AMBIENCE_JUNGLE

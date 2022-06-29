@@ -25,13 +25,6 @@ again.
 	spawn_list = list(/obj/structure/low_wall, /obj/structure/window/fulltile)
 	dir = SOUTH
 
-/obj/effect/spawner/structure/window/Initialize()
-	. = ..()
-
-	if (is_station_level(src))
-		var/turf/current_turf = get_turf(src)
-		current_turf.rcd_memory = RCD_MEMORY_WINDOWGRILLE
-
 /obj/effect/spawner/structure/window/wood
 	name = "window with wooden low wall spawner"
 	spawn_list = list(/obj/structure/low_wall/wood, /obj/structure/window/fulltile)

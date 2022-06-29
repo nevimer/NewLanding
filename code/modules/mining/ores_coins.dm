@@ -230,104 +230,6 @@ GLOBAL_LIST_INIT(sand_recipes, list(\
 	singular_name = "slag chunk"
 	merge_type = /obj/item/stack/ore/slag
 
-/obj/item/gibtonite
-	name = "gibtonite ore"
-	desc = "Extremely explosive if struck with mining equipment, Gibtonite is often used by miners to speed up their work by using it as a mining charge. This material is illegal to possess by unauthorized personnel under space law."
-	icon = 'icons/obj/mining.dmi'
-	icon_state = "Gibtonite ore"
-	inhand_icon_state = "Gibtonite ore"
-	w_class = WEIGHT_CLASS_BULKY
-	throw_range = 0
-	var/primed = FALSE
-	var/det_time = 100
-	var/quality = GIBTONITE_QUALITY_LOW //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher value = better
-	var/attacher = "UNKNOWN"
-	var/det_timer
-
-/obj/item/gibtonite/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/two_handed, require_twohands=TRUE)
-
-/obj/item/gibtonite/Destroy()
-	qdel(wires)
-	wires = null
-	return ..()
-
-/obj/item/gibtonite/attackby(obj/item/I, mob/user, params)
-	if(!wires && istype(I, /obj/item/assembly/igniter))
-		user.visible_message(SPAN_NOTICE("[user] attaches [I] to [src]."), SPAN_NOTICE("You attach [I] to [src]."))
-		wires = new /datum/wires/explosive/gibtonite(src)
-		attacher = key_name(user)
-		qdel(I)
-		add_overlay("Gibtonite_igniter")
-		return
-
-	if(wires && !primed)
-		if(is_wire_tool(I))
-			wires.interact(user)
-			return
-
-	if(I.tool_behaviour == TOOL_MINING || istype(I, /obj/item/resonator) || I.force >= 10)
-		GibtoniteReaction(user)
-		return
-	if(primed)
-		if(istype(I, /obj/item/mining_scanner) || istype(I, /obj/item/t_scanner/adv_mining_scanner) || I.tool_behaviour == TOOL_MULTITOOL)
-			primed = FALSE
-			if(det_timer)
-				deltimer(det_timer)
-			user.visible_message(SPAN_NOTICE("The chain reaction stopped! ...The ore's quality looks diminished."), SPAN_NOTICE("You stopped the chain reaction. ...The ore's quality looks diminished."))
-			icon_state = "Gibtonite ore"
-			quality = GIBTONITE_QUALITY_LOW
-			return
-	..()
-
-/obj/item/gibtonite/attack_self(user)
-	if(wires)
-		wires.interact(user)
-	else
-		..()
-
-/obj/item/gibtonite/bullet_act(obj/projectile/P)
-	GibtoniteReaction(P.firer)
-	. = ..()
-
-/obj/item/gibtonite/ex_act()
-	GibtoniteReaction(null, 1)
-
-/obj/item/gibtonite/proc/GibtoniteReaction(mob/user, triggered_by = 0)
-	if(!primed)
-		primed = TRUE
-		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,TRUE)
-		icon_state = "Gibtonite active"
-		var/notify_admins = FALSE
-		if(z != 5)//Only annoy the admins ingame if we're triggered off the mining zlevel
-			notify_admins = TRUE
-
-		if(triggered_by == 1)
-			log_bomber(null, "An explosion has primed a", src, "for detonation", notify_admins)
-		else if(triggered_by == 2)
-			var/turf/bombturf = get_turf(src)
-			if(notify_admins)
-				message_admins("A signal has triggered a [name] to detonate at [ADMIN_VERBOSEJMP(bombturf)]. Igniter attacher: [ADMIN_LOOKUPFLW(attacher)]")
-			var/bomb_message = "A signal has primed a [name] for detonation at [AREACOORD(bombturf)]. Igniter attacher: [key_name(attacher)]."
-			log_game(bomb_message)
-			GLOB.bombers += bomb_message
-		else
-			user.visible_message(SPAN_WARNING("[user] strikes \the [src], causing a chain reaction!"), SPAN_DANGER("You strike \the [src], causing a chain reaction."))
-			log_bomber(user, "has primed a", src, "for detonation", notify_admins)
-		det_timer = addtimer(CALLBACK(src, .proc/detonate, notify_admins), det_time, TIMER_STOPPABLE)
-
-/obj/item/gibtonite/proc/detonate(notify_admins)
-	if(primed)
-		switch(quality)
-			if(GIBTONITE_QUALITY_HIGH)
-				explosion(src, devastation_range = 2, heavy_impact_range = 4, light_impact_range = 9, adminlog = notify_admins)
-			if(GIBTONITE_QUALITY_MEDIUM)
-				explosion(src, devastation_range = 1, heavy_impact_range = 2, light_impact_range = 5, adminlog = notify_admins)
-			if(GIBTONITE_QUALITY_LOW)
-				explosion(src, heavy_impact_range = 1, light_impact_range = 3, adminlog = notify_admins)
-		qdel(src)
-
 /obj/item/stack/ore/Initialize(mapload, new_amount, merge = TRUE, list/mat_override=null, mat_amt=1)
 	. = ..()
 	pixel_x = base_pixel_x + rand(0, 16) - 8
@@ -351,7 +253,6 @@ GLOBAL_LIST_INIT(sand_recipes, list(\
 	w_class = WEIGHT_CLASS_TINY
 	custom_materials = list(/datum/material/iron = 400)
 	material_flags = MATERIAL_ADD_PREFIX | MATERIAL_COLOR | MATERIAL_AFFECT_STATISTICS
-	var/string_attached
 	var/list/sideslist = list("heads","tails")
 	var/cooldown = 0
 	var/value
@@ -395,39 +296,8 @@ GLOBAL_LIST_INIT(sand_recipes, list(\
 	. = ..()
 	. += SPAN_INFO("It's worth [value] credit\s.")
 
-/obj/item/coin/attackby(obj/item/W, mob/user, params)
-	if(istype(W, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/CC = W
-		if(string_attached)
-			to_chat(user, SPAN_WARNING("There already is a string attached to this coin!"))
-			return
-
-		if (CC.use(1))
-			add_overlay("coin_string_overlay")
-			string_attached = 1
-			to_chat(user, SPAN_NOTICE("You attach a string to the coin."))
-		else
-			to_chat(user, SPAN_WARNING("You need one length of cable to attach a string to the coin!"))
-			return
-	else
-		..()
-
-/obj/item/coin/wirecutter_act(mob/living/user, obj/item/I)
-	..()
-	if(!string_attached)
-		return TRUE
-
-	new /obj/item/stack/cable_coil(drop_location(), 1)
-	overlays = list()
-	string_attached = null
-	to_chat(user, SPAN_NOTICE("You detach the string from the coin."))
-	return TRUE
-
 /obj/item/coin/attack_self(mob/user)
 	if(cooldown < world.time)
-		if(string_attached) //does the coin have a wire attached
-			to_chat(user, SPAN_WARNING("The coin won't flip very well with something attached!") )
-			return FALSE//do not flip the coin
 		cooldown = world.time + 15
 		flick("coin_[coinflip]_flip", src)
 		coinflip = pick(sideslist)

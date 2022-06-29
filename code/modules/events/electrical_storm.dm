@@ -19,18 +19,4 @@
 
 
 /datum/round_event/electrical_storm/start()
-	var/list/epicentreList = list()
-
-	for(var/i=1, i <= lightsoutAmount, i++)
-		var/turf/T = find_safe_turf()
-		if(istype(T))
-			epicentreList += T
-
-	if(!epicentreList.len)
-		return
-
-	for(var/centre in epicentreList)
-		for(var/a in GLOB.apcs_list)
-			var/obj/machinery/power/apc/A = a
-			if(get_dist(centre, A) <= lightsoutRange)
-				A.overload_lighting()
+	return

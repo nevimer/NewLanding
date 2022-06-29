@@ -44,9 +44,8 @@
 						GM.visible_message(SPAN_DANGER("[user] gives [GM] a swirlie!"), SPAN_USERDANGER("[user] gives you a swirlie!"), SPAN_HEAR("You hear a toilet flushing."))
 						if(iscarbon(GM))
 							var/mob/living/carbon/C = GM
-							if(!C.internal)
-								log_combat(user, C, "swirlied (oxy)")
-								C.adjustOxyLoss(5)
+							log_combat(user, C, "swirlied (oxy)")
+							C.adjustOxyLoss(5)
 						else
 							log_combat(user, GM, "swirlied (oxy)")
 							GM.adjustOxyLoss(5)
@@ -285,7 +284,6 @@
 	if(has_water_reclaimer)
 		create_reagents(100, NO_REACT)
 		reagents.add_reagent(dispensedreagent, 100)
-	AddComponent(/datum/component/plumbing/simple_demand, bolt)
 
 /obj/structure/sink/examine(mob/user)
 	. = ..()
@@ -355,18 +353,6 @@
 				return TRUE
 			to_chat(user, SPAN_NOTICE("\The [RG] is full."))
 			return FALSE
-
-	if(istype(O, /obj/item/melee/baton))
-		var/obj/item/melee/baton/B = O
-		if(B.cell && B.cell.charge && B.turned_on)
-			flick("baton_active", src)
-			user.Paralyze(B.stun_time)
-			user.stuttering = B.stun_time/20
-			B.deductcharge(B.cell_hit_cost)
-			user.visible_message(SPAN_WARNING("[user] shocks [user.p_them()]self while attempting to wash the active [B.name]!"), \
-								SPAN_USERDANGER("You unwisely attempt to wash [B] while it's still on."))
-			playsound(src, B.stun_sound, 50, TRUE)
-			return
 
 	if(istype(O, /obj/item/mop))
 		if(reagents.total_volume <= 0)
@@ -475,14 +461,6 @@
 	return !anchored
 
 /obj/structure/sinkframe/attackby(obj/item/I, mob/living/user, params)
-	if(istype(I, /obj/item/stock_parts/water_recycler))
-		qdel(I)
-		var/obj/structure/sink/greyscale/new_sink = new /obj/structure/sink/greyscale(loc)
-		new_sink.has_water_reclaimer = TRUE
-		new_sink.set_custom_materials(custom_materials)
-		new_sink.setDir(dir)
-		qdel(src)
-		return
 	return ..()
 
 //Water source, use the type water_source for unlimited water sources like classic sinks.
@@ -549,18 +527,6 @@
 				return TRUE
 			to_chat(user, SPAN_NOTICE("\The [container] is full."))
 			return FALSE
-
-	if(istype(O, /obj/item/melee/baton))
-		var/obj/item/melee/baton/baton = O
-		if(baton.cell && baton.cell.charge && baton.turned_on)
-			flick("baton_active", src)
-			user.Paralyze(baton.stun_time)
-			user.stuttering = baton.stun_time * 0.05
-			baton.deductcharge(baton.cell_hit_cost)
-			user.visible_message(SPAN_WARNING("[user] shocks [user.p_them()]self while attempting to wash the active [baton.name]!"), \
-								SPAN_USERDANGER("You unwisely attempt to wash [baton] while it's still on."))
-			playsound(src, baton.stun_sound, 50, TRUE)
-			return
 
 	if(istype(O, /obj/item/mop))
 		O.reagents.add_reagent(dispensedreagent, 5)

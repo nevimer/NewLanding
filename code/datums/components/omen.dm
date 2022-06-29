@@ -60,16 +60,6 @@
 
 	if(!prob(15))
 		return
-	var/our_guy_pos = get_turf(living_guy)
-	for(var/turf_content in our_guy_pos)
-		if(istype(turf_content, /obj/machinery/door/airlock))
-			to_chat(living_guy, SPAN_WARNING("A malevolent force launches your body to the floor..."))
-			var/obj/machinery/door/airlock/darth_airlock = turf_content
-			living_guy.apply_status_effect(STATUS_EFFECT_PARALYZED, 10)
-			INVOKE_ASYNC(darth_airlock, /obj/machinery/door/airlock.proc/close, TRUE)
-			if(!permanent)
-				qdel(src)
-			return
 
 	for(var/t in get_adjacent_open_turfs(living_guy))
 		var/turf/the_turf = t
