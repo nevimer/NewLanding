@@ -1,9 +1,4 @@
-# Horizon Station 13
-
-[![GitHub continuous integrations status](https://img.shields.io/github/workflow/status/hrzntal/horizon/CI%20Suite/main?style=for-the-badge)](https://github.com/hrzntal/horizon/actions?query=workflow%3A%22CI+Suite%22)
-[![Open GitHub pull requests](https://img.shields.io/github/issues-pr/hrzntal/horizon?color=blue&style=for-the-badge)](https://github.com/hrzntal/horizon/pulls)
-[![Open GitHub issues marked as tracked bugs](https://img.shields.io/github/issues/hrzntal/horizon/Issue%20:%20Bug%20-%20Tracked?label=Bug%20Reports&style=for-the-badge)](https://github.com/hrzntal/horizon/issues?q=is%3Aissue+is%3Aopen+label%3A%22Issue+%3A+Bug+-+Tracked%22)
-[![Open GitHub issues marked as feature requests](https://img.shields.io/github/issues/hrzntal/horizon/Issue%20:%20Feature%20Request?label=Feature%20Requests&color=a180f2&style=for-the-badge)](https://github.com/hrzntal/horizon/issues?q=is%3Aissue+is%3Aopen+label%3A%22Issue%3AFeature+Request%22)
+# New Landing
 
 ![Built with Resentment](https://img.shields.io/static/v1?label=Built%20with&message=Resentment&labelColor=e36d25&color=d15d27&style=for-the-badge)
 ![Contains Tasty Spaghetti Code](https://img.shields.io/static/v1?label=Contains&message=Tasty%20Spaghetti%20Code&labelColor=31c4f3&color=389ad5&style=for-the-badge)
@@ -12,16 +7,13 @@
 ---
 
 ## About
-Welcome to the Horizon Station 13 codebase.  
+Welcome to the New Landing codebase.  
 TBD
 
 Code based on [/tg/station](https://github.com/tgstation/tgstation) among others.
 
 | Helpful URLs |                               |
 |---------|------------------------------------|
-| Website | https://hrzn.fun                   |
-| Code    | https://github.com/hrzntal/horizon |
-| Discord | https://discord.hrzn.fun           |
 | Git/GitHub cheatsheet | https://www.notion.so/Git-GitHub-61bc81766b2e4c7d9a346db3078ce833 |
 | BYOND   | https://byond.com                  |
 ---
