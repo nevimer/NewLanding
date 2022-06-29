@@ -221,16 +221,6 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 	if(radio_return & NOPASS)
 		return 1
 
-	//No screams in space, unless you're next to someone.
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/environment = T.return_air()
-	var/pressure = (environment)? environment.return_pressure() : 0
-	if(pressure < SOUND_MINIMUM_PRESSURE)
-		message_range = 1
-
-	if(pressure < ONE_ATMOSPHERE*0.4) //Thin air, let's italicise the message
-		spans |= SPEECH_SPAN_ITALICS
-
 	send_speech(message, message_range, src, bubble_type, spans, language, message_mods)
 
 	if(succumbed)
@@ -403,14 +393,6 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 	return message
 
 /mob/living/proc/radio(message, list/message_mods = list(), list/spans, language)
-	var/obj/item/implant/radio/imp = locate() in src
-	if(imp?.radio.on)
-		if(message_mods[MODE_HEADSET])
-			imp.radio.talk_into(src, message, , spans, language, message_mods)
-			return ITALICS | REDUCE_RANGE
-		if(message_mods[RADIO_EXTENSION] == MODE_DEPARTMENT || (message_mods[RADIO_EXTENSION] in imp.radio.channels))
-			imp.radio.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
-			return ITALICS | REDUCE_RANGE
 	switch(message_mods[RADIO_EXTENSION])
 		if(MODE_R_HAND)
 			for(var/obj/item/r_hand in get_held_items_for_side(RIGHT_HANDS, all = TRUE))
@@ -424,8 +406,6 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 				return ITALICS | REDUCE_RANGE
 
 		if(MODE_INTERCOM)
-			for (var/obj/item/radio/intercom/I in view(MODE_RANGE_INTERCOM, null))
-				I.talk_into(src, message, , spans, language, message_mods)
 			return ITALICS | REDUCE_RANGE
 
 	return 0

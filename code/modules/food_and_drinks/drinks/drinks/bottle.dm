@@ -614,7 +614,7 @@
 
 /obj/item/reagent_containers/food/drinks/bottle/pruno/proc/check_fermentation()
 	SIGNAL_HANDLER
-	if (!(istype(loc, /obj/machinery) || istype(loc, /obj/structure)))
+	if (!(istype(loc, /obj/structure)))
 		if(fermentation_timer)
 			fermentation_time_remaining = timeleft(fermentation_timer)
 			deltimer(fermentation_timer)

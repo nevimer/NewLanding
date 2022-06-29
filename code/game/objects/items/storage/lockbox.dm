@@ -47,16 +47,6 @@
 	else
 		to_chat(user, SPAN_DANGER("It's locked!"))
 
-/obj/item/storage/lockbox/emag_act(mob/user)
-	if(!broken)
-		broken = TRUE
-		SEND_SIGNAL(src, COMSIG_TRY_STORAGE_SET_LOCKSTATE, FALSE)
-		desc += "It appears to be broken."
-		icon_state = src.icon_broken
-		if(user)
-			visible_message(SPAN_WARNING("\The [src] is broken by [user] with an electromagnetic card!"))
-			return
-
 /obj/item/storage/lockbox/Entered(atom/movable/arrived, direction)
 	. = ..()
 	open = TRUE

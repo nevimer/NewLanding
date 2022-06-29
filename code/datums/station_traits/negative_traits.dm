@@ -64,11 +64,7 @@
 	report_message = "Station lights seem to be damaged, be safe when starting your shift today."
 
 /datum/station_trait/blackout/on_round_start()
-	. = ..()
-	for(var/a in GLOB.apcs_list)
-		var/obj/machinery/power/apc/current_apc = a
-		if(prob(60))
-			current_apc.overload_lighting()
+	return
 
 /datum/station_trait/empty_maint
 	name = "Cleaned out maintenance"
@@ -78,35 +74,6 @@
 	report_message = "Our workers cleaned out most of the junk in the maintenace areas."
 	blacklist = list(/datum/station_trait/filled_maint)
 	trait_to_give = STATION_TRAIT_EMPTY_MAINT
-
-
-/datum/station_trait/overflow_job_bureaucracy
-	name = "Overflow bureaucracy mistake"
-	trait_type = STATION_TRAIT_NEGATIVE
-	weight = 5
-	show_in_report = TRUE
-	var/chosen_job
-
-/datum/station_trait/overflow_job_bureaucracy/New()
-	. = ..()
-	var/list/jobs_to_use = list(
-		/datum/job/clown,
-		/datum/job/bartender,
-		/datum/job/cook,
-		/datum/job/botanist,
-		/datum/job/mime,
-		/datum/job/janitor,
-		/datum/job/prisoner,
-		)
-	chosen_job = pick(jobs_to_use)
-	RegisterSignal(SSjob, COMSIG_SUBSYSTEM_POST_INITIALIZE, .proc/set_overflow_job_override)
-
-/datum/station_trait/overflow_job_bureaucracy/get_report()
-	return "[name] - It seems for some reason we put out the wrong job-listing for the overflow role this shift...I hope you like [chosen_job]s."
-
-/datum/station_trait/overflow_job_bureaucracy/proc/set_overflow_job_override(datum/source, new_overflow_role)
-	SIGNAL_HANDLER
-	SSjob.set_overflow_role(chosen_job)
 
 /datum/station_trait/revenge_of_pun_pun
 	name = "Revenge of Pun Pun"

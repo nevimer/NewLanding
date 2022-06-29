@@ -119,19 +119,7 @@
 	set category = "Admin"
 	set hidden = TRUE
 
-	if(!loc)
-		return
-
-	var/datum/gas_mixture/environment = loc.return_air()
-
-	var/t = "[SPAN_NOTICE("Coordinates: [x],[y] ")]\n"
-	t += "[SPAN_DANGER("Temperature: [environment.temperature] ")]\n"
-	for(var/id in environment.gases)
-		var/gas = environment.gases[id]
-		if(gas[MOLES])
-			t+="[SPAN_NOTICE("[gas[GAS_META][META_GAS_NAME]]: [gas[MOLES]] ")]\n"
-
-	to_chat(usr, t)
+	return
 
 /**
  * Return the desc of this mob for a photo
@@ -649,9 +637,6 @@
 	set category = "Object"
 	set src = usr
 
-	if(ismecha(loc))
-		return
-
 	if(incapacitated())
 		return
 
@@ -1118,15 +1103,6 @@
 				if(!search_pda)
 					break
 				search_id = 0
-
-		else if( search_pda && istype(A, /obj/item/pda) )
-			var/obj/item/pda/PDA = A
-			if(PDA.owner == oldname)
-				PDA.owner = newname
-				PDA.update_label()
-				if(!search_id)
-					break
-				search_pda = 0
 
 /mob/proc/update_stat()
 	return

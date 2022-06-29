@@ -63,10 +63,6 @@
 	return make_plating(force_plating)
 
 /turf/open/floor/wood/cold
-	temperature = 255.37
-
-/turf/open/floor/wood/airless
-	initial_gas_mix = AIRLESS_ATMOS
 
 /turf/open/floor/wood/tile
 	icon_state = "wood_tile"
@@ -142,9 +138,7 @@
 	desc = "Looks cold."
 	icon_state = "snow"
 	ore_type = /obj/item/stack/sheet/mineral/snow
-	planetary_atmos = TRUE
 	floor_tile = null
-	initial_gas_mix = FROZEN_ATMOS
 	slowdown = 2
 	bullet_sizzle = TRUE
 	footstep = FOOTSTEP_SAND
@@ -170,21 +164,12 @@
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "basalt"
 	ore_type = /obj/item/stack/ore/glass/basalt
-	initial_gas_mix = OPENTURF_LOW_PRESSURE
 	slowdown = 0
 
 /turf/open/floor/grass/snow/basalt/spawniconchange()
 	if(prob(15))
 		icon_state = "basalt[rand(0, 12)]"
 		set_basalt_light(src)
-
-/turf/open/floor/grass/snow/basalt/safe
-	planetary_atmos = FALSE
-
-/turf/open/floor/grass/snow/safe
-	slowdown = 1.5
-	planetary_atmos = FALSE
-
 
 /turf/open/floor/grass/fakebasalt //Heart is not a real planeteer power
 	name = "aesthetic volcanic flooring"
@@ -353,37 +338,6 @@
 	floor_tile = /obj/item/stack/tile/carpet/donk
 	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_DONK)
 	canSmoothWith = list(SMOOTH_GROUP_CARPET_DONK)
-
-//*****Airless versions of all of the above.*****
-/turf/open/floor/carpet/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/black/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/blue/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/cyan/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/green/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/orange/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/purple/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/red/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/royalblack/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/royalblue/airless
-	initial_gas_mix = AIRLESS_ATMOS
 
 /turf/open/floor/carpet/break_tile()
 	broken = TRUE
@@ -662,93 +616,6 @@
 	floor_tile = /obj/item/stack/tile/carpet/neon/simple/pink/nodots
 	smoothing_groups = list(SMOOTH_GROUP_TURF_OPEN, SMOOTH_GROUP_CARPET_SIMPLE_NEON_PINK_NODOTS)
 	canSmoothWith = list(SMOOTH_GROUP_CARPET_SIMPLE_NEON_PINK_NODOTS)
-
-/turf/open/floor/carpet/neon/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/white/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/black/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/red/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/orange/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/yellow/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/lime/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/green/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/teal/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/cyan/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/blue/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/purple/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/violet/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/pink/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/white/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/black/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/red/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/orange/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/yellow/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/lime/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/green/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/teal/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/cyan/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/blue/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/purple/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/violet/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/carpet/neon/simple/pink/nodots/airless
-	initial_gas_mix = AIRLESS_ATMOS
 
 /turf/open/floor/fakepit
 	desc = "A clever illusion designed to look like a bottomless pit."

@@ -1,7 +1,6 @@
 /mob/living/carbon
 	blood_volume = BLOOD_VOLUME_NORMAL
 	gender = MALE
-	pressure_resistance = 15
 	hud_possible = list(HEALTH_HUD,STATUS_HUD,ANTAG_HUD,GLAND_HUD,NANITE_HUD,DIAG_NANITE_FULL_HUD)
 	has_limbs = 1
 	held_items = list(null, null)
@@ -31,7 +30,6 @@
 	var/obj/item/back = null
 	var/obj/item/clothing/mask/wear_mask = null
 	var/obj/item/clothing/neck/wear_neck = null
-	var/obj/item/tank/internal = null
 	var/obj/item/clothing/head = null
 
 	///only used by humans

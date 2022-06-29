@@ -32,10 +32,6 @@
 /obj/effect/nettingportal/Initialize()
 	. = ..()
 	var/obj/item/beacon/teletarget = null
-	for(var/obj/machinery/computer/teleporter/com in GLOB.machines)
-		if(com.target)
-			if(com.power_station && com.power_station.teleporter_hub && com.power_station.engaged)
-				teletarget = com.target
 
 	addtimer(CALLBACK(src, .proc/pop, teletarget), 30)
 
@@ -48,12 +44,6 @@
 			do_teleport(L, L, 15, channel = TELEPORT_CHANNEL_BLUESPACE) //Otherwise it just warps you off somewhere.
 
 	qdel(src)
-
-/obj/effect/nettingportal/singularity_act()
-	return
-
-/obj/effect/nettingportal/singularity_pull()
-	return
 
 /obj/projectile/energy/trap
 	name = "energy snare"

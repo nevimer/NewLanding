@@ -30,12 +30,7 @@
 	custom_premium_price = PAYCHECK_HARD * 3
 	toolspeed = 1
 	usesound = 'sound/weapons/empty.ogg'
-	var/obj/machinery/buffer // simple machine buffer for device linkage
 	var/mode = 0
-
-/obj/item/multitool/examine(mob/user)
-	. = ..()
-	. += SPAN_NOTICE("Its buffer [buffer ? "contains [buffer]." : "is empty."]")
 
 /obj/item/multitool/suicide_act(mob/living/carbon/user)
 	user.visible_message(SPAN_SUICIDE("[user] puts the [src] to [user.p_their()] chest. It looks like [user.p_theyre()] trying to pulse [user.p_their()] heart off!"))

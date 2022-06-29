@@ -122,14 +122,7 @@
 		if(do_attack && can_attack)
 			for(var/turf/open/adjacent_open in get_adjacent_open_turfs(resin))
 				for(var/obj/object in adjacent_open)
-					if(object.density && \
-						(resin_attacks_doors && \
-							(istype(object, /obj/machinery/door/airlock) || istype(object, /obj/machinery/door/firedoor)  || istype(object, /obj/structure/door_assembly))\
-							)\
-						|| \
-						(resin_attacks_windows && \
-							(istype(object, /obj/structure/window)))
-						)
+					if(object.density && (resin_attacks_windows && (istype(object, /obj/structure/window))))
 						could_attack = TRUE
 						tasks++
 						if(prob(attack_prob))
@@ -142,7 +135,7 @@
 		if(do_spread)
 			for(var/turf/open/adjacent_open in resin_turf.atmos_adjacent_turfs + resin_turf)
 				if(spawns_walls && !could_do_wall)
-					if((wall_off_vaccuum && isspaceturf(adjacent_open)) || (wall_off_planetary && adjacent_open.planetary_atmos))
+					if((wall_off_vaccuum && isspaceturf(adjacent_open)))
 						could_do_wall = TRUE
 						tasks++
 						if(prob(wall_prob))
@@ -190,10 +183,6 @@
 
 /// Spawns and registers a resin at location
 /datum/mold_controller/proc/spawn_resin(turf/location, resin_type)
-	//Spawn effect
-	for(var/obj/machinery/light/light_in_place in location)
-		light_in_place.break_light_tube()
-
 	var/obj/structure/mold/resin/new_resin = new resin_type(location)
 	new_resin.controller = src
 	active_resin += new_resin

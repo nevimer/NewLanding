@@ -30,7 +30,6 @@
 	var/cooldown = 64
 	var/blending = FALSE //lets not take pictures while the previous is still processing!
 	var/see_ghosts = CAMERA_NO_GHOSTS //for the spoop of it
-	var/obj/item/disk/holodisk/disk
 	var/sound/custom_sound
 	var/silent = FALSE
 	var/picture_size_x = 2
@@ -41,14 +40,6 @@
 	var/picture_size_y_max = 4
 	var/can_customise = TRUE
 	var/default_picture_name
-
-
-/obj/item/camera/attack_self(mob/user)
-	if(!disk)
-		return
-	to_chat(user, SPAN_NOTICE("You eject [disk] out the back of [src]."))
-	user.put_in_hands(disk)
-	disk = null
 
 /obj/item/camera/examine(mob/user)
 	. = ..()
@@ -87,16 +78,6 @@
 		qdel(I)
 		pictures_left = pictures_max
 		return
-	if(istype(I, /obj/item/disk/holodisk))
-		if (!disk)
-			if(!user.transferItemToLoc(I, src))
-				to_chat(user, SPAN_WARNING("[I] is stuck to your hand!"))
-				return TRUE
-			to_chat(user, SPAN_NOTICE("You slide [I] into the back of [src]."))
-			disk = I
-		else
-			to_chat(user, SPAN_WARNING("There's already a disk inside [src]."))
-		return TRUE //no afterattack
 	..()
 
 /obj/item/camera/examine(mob/user)
@@ -121,19 +102,6 @@
 	return TRUE
 
 /obj/item/camera/afterattack(atom/target, mob/user, flag)
-	if (disk)
-		if(ismob(target))
-			if (disk.record)
-				QDEL_NULL(disk.record)
-
-			disk.record = new
-			var/mob/M = target
-			disk.record.caller_name = M.name
-			disk.record.set_caller_image(M)
-		else
-			to_chat(user, SPAN_WARNING("Invalid holodisk target."))
-			return
-
 	if(!can_target(target, user, flag))
 		return
 

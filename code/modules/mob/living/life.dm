@@ -57,9 +57,7 @@
 			handle_random_events(delta_time, times_fired)
 
 		//Handle temperature/pressure differences between body and environment
-		var/datum/gas_mixture/environment = loc.return_air()
-		if(environment)
-			handle_environment(environment, delta_time, times_fired)
+		handle_environment(delta_time, times_fired)
 
 		handle_gravity(delta_time, times_fired)
 
@@ -89,8 +87,8 @@
 	return
 
 // Base mob environment handler for body temperature
-/mob/living/proc/handle_environment(datum/gas_mixture/environment, delta_time, times_fired)
-	var/loc_temp = get_temperature(environment)
+/mob/living/proc/handle_environment(delta_time, times_fired)
+	var/loc_temp = T20C
 	var/temp_delta = loc_temp - bodytemperature
 
 	if(temp_delta < 0) // it is cold here
@@ -109,10 +107,6 @@
 	else
 		extinguish_mob()
 		return TRUE //mob was put out, on_fire = FALSE via extinguish_mob(), no need to update everything down the chain.
-	var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
-	if(!G.gases[/datum/gas/oxygen] || G.gases[/datum/gas/oxygen][MOLES] < 1)
-		extinguish_mob() //If there's no oxygen in the tile we're on, put out the fire
-		return TRUE
 	var/turf/location = get_turf(src)
 	location.hotspot_expose(700, 25 * delta_time, TRUE)
 

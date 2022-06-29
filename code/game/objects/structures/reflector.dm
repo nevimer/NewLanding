@@ -306,9 +306,3 @@
 	if(admin)
 		return FALSE
 	return ..()
-
-/obj/structure/reflector/singularity_act()
-	if(admin)
-		return
-	else
-		return ..()

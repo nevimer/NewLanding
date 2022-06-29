@@ -70,19 +70,6 @@
 	. = ..()
 	. += "Combat mode: [combat_mode ? "On" : "Off"]"
 	. += "Move Mode: [m_intent]"
-	if (internal)
-		var/datum/gas_mixture/internal_air = internal.return_air()
-		if (!internal_air)
-			QDEL_NULL(internal)
-		else
-			. += ""
-			. += "Internal Atmosphere Info: [internal.name]"
-			. += "Tank Pressure: [internal_air.return_pressure()]"
-			. += "Distribution Pressure: [internal.distribute_pressure]"
-	if(istype(wear_suit, /obj/item/clothing/suit/space))
-		var/obj/item/clothing/suit/space/S = wear_suit
-		. += "Thermal Regulator: [S.thermal_on ? "on" : "off"]"
-		. += "Cell Charge: [S.cell ? "[round(S.cell.percent(), 0.1)]%" : "!invalid!"]"
 
 // called when something steps onto a human
 /mob/living/carbon/human/proc/on_entered(datum/source, atom/movable/AM)
@@ -351,18 +338,6 @@
 				fine = min(fine, maxFine)
 
 				var/datum/data/crime/crime = GLOB.data_core.createCrimeEntry(t1, "", allowed_access, station_time_timestamp(), fine)
-				for (var/obj/item/pda/P in GLOB.PDAs)
-					if(P.owner == R.fields["name"])
-						var/message = "You have been fined [fine] credits for '[t1]'. Fines may be paid at security."
-						var/datum/signal/subspace/messaging/pda/signal = new(src, list(
-							"name" = "Security Citation",
-							"job" = "Citation Server",
-							"message" = message,
-							"targets" = list("[P.owner] ([P.ownjob])"),
-							"automated" = 1
-						))
-						signal.send_to_receivers()
-						usr.log_message("(PDA: Citation Server) sent \"[message]\" to [signal.format_target()]", LOG_PDA)
 				GLOB.data_core.addCitation(R.fields["id"], crime)
 				investigate_log("New Citation: <strong>[t1]</strong> Fine: [fine] | Added to [R.fields["name"]] by [key_name(usr)]", INVESTIGATE_RECORDS)
 				SSblackbox.ReportCitation(crime.dataId, usr.ckey, usr.real_name, R.fields["name"], t1, fine)
@@ -461,26 +436,6 @@
 
 	var/threatcount = 0
 
-	//Lasertag bullshit
-	if(lasercolor)
-		if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
-			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
-				threatcount += 4
-			if(is_holding_item_of_type(/obj/item/gun/energy/laser/redtag))
-				threatcount += 4
-			if(istype(belt, /obj/item/gun/energy/laser/redtag))
-				threatcount += 2
-
-		if(lasercolor == "r")
-			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
-				threatcount += 4
-			if(is_holding_item_of_type(/obj/item/gun/energy/laser/bluetag))
-				threatcount += 4
-			if(istype(belt, /obj/item/gun/energy/laser/bluetag))
-				threatcount += 2
-
-		return threatcount
-
 	//Check for ID
 	var/obj/item/card/id/idcard = get_idcard(FALSE)
 	if( (judgement_criteria & JUDGE_IDCHECK) && !idcard && name=="Unknown")
@@ -508,14 +463,6 @@
 				if("Paroled")
 					threatcount += 2
 
-	//Check for dresscode violations
-	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/hardsuit/wizard))
-		threatcount += 2
-
-	//Check for nonhuman scum
-	if(dna && dna.species.id && dna.species.id != "human")
-		threatcount += 1
-
 	//mindshield implants imply trustworthyness
 	if(HAS_TRAIT(src, TRAIT_MINDSHIELD))
 		threatcount -= 1
@@ -533,15 +480,6 @@
 	underwear = "Nude"
 	update_body()
 	update_hair()
-
-/mob/living/carbon/human/singularity_pull(S, current_size)
-	..()
-	if(current_size >= STAGE_THREE)
-		for(var/obj/item/hand in held_items)
-			if(prob(current_size * 5) && hand.w_class >= ((11-current_size)/2)  && dropItemToGround(hand))
-				step_towards(hand, src)
-				to_chat(src, SPAN_WARNING("\The [S] pulls \the [hand] from your grip!"))
-	rad_act(current_size * 3)
 
 #define CPR_PANIC_SPEED (0.8 SECONDS)
 
@@ -1197,17 +1135,11 @@
 /mob/living/carbon/human/species/lizard/silverscale
 	race = /datum/species/lizard/silverscale
 
-/mob/living/carbon/human/species/ethereal
-	race = /datum/species/ethereal
-
 /mob/living/carbon/human/species/moth
 	race = /datum/species/moth
 
 /mob/living/carbon/human/species/mush
 	race = /datum/species/mush
-
-/mob/living/carbon/human/species/plasma
-	race = /datum/species/plasmaman
 
 /mob/living/carbon/human/species/pod
 	race = /datum/species/pod
@@ -1239,14 +1171,8 @@
 /mob/living/carbon/human/species/zombie/krokodil_addict
 	race = /datum/species/krokodil_addict
 
-/mob/living/carbon/human/species/synthliz
-	race = /datum/species/robotic/synthliz
-
 /mob/living/carbon/human/species/vox
 	race = /datum/species/vox
-
-/mob/living/carbon/human/species/ipc
-	race = /datum/species/robotic/ipc
 
 /mob/living/carbon/human/species/mammal
 	race = /datum/species/mammal

@@ -76,10 +76,6 @@
 /obj/docking_port/take_damage()
 	return
 
-/obj/docking_port/singularity_pull()
-	return
-/obj/docking_port/singularity_act()
-	return 0
 /obj/docking_port/shuttleRotate()
 	return //we don't rotate with shuttles via this code.
 
@@ -645,8 +641,7 @@
 	return ripple_turfs
 
 /obj/docking_port/mobile/proc/check_poddoors()
-	for(var/obj/machinery/door/poddoor/shuttledock/pod in GLOB.airlocks)
-		pod.check()
+	return
 
 /obj/docking_port/mobile/proc/dock_id(id)
 	var/port = SSshuttle.getDock(id)
@@ -867,63 +862,10 @@
 
 // attempts to locate /obj/machinery/computer/shuttle with matching ID inside the shuttle
 /obj/docking_port/mobile/proc/getControlConsole()
-	for(var/place in shuttle_areas)
-		var/area/shuttle/shuttle_area = place
-		for(var/obj/machinery/computer/shuttle/S in shuttle_area)
-			if(S.shuttleId == id)
-				return S
 	return null
 
 /obj/docking_port/mobile/proc/hyperspace_sound(phase, list/areas)
-	var/selected_sound
-	switch(phase)
-		if(HYPERSPACE_WARMUP)
-			selected_sound = "hyperspace_begin"
-		if(HYPERSPACE_LAUNCH)
-			selected_sound = "hyperspace_progress"
-		if(HYPERSPACE_END)
-			selected_sound = "hyperspace_end"
-		else
-			CRASH("Invalid hyperspace sound phase: [phase]")
-	// This previously was played from each door at max volume, and was one of the worst things I had ever seen.
-	// Now it's instead played from the nearest engine if close, or the first engine in the list if far since it doesn't really matter.
-	// Or a door if for some reason the shuttle has no engine, fuck oh hi daniel fuck it
-	var/range = (engine_coeff * max(width, height))
-	var/long_range = range * 2.5
-	var/atom/distant_source
-	var/list/engines = list()
-	for(var/datum/weakref/engine in engine_list)
-		var/obj/structure/shuttle/engine/real_engine = engine.resolve()
-		if(!real_engine)
-			engine_list -= engine
-			continue
-		engines += real_engine
-
-	if(engines[1])
-		distant_source = engines[1]
-	else
-		for(var/A in areas)
-			distant_source = locate(/obj/machinery/door) in A
-			if(distant_source)
-				break
-
-	if(distant_source)
-		for(var/mob/M in SSmobs.clients_by_zlevel[z])
-			var/dist_far = get_dist(M, distant_source)
-			if(dist_far <= long_range && dist_far > range)
-				M.playsound_local(distant_source, "sound/runtime/hyperspace/[selected_sound]_distance.ogg", 100)
-			else if(dist_far <= range)
-				var/source
-				if(engines.len == 0)
-					source = distant_source
-				else
-					var/closest_dist = 10000
-					for(var/obj/O in engines)
-						var/dist_near = get_dist(M, O)
-						if(dist_near < closest_dist)
-							source = O
-							closest_dist = dist_near
-				M.playsound_local(source, "sound/runtime/hyperspace/[selected_sound].ogg", 100)
+	return
 
 // Losing all initial engines should get you 2
 // Adding another set of engines at 0.5 time
@@ -976,15 +918,6 @@
 		else
 			return FALSE // hmm
 
-/obj/docking_port/mobile/emergency/in_flight()
-	switch(mode)
-		if(SHUTTLE_ESCAPE)
-			return TRUE
-		if(SHUTTLE_STRANDED,SHUTTLE_ENDGAME)
-			return FALSE
-		else
-			return ..()
-
 
 //Called when emergency shuttle leaves the station
 /obj/docking_port/mobile/proc/on_emergency_launch()
@@ -992,19 +925,8 @@
 		launch_status = ENDGAME_LAUNCHED
 		enterTransit()
 
-/obj/docking_port/mobile/emergency/on_emergency_launch()
-	return
-
 //Called when emergency shuttle docks at centcom
 /obj/docking_port/mobile/proc/on_emergency_dock()
 	//Mapping a new docking point for each ship mappers could potentially want docking with centcom would take up lots of space, just let them keep flying off into the sunset for their greentext
 	if(launch_status == ENDGAME_LAUNCHED)
 		launch_status = ENDGAME_TRANSIT
-
-/obj/docking_port/mobile/pod/on_emergency_dock()
-	if(launch_status == ENDGAME_LAUNCHED)
-		initiate_docking(SSshuttle.getDock("[id]_away")) //Escape pods dock at centcom
-		mode = SHUTTLE_ENDGAME
-
-/obj/docking_port/mobile/emergency/on_emergency_dock()
-	return

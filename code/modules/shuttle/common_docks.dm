@@ -29,15 +29,6 @@
 	dwidth = 11
 	height = 22
 
-/obj/machinery/computer/shuttle/common_docks
-	circuit = /obj/item/circuitboard/computer/shuttle_common_docks
-	possible_destinations = "mediumdock;largedock;hugedock;smalldock"
-
-/obj/item/circuitboard/computer/shuttle_common_docks
-	name = "Shuttle Console (Computer Board)"
-	greyscale_colors = CIRCUIT_COLOR_GENERIC
-	build_path = /obj/machinery/computer/shuttle/common_docks
-
 /datum/map_template/shuttle/common
 	port_id = "common"
 

@@ -77,14 +77,6 @@
 	path = /obj/item/pen/fountain
 	cost = 2
 
-/datum/loadout_item/backpack/modular_tablet
-	path = /obj/item/modular_computer/tablet/preset/cheap/
-	cost = 4
-
-/datum/loadout_item/backpack/modular_laptop
-	path = /obj/item/modular_computer/laptop/preset/civilian
-	cost = 7
-
 /datum/loadout_item/backpack/ringbox_gold
 	path = /obj/item/storage/fancy/ringbox
 	cost = 3
@@ -104,9 +96,6 @@
 
 /datum/loadout_item/backpack/tape
 	path = /obj/item/tape/random
-
-/datum/loadout_item/backpack/newspaper
-	path = /obj/item/newspaper
 
 /datum/loadout_item/backpack/coin
 	name = "iron coin"

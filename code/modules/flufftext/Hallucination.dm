@@ -105,12 +105,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	var/image_layer = MOB_LAYER
 	var/active = TRUE //qdelery
 
-/obj/effect/hallucination/singularity_pull()
-	return
-
-/obj/effect/hallucination/singularity_act()
-	return
-
 /obj/effect/hallucination/simple/Initialize(mapload, mob/living/carbon/T)
 	. = ..()
 	if(!T)
@@ -184,25 +178,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /datum/hallucination/fake_flood/New(mob/living/carbon/C, forced = TRUE)
 	..()
-	for(var/obj/machinery/atmospherics/components/unary/vent_pump/U in orange(7,target))
-		if(!U.welded)
-			center = get_turf(U)
-			break
-	if(!center)
-		qdel(src)
-		return
-	feedback_details += "Vent Coords: [center.x],[center.y],[center.z]"
-	var/obj/effect/plasma_image_holder/pih = new(center)
-	var/image/plasma_image = image(image_icon, pih, image_state, FLY_LAYER)
-	plasma_image.alpha = 50
-	plasma_image.plane = GAME_PLANE
-	flood_images += plasma_image
-	flood_image_holders += pih
-	flood_turfs += center
-	if(target.client)
-		target.client.images |= flood_images
-	next_expand = world.time + FAKE_FLOOD_EXPAND_TIME
-	START_PROCESSING(SSobj, src)
 
 /datum/hallucination/fake_flood/process()
 	if(next_expand <= world.time)
@@ -211,7 +186,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 			qdel(src)
 			return
 		Expand()
-		if((get_turf(target) in flood_turfs) && !target.internal)
+		if((get_turf(target) in flood_turfs))
 			new /datum/hallucination/fake_alert(target, TRUE, "too_much_tox")
 		next_expand = world.time + FAKE_FLOOD_EXPAND_TIME
 
@@ -274,17 +249,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /datum/hallucination/xeno_attack/New(mob/living/carbon/C, forced = TRUE)
 	..()
-	for(var/obj/machinery/atmospherics/components/unary/vent_pump/U in orange(7,target))
-		if(!U.welded)
-			pump_location = get_turf(U)
-			break
-
-	if(pump_location)
-		feedback_details += "Vent Coords: [pump_location.x],[pump_location.y],[pump_location.z]"
-		xeno = new(pump_location, target)
-		START_PROCESSING(SSfastprocess, src)
-	else
-		qdel(src)
 
 /datum/hallucination/xeno_attack/process(delta_time)
 	time_processing += delta_time
@@ -734,78 +698,27 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 /datum/hallucination/bolts/New(mob/living/carbon/C, forced, door_number)
 	set waitfor = FALSE
 	..()
-	if(!door_number)
-		door_number = rand(0,4) //if 0 bolts all visible doors
-	var/count = 0
-	feedback_details += "Door amount: [door_number]"
-
-	for(var/obj/machinery/door/airlock/A in range(7, target))
-		if(count>door_number && door_number>0)
-			break
-		if(!A.density)
-			continue
-		count++
-		LAZYADD(airlocks_to_hit, A)
-
-	if(!LAZYLEN(airlocks_to_hit)) //no valid airlocks in sight
-		qdel(src)
-		return
 
 	START_PROCESSING(SSfastprocess, src)
 
 /datum/hallucination/bolts/process(delta_time)
-	next_action -= (delta_time * 10)
-	if (next_action > 0)
-		return
-
-	if (locking)
-		var/atom/next_airlock = pop(airlocks_to_hit)
-		if (next_airlock)
-			var/obj/effect/hallucination/fake_door_lock/lock = new(get_turf(next_airlock))
-			lock.target = target
-			lock.airlock = next_airlock
-			LAZYADD(locks, lock)
-
-		if (!LAZYLEN(airlocks_to_hit))
-			locking = FALSE
-			next_action = 10 SECONDS
-			return
-	else
-		var/obj/effect/hallucination/fake_door_lock/next_unlock = popleft(locks)
-		if (next_unlock)
-			next_unlock.unlock()
-		else
-			qdel(src)
-			return
-
-	next_action = rand(4, 12)
+	return
 
 /datum/hallucination/bolts/Destroy()
 	. = ..()
-	QDEL_LIST(locks)
 	STOP_PROCESSING(SSfastprocess, src)
 
 /obj/effect/hallucination/fake_door_lock
 	layer = CLOSED_DOOR_LAYER + 1 //for Bump priority
 	var/image/bolt_light
-	var/obj/machinery/door/airlock/airlock
 
 /obj/effect/hallucination/fake_door_lock/proc/lock()
-	bolt_light = image(airlock.overlays_file, get_turf(airlock), "lights_bolts",layer=airlock.layer+0.1)
-	if(target.client)
-		target.client.images |= bolt_light
-		target.playsound_local(get_turf(airlock), 'sound/machines/boltsdown.ogg',30,0,3)
 
 /obj/effect/hallucination/fake_door_lock/proc/unlock()
-	if(target.client)
-		target.client.images.Remove(bolt_light)
-		target.playsound_local(get_turf(airlock), 'sound/machines/boltsup.ogg',30,0,3)
 	qdel(src)
 
 /obj/effect/hallucination/fake_door_lock/CanAllowThrough(atom/movable/mover, turf/_target)
 	. = ..()
-	if(mover == target && airlock.density)
-		return FALSE
 
 /datum/hallucination/chat
 

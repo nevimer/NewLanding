@@ -181,16 +181,6 @@
 	to_chat(usr, SPAN_NOTICE("You flush [src]'s radiation counts, resetting it to normal."))
 	update_appearance()
 
-/obj/item/geiger_counter/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
-		return
-	if(scanning)
-		to_chat(user, SPAN_WARNING("Turn off [src] before you perform this action!"))
-		return
-	to_chat(user, SPAN_WARNING("You override [src]'s radiation storing protocols. It will now generate small doses of radiation, and stored rads are now projected into creatures you scan."))
-	obj_flags |= EMAGGED
-
-
 #undef RAD_LEVEL_NORMAL
 #undef RAD_LEVEL_MODERATE
 #undef RAD_LEVEL_HIGH

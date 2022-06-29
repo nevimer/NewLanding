@@ -221,17 +221,10 @@
 				for(var/i in 1 to number)
 					H.equip_to_slot_or_del(new path(H),ITEM_SLOT_BACKPACK, TRUE)
 
-	if(!H.head && toggle_helmet && istype(H.wear_suit, /obj/item/clothing/suit/space/hardsuit))
-		var/obj/item/clothing/suit/space/hardsuit/HS = H.wear_suit
-		HS.ToggleHelmet()
-
 	post_equip(H, visualsOnly)
 
 	if(!visualsOnly)
 		apply_fingerprints(H)
-		if(internals_slot)
-			H.internal = H.get_item_by_slot(internals_slot)
-			H.update_action_buttons_icon()
 		if(implants)
 			for(var/implant_type in implants)
 				var/obj/item/implant/I = new implant_type(H)

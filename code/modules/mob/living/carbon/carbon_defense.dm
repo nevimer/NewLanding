@@ -233,7 +233,6 @@
 	var/turf/target_shove_turf = get_step(target.loc, shove_dir)
 	var/mob/living/carbon/target_collateral_carbon
 	var/obj/structure/table/target_table
-	var/obj/machinery/disposal/bin/target_disposal_bin
 	var/shove_blocked = FALSE //Used to check if a shove is blocked so that if it is knockdown logic can be applied
 
 	//Thank you based whoneedsspace
@@ -249,7 +248,6 @@
 		target.Move(target_shove_turf, shove_dir)
 		if(get_turf(target) == target_oldturf)
 			target_table = locate(/obj/structure/table) in target_shove_turf.contents
-			target_disposal_bin = locate(/obj/machinery/disposal/bin) in target_shove_turf.contents
 			shove_blocked = TRUE
 
 	if(target.IsKnockdown() && !target.IsParalyzed())
@@ -273,7 +271,7 @@
 					if(obj_content.flags_1 & ON_BORDER_1 && obj_content.dir == turn(shove_dir, 180) && obj_content.density)
 						directional_blocked = TRUE
 						break
-		if((!target_table && !target_collateral_carbon && !target_disposal_bin) || directional_blocked)
+		if((!target_table && !target_collateral_carbon) || directional_blocked)
 			target.Knockdown(SHOVE_KNOCKDOWN_SOLID)
 			target.visible_message(SPAN_DANGER("[name] shoves [target.name], knocking [target.p_them()] down!"),
 							SPAN_USERDANGER("You're knocked down from a shove by [name]!"), SPAN_HEAR("You hear aggressive shuffling followed by a loud thud!"), COMBAT_MESSAGE_RANGE, src)
@@ -294,13 +292,6 @@
 				SPAN_USERDANGER("You're shoved into [target_collateral_carbon.name] by [name]!"), SPAN_HEAR("You hear aggressive shuffling followed by a loud thud!"), COMBAT_MESSAGE_RANGE, src)
 			to_chat(src, SPAN_DANGER("You shove [target.name] into [target_collateral_carbon.name]!"))
 			log_combat(src, target, "shoved", "into [target_collateral_carbon.name]")
-		else if(target_disposal_bin)
-			target.Knockdown(SHOVE_KNOCKDOWN_SOLID)
-			target.forceMove(target_disposal_bin)
-			target.visible_message(SPAN_DANGER("[name] shoves [target.name] into \the [target_disposal_bin]!"),
-							SPAN_USERDANGER("You're shoved into \the [target_disposal_bin] by [target.name]!"), SPAN_HEAR("You hear aggressive shuffling followed by a loud thud!"), COMBAT_MESSAGE_RANGE, src)
-			to_chat(src, SPAN_DANGER("You shove [target.name] into \the [target_disposal_bin]!"))
-			log_combat(src, target, "shoved", "into [target_disposal_bin] (disposal bin)")
 	else
 		target.visible_message(SPAN_DANGER("[name] shoves [target.name]!"),
 						SPAN_USERDANGER("You're shoved by [name]!"), SPAN_HEAR("You hear aggressive shuffling!"), COMBAT_MESSAGE_RANGE, src)

@@ -18,12 +18,7 @@
 	allowed += list(
 		/obj/item/flashlight,
 		/obj/item/lighter,
-		/obj/item/modular_computer/tablet,
-		/obj/item/pda,
-		/obj/item/radio,
 		/obj/item/storage/fancy/cigarettes,
-		/obj/item/tank/internals/emergency_oxygen,
-		/obj/item/tank/internals/plasmaman,
 		/obj/item/toy,
 	)
 
@@ -123,7 +118,6 @@
 		/obj/item/grenade/chem_grenade,
 		/obj/item/holosign_creator,
 		/obj/item/key/janitor,
-		/obj/item/lightreplacer,
 		/obj/item/melee/flyswatter,
 		/obj/item/paint_remover,
 		/obj/item/reagent_containers/glass/beaker,
@@ -185,7 +179,6 @@
 		/obj/item/reagent_containers/pill,
 		/obj/item/reagent_containers/syringe,
 		/obj/item/stack/medical,
-		/obj/item/sensor_device,
 		/obj/item/storage/pill_bottle,
 	)
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 40, RAD = 0, FIRE = 10, ACID = 20)
@@ -259,7 +252,6 @@
 	icon_state = "coatscience"
 	inhand_icon_state = "coatscience"
 	allowed = list(
-		/obj/item/analyzer,
 		/obj/item/dnainjector,
 		/obj/item/paper,
 		/obj/item/reagent_containers/dropper,
@@ -330,9 +322,6 @@
 	icon_state = "coatengineer"
 	inhand_icon_state = "coatengineer"
 	allowed = list(
-		/obj/item/analyzer,
-		/obj/item/construction/rcd,
-		/obj/item/pipe_dispenser,
 		/obj/item/t_scanner,
 	)
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, RAD = 10, FIRE = 20, ACID = 0)
@@ -417,12 +406,10 @@
 	icon_state = "coatminer"
 	inhand_icon_state = "coatminer"
 	allowed = list(
-		/obj/item/gun/energy/kinetic_accelerator,
 		/obj/item/mining_scanner,
 		/obj/item/pickaxe,
 		/obj/item/resonator,
 		/obj/item/t_scanner/adv_mining_scanner,
-		/obj/item/tank/internals,
 	)
 	armor = list(MELEE = 10, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, RAD = 0, FIRE = 0, ACID = 0)
 	hoodtype = /obj/item/clothing/head/hooded/winterhood/miner

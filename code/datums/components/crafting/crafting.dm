@@ -69,7 +69,6 @@
  */
 /datum/component/personal_crafting/proc/check_contents(atom/a, datum/crafting_recipe/R, list/contents)
 	var/list/item_instances = contents["instances"]
-	var/list/machines = contents["machinery"]
 	contents = contents["other"]
 
 
@@ -103,10 +102,6 @@
 		if(contents[requirement_path] < R.chem_catalysts[requirement_path])
 			return FALSE
 
-	for(var/machinery_path in R.machinery)
-		if(!machines[machinery_path])//We don't care for volume with machines, just if one is there or not
-			return FALSE
-
 	return R.check_requirements(a, requirements_list)
 
 /datum/component/personal_crafting/proc/get_environment(atom/a, list/blacklist = null, radius_range = 1)
@@ -126,7 +121,6 @@
 	.["tool_behaviour"] = list()
 	.["other"] = list()
 	.["instances"] = list()
-	.["machinery"] = list()
 	for(var/obj/object in get_environment(a, blacklist))
 		if(isitem(object))
 			var/obj/item/item = object
@@ -144,8 +138,6 @@
 						for(var/datum/reagent/reagent in container.reagents.reagent_list)
 							.["other"][reagent.type] += reagent.volume
 				.["other"][item.type] += 1
-		else if (ismachinery(object))
-			LAZYADDASSOCLIST(.["machinery"], object.type, object)
 
 
 
@@ -250,12 +242,10 @@
 	var/list/requirements = list()
 	if(R.reqs)
 		requirements += R.reqs
-	if(R.machinery)
-		requirements += R.machinery
 	main_loop:
 		for(var/path_key in requirements)
-			amt = R.reqs[path_key] || R.machinery[path_key]
-			if(!amt)//since machinery can have 0 aka CRAFTING_MACHINERY_USE - i.e. use it, don't consume it!
+			amt = R.reqs[path_key]
+			if(!amt)
 				continue main_loop
 			surroundings = get_environment(a, R.blacklist)
 			surroundings -= Deletion
@@ -471,8 +461,6 @@
 		//We just need the name, so cheat-typecast to /atom for speed (even tho Reagents are /datum they DO have a "name" var)
 		//Also these are typepaths so sadly we can't just do "[a]"
 		req_text += "[R.reqs[req_atom]] [initial(req_atom.name)]"
-	for(var/obj/machinery/content as anything in R.machinery)
-		req_text += "[R.reqs[content]] [initial(content.name)]"
 	if(R.additional_req_text)
 		req_text += R.additional_req_text
 	data["req_text"] = req_text.Join(", ")

@@ -41,9 +41,6 @@
  * returns TRUE if we can scan the object, and outputs the message to the USER.
  */
 /obj/item/plant_analyzer/proc/do_plant_stats_scan(atom/scan_target, mob/user)
-	if(istype(scan_target, /obj/machinery/hydroponics))
-		to_chat(user, scan_tray_stats(scan_target))
-		return TRUE
 	if(istype(scan_target, /obj/structure/glowshroom))
 		var/obj/structure/glowshroom/shroom_plant = scan_target
 		to_chat(user, scan_plant_stats(shroom_plant.myseed))
@@ -74,9 +71,6 @@
  * returns TRUE if we can scan the object, and outputs the message to the USER.
  */
 /obj/item/plant_analyzer/proc/do_plant_chem_scan(atom/scan_target, mob/user)
-	if(istype(scan_target, /obj/machinery/hydroponics))
-		to_chat(user, scan_tray_chems(scan_target))
-		return TRUE
 	if(istype(scan_target, /obj/structure/glowshroom))
 		var/obj/structure/glowshroom/shroom_plant = scan_target
 		to_chat(user, scan_plant_chems(shroom_plant.myseed))
@@ -121,64 +115,6 @@
 						SPAN_NOTICE("You analyze [scanned_mob]'s bloodstream."))
 	chemscan(user, scanned_mob)
 	add_fingerprint(user)
-
-/**
- * This proc is called when we scan a hydroponics tray or soil on left click (stats mode)
- * It formats the plant name, it's age, the plant's stats, and the tray's stats.
- *
- * - scanned_tray - the tray or soil we are scanning.
- *
- * Returns the formatted message as text.
- */
-/obj/item/plant_analyzer/proc/scan_tray_stats(obj/machinery/hydroponics/scanned_tray)
-	var/returned_message = "<span class='info'>*---------*\n"
-	if(scanned_tray.myseed)
-		returned_message += "*** <B>[scanned_tray.myseed.plantname]</B> ***\n"
-		returned_message += "- Plant Age: [SPAN_NOTICE("[scanned_tray.age]")]</span>\n"
-		returned_message += scan_plant_stats(scanned_tray.myseed)
-	else
-		returned_message += "[SPAN_INFO("<B>No plant found.</B>")]\n"
-
-	returned_message += "<span class='info'>"
-	returned_message += "- Weed level: [SPAN_NOTICE("[scanned_tray.weedlevel] / [MAX_TRAY_WEEDS]")]\n"
-	returned_message += "- Pest level: [SPAN_NOTICE("[scanned_tray.pestlevel] / [MAX_TRAY_PESTS]")]\n"
-	returned_message += "- Toxicity level: [SPAN_NOTICE("[scanned_tray.toxic] / [MAX_TRAY_TOXINS]")]\n"
-	returned_message += "- Water level: [SPAN_NOTICE("[scanned_tray.waterlevel] / [scanned_tray.maxwater]")]\n"
-	returned_message += "- Nutrition level: [SPAN_NOTICE("[scanned_tray.reagents.total_volume] / [scanned_tray.maxnutri]")]\n"
-	if(scanned_tray.yieldmod != 1)
-		returned_message += "- Yield modifier on harvest: [SPAN_NOTICE("[scanned_tray.yieldmod]x")]\n"
-
-	returned_message += "*---------*</span>"
-	return returned_message
-
-/**
- * This proc is called when we scan a hydroponics tray or soil on right click (chemicals mode)
- * It formats the plant name and age, as well as the plant's chemical genes and the tray's contents.
- *
- * - scanned_tray - the tray or soil we are scanning.
- *
- * Returns the formatted message as text.
- */
-/obj/item/plant_analyzer/proc/scan_tray_chems(obj/machinery/hydroponics/scanned_tray)
-	var/returned_message = "<span class='info'>*---------*\n"
-	if(scanned_tray.myseed)
-		returned_message += "*** <B>[scanned_tray.myseed.plantname]</B> ***\n"
-		returned_message += "- Plant Age: [SPAN_NOTICE("[scanned_tray.age]")]</span>\n"
-		returned_message += scan_plant_chems(scanned_tray.myseed)
-	else
-		returned_message += "[SPAN_INFO("<B>No plant found.</B>")]\n"
-
-	returned_message += "<span class='info'>"
-
-	returned_message += "- Tray contains:\n"
-	if(scanned_tray.reagents.reagent_list.len)
-		for(var/datum/reagent/reagent_id in scanned_tray.reagents.reagent_list)
-			returned_message += "- [SPAN_NOTICE("[reagent_id.volume] / [scanned_tray.maxnutri] units of [reagent_id]")]\n"
-	else
-		returned_message += "[SPAN_NOTICE("No reagents found.")]\n"
-
-	returned_message += "*---------*</span>"
-	return returned_message
 
 /**
  * This proc is called when a seed or any grown plant is scanned on left click (stats mode).

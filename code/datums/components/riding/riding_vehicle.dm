@@ -165,7 +165,7 @@
 
 /datum/component/riding/vehicle/scooter/skateboard/wheelys/skishoes/handle_specials()
 	. = ..()
-	allowed_turf_typecache = typecacheof(/turf/open/floor/plating/asteroid/snow/icemoon)
+	allowed_turf_typecache = typecacheof(/turf/open/floor/plating/asteroid)
 
 /datum/component/riding/vehicle/secway
 	keytype = /obj/item/key/security
@@ -234,19 +234,3 @@
 	var/delay_multiplier = 6.7 // magic number from wheelchair code
 	vehicle_move_delay = round(CONFIG_GET(number/movedelay/run_delay) * delay_multiplier) / clamp(user.usable_hands, 1, 2)
 	return ..()
-
-/datum/component/riding/vehicle/wheelchair/motorized/driver_move(obj/vehicle/vehicle_parent, mob/living/user, direction)
-	var/speed = 1 // Should never be under 1
-	var/delay_multiplier = 6.7 // magic number from wheelchair code
-
-	var/obj/vehicle/ridden/wheelchair/motorized/our_chair = parent
-	for(var/obj/item/stock_parts/manipulator/M in our_chair.contents)
-		speed += M.rating
-	vehicle_move_delay = round(CONFIG_GET(number/movedelay/run_delay) * delay_multiplier) / speed
-	return ..()
-
-/datum/component/riding/vehicle/wheelchair/motorized/handle_ride(mob/user, direction)
-	. = ..()
-	var/obj/vehicle/ridden/wheelchair/motorized/our_chair = parent
-	if(istype(our_chair) && our_chair.power_cell)
-		our_chair.power_cell.use(our_chair.power_usage / max(our_chair.power_efficiency, 1) * 0.05)

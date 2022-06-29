@@ -9,10 +9,6 @@
 		/obj/item/clothing/head/hooded,
 		/obj/item/clothing/head
 		)
-	ignored_types += typesof(/obj/item/clothing/head/chameleon)
-	ignored_types += typesof(/obj/item/clothing/suit/chameleon)
-	ignored_types += typesof(/obj/item/clothing/under/chameleon)
-	ignored_types += typesof(/obj/item/clothing/shoes/chameleon)
 
 	// The turf we will spawn clothes that need to get their GAGS icon
 	var/turf/spawn_at = run_loc_floor_bottom_left

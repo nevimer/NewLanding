@@ -72,14 +72,6 @@
 
 						M.dropItemToGround(item_to_retrieve)
 
-					else
-						if(istype(item_to_retrieve.loc, /obj/machinery/portable_atmospherics/)) //Edge cases for moved machinery
-							var/obj/machinery/portable_atmospherics/P = item_to_retrieve.loc
-							P.disconnect()
-							P.update_appearance()
-
-						item_to_retrieve = item_to_retrieve.loc
-
 					infinite_recursion += 1
 
 			if(!item_to_retrieve)

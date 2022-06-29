@@ -107,28 +107,6 @@
 	icon = 'icons/obj/lavaland/survival_pod.dmi'
 	icon_state = "pwindow"
 
-//Door
-/obj/machinery/door/airlock/survival_pod
-	name = "airlock"
-	assemblytype = /obj/structure/door_assembly/door_assembly_pod
-	airlock_paint = "#333333"
-
-/obj/machinery/door/airlock/survival_pod/glass
-	opacity = FALSE
-	glass = TRUE
-
-/obj/structure/door_assembly/door_assembly_pod
-	name = "pod airlock assembly"
-	base_name = "pod airlock"
-	airlock_type = /obj/machinery/door/airlock/survival_pod
-	glass_type = /obj/machinery/door/airlock/survival_pod/glass
-
-//Windoor
-/obj/machinery/door/window/survival_pod
-	icon = 'icons/obj/lavaland/survival_pod.dmi'
-	icon_state = "windoor"
-	base_state = "windoor"
-
 //Table
 /obj/structure/table/survival_pod
 	icon = 'icons/obj/lavaland/survival_pod.dmi'
@@ -136,22 +114,6 @@
 	smoothing_flags = NONE
 	smoothing_groups = null
 	canSmoothWith = null
-
-//Sleeper
-/obj/machinery/sleeper/survival_pod
-	icon = 'icons/obj/lavaland/survival_pod.dmi'
-	icon_state = "sleeper"
-	base_icon_state = "sleeper"
-
-/obj/machinery/sleeper/survival_pod/update_overlays()
-	. = ..()
-	if(!state_open)
-		. += "sleeper_cover"
-
-//Lifeform Stasis Unit
-/obj/machinery/stasis/survival_pod
-	icon = 'icons/obj/lavaland/survival_pod.dmi'
-	buckle_lying = 270
 
 //Computer
 /obj/item/gps/computer
@@ -188,39 +150,6 @@
 /obj/structure/bed/double/pod
 	icon = 'icons/obj/lavaland/survival_pod.dmi'
 	icon_state = "bed_double"
-
-//Survival Storage Unit
-/obj/machinery/smartfridge/survival_pod
-	name = "survival pod storage"
-	desc = "A heated storage unit."
-	icon_state = "donkvendor"
-	icon = 'icons/obj/lavaland/donkvendor.dmi'
-	base_build_path = /obj/machinery/smartfridge/survival_pod
-	light_range = 5
-	light_power = 1.2
-	light_color = COLOR_VERY_PALE_LIME_GREEN
-	max_n_of_items = 10
-	pixel_y = -4
-	flags_1 = NODECONSTRUCT_1
-
-/obj/machinery/smartfridge/survival_pod/ComponentInitialize()
-	. = ..()
-	AddElement(/datum/element/update_icon_blocker)
-
-/obj/machinery/smartfridge/survival_pod/preloaded/Initialize(mapload)
-	. = ..()
-	for(var/i in 1 to 5)
-		var/obj/item/food/donkpocket/warm/W = new(src)
-		load(W)
-	if(prob(50))
-		var/obj/item/storage/pill_bottle/dice/D = new(src)
-		load(D)
-	else
-		var/obj/item/instrument/guitar/G = new(src)
-		load(G)
-
-/obj/machinery/smartfridge/survival_pod/accept_check(obj/item/O)
-	return isitem(O)
 
 //Fans
 /obj/structure/fans
@@ -286,10 +215,8 @@
 	icon = 'icons/hud/screen_gen.dmi'
 	icon_state = "x2"
 	var/possible = list(/obj/item/ship_in_a_bottle,
-						/obj/item/gun/energy/pulse,
 						/obj/item/book/granter/martial/carp,
 						/obj/item/his_grace,
-						/obj/item/gun/energy/minigun,
 						/obj/item/gun/ballistic/automatic/l6_saw,
 						/obj/item/nuke_core,
 						/obj/item/phylactery,

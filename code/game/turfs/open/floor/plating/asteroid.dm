@@ -90,9 +90,6 @@
 	. = SEND_SIGNAL(src, COMSIG_ATOM_EX_ACT, severity, target)
 	contents_explosion(severity, target)
 
-/turf/open/floor/plating/lavaland_baseturf
-	baseturfs = /turf/open/floor/plating/asteroid/basalt/lava_land_surface
-
 /turf/open/floor/plating/asteroid/basalt
 	name = "volcanic floor"
 	baseturfs = /turf/open/floor/plating/asteroid/basalt
@@ -108,9 +105,6 @@
 /turf/open/floor/plating/asteroid/basalt/lava //lava underneath
 	baseturfs = /turf/open/lava/smooth
 
-/turf/open/floor/plating/asteroid/basalt/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
 /turf/open/floor/plating/asteroid/basalt/Initialize(mapload, inherited_virtual_z)
 	. = ..()
 	set_basalt_light(src)
@@ -125,92 +119,3 @@
 			B.set_light(2, 0.6, LIGHT_COLOR_LAVA) //more light
 		if("basalt5", "basalt9")
 			B.set_light(1.4, 0.6, LIGHT_COLOR_LAVA) //barely anything!
-
-///////Surface. The surface is warm, but survivable without a suit. Internals are required. The floors break to chasms, which drop you into the underground.
-
-/turf/open/floor/plating/asteroid/basalt/lava_land_surface
-	initial_gas_mix = PLANETARY_ATMOS
-	planetary_atmos = TRUE
-	baseturfs = /turf/open/lava/smooth/lava_land_surface
-
-/turf/open/floor/plating/asteroid/lowpressure
-	initial_gas_mix = OPENTURF_LOW_PRESSURE
-	baseturfs = /turf/open/floor/plating/asteroid/lowpressure
-	turf_type = /turf/open/floor/plating/asteroid/lowpressure
-
-/turf/open/floor/plating/asteroid/airless
-	initial_gas_mix = AIRLESS_ATMOS
-	baseturfs = /turf/open/floor/plating/asteroid/airless
-	turf_type = /turf/open/floor/plating/asteroid/airless
-
-/turf/open/floor/plating/asteroid/snow
-	gender = PLURAL
-	name = "snow"
-	desc = "Looks cold."
-	icon = 'icons/turf/snow.dmi'
-	baseturfs = /turf/open/floor/plating/asteroid/snow
-	icon_state = "snow"
-	base_icon_state = "snow"
-	initial_gas_mix = FROZEN_ATMOS
-	slowdown = 2
-	flags_1 = NONE
-	planetary_atmos = TRUE
-	bullet_sizzle = TRUE
-	bullet_bounce_sound = null
-	digResult = /obj/item/stack/sheet/mineral/snow
-
-/turf/open/floor/plating/asteroid/snow/setup_broken_states()
-	return list("snow_dug")
-
-/turf/open/floor/plating/asteroid/snow/burn_tile()
-	if(!burnt)
-		visible_message(SPAN_DANGER("[src] melts away!."))
-		slowdown = 0
-		burnt = TRUE
-		icon_state = "snow_dug"
-		return TRUE
-	return FALSE
-
-/turf/open/floor/plating/asteroid/snow/icemoon
-	baseturfs = /turf/open/openspace/icemoon
-	initial_gas_mix = PLANETARY_ATMOS
-	slowdown = 0
-
-/turf/open/lava/plasma/ice_moon
-	initial_gas_mix = PLANETARY_ATMOS
-	baseturfs = /turf/open/lava/plasma/ice_moon
-	planetary_atmos = TRUE
-
-/turf/open/floor/plating/asteroid/snow/ice
-	name = "icy snow"
-	desc = "Looks colder."
-	baseturfs = /turf/open/floor/plating/asteroid/snow/ice
-	initial_gas_mix = "n2=82;plasma=24;TEMP=120"
-	floor_variance = 0
-	icon_state = "snow-ice"
-	base_icon_state = "snow-ice"
-	footstep = FOOTSTEP_FLOOR
-	barefootstep = FOOTSTEP_HARD_BAREFOOT
-	clawfootstep = FOOTSTEP_HARD_CLAW
-	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
-
-/turf/open/floor/plating/asteroid/snow/ice/setup_broken_states()
-	return list("snow-ice")
-/turf/open/floor/plating/asteroid/snow/ice/icemoon
-	baseturfs = /turf/open/floor/plating/asteroid/snow/ice/icemoon
-	initial_gas_mix = PLANETARY_ATMOS
-	planetary_atmos = TRUE
-	slowdown = 0
-
-/turf/open/floor/plating/asteroid/snow/ice/burn_tile()
-	return FALSE
-
-/turf/open/floor/plating/asteroid/snow/airless
-	initial_gas_mix = AIRLESS_ATMOS
-
-/turf/open/floor/plating/asteroid/snow/temperatre
-	initial_gas_mix = "o2=22;n2=82;TEMP=255.37"
-
-/turf/open/floor/plating/asteroid/snow/atmosphere
-	initial_gas_mix = FROZEN_ATMOS
-	planetary_atmos = FALSE

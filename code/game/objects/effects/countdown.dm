@@ -60,22 +60,6 @@
 	STOP_PROCESSING(SSfastprocess, src)
 	. = ..()
 
-/obj/effect/countdown/singularity_pull()
-	return
-
-/obj/effect/countdown/singularity_act()
-	return
-
-/obj/effect/countdown/syndicatebomb
-	name = "syndicate bomb countdown"
-
-/obj/effect/countdown/syndicatebomb/get_value()
-	var/obj/machinery/syndicatebomb/S = attached_to
-	if(!istype(S))
-		return
-	else if(S.active)
-		return S.seconds_remaining()
-
 /obj/effect/countdown/hourglass
 	name = "hourglass countdown"
 
@@ -85,17 +69,4 @@
 		return
 	else
 		var/time_left = max(0, (H.finish_time - world.time) / 10)
-		return round(time_left)
-
-/obj/effect/countdown/arena
-	invisibility = 0
-	name = "arena countdown"
-
-/obj/effect/countdown/arena/get_value()
-	var/obj/machinery/arena_spawn/A = attached_to
-	if(!istype(A))
-		return
-	else
-		var/obj/machinery/computer/arena/C = A.get_controller()
-		var/time_left = max(0, (C.start_time - world.time) / 10)
 		return round(time_left)

@@ -54,24 +54,14 @@
 		/obj/item/wrench,
 		/obj/item/multitool,
 		/obj/item/flashlight,
-		/obj/item/stack/cable_coil,
 		/obj/item/t_scanner,
-		/obj/item/analyzer,
 		/obj/item/geiger_counter,
 		/obj/item/extinguisher/mini,
-		/obj/item/radio,
 		/obj/item/clothing/gloves,
 		/obj/item/holosign_creator/atmos,
 		/obj/item/holosign_creator/engineering,
 		/obj/item/forcefield_projector,
-		/obj/item/assembly/signaler,
-		/obj/item/lightreplacer,
-		/obj/item/construction/rcd,
-		/obj/item/pipe_dispenser,
-		/obj/item/inducer,
 		/obj/item/plunger,
-		/obj/item/airlock_painter,
-		/obj/item/pipe_painter
 		))
 
 /obj/item/storage/belt/utility/chief
@@ -86,9 +76,7 @@
 	new /obj/item/crowbar/power(src)
 	new /obj/item/weldingtool/experimental(src)//This can be changed if this is too much
 	new /obj/item/multitool(src)
-	new /obj/item/stack/cable_coil(src)
 	new /obj/item/extinguisher/mini(src)
-	new /obj/item/analyzer(src)
 	//much roomier now that we've managed to remove two tools
 
 /obj/item/storage/belt/utility/full/PopulateContents()
@@ -98,7 +86,6 @@
 	new /obj/item/crowbar(src)
 	new /obj/item/wirecutters(src)
 	new /obj/item/multitool(src)
-	new /obj/item/stack/cable_coil(src)
 
 /obj/item/storage/belt/utility/full/powertools/PopulateContents()
 	new /obj/item/screwdriver/power(src)
@@ -107,7 +94,6 @@
 	new /obj/item/multitool(src)
 	new /obj/item/holosign_creator/atmos(src)
 	new /obj/item/extinguisher/mini(src)
-	new /obj/item/stack/cable_coil(src)
 
 /obj/item/storage/belt/utility/full/engi/PopulateContents()
 	new /obj/item/screwdriver(src)
@@ -116,7 +102,6 @@
 	new /obj/item/crowbar(src)
 	new /obj/item/wirecutters(src)
 	new /obj/item/multitool(src)
-	new /obj/item/stack/cable_coil(src)
 
 /obj/item/storage/belt/utility/atmostech/PopulateContents()
 	new /obj/item/screwdriver(src)
@@ -134,7 +119,6 @@
 	new /obj/item/crowbar(src)
 	new /obj/item/wirecutters(src)
 	new /obj/item/multitool(src)
-	new /obj/item/inducer/syndicate(src)
 
 /obj/item/storage/belt/medical
 	name = "medical belt"
@@ -164,9 +148,7 @@
 		/obj/item/flashlight/pen,
 		/obj/item/extinguisher/mini,
 		/obj/item/reagent_containers/hypospray,
-		/obj/item/sensor_device,
-		/obj/item/radio,
-		/obj/item/clothing/gloves/,
+		/obj/item/clothing/gloves,
 		/obj/item/lazarus_injector,
 		/obj/item/bikehorn/rubberducky,
 		/obj/item/clothing/mask/surgical,
@@ -188,14 +170,12 @@
 		/obj/item/wrench/medical,
 		/obj/item/clothing/mask/muzzle,
 		/obj/item/reagent_containers/blood,
-		/obj/item/tank/internals/emergency_oxygen,
 		/obj/item/gun/syringe/syndicate,
 		/obj/item/implantcase,
 		/obj/item/implant,
 		/obj/item/implanter,
 		/obj/item/pinpointer/crew,
 		/obj/item/holosign_creator/medical,
-		/obj/item/construction/plumbing,
 		/obj/item/plunger,
 		/obj/item/reagent_containers/spray,
 		/obj/item/shears,
@@ -203,7 +183,6 @@
 		))
 
 /obj/item/storage/belt/medical/paramedic/PopulateContents()
-	new /obj/item/sensor_device(src)
 	new /obj/item/pinpointer/crew/prox(src)
 	new /obj/item/stack/medical/gauze/twelve(src)
 	new /obj/item/reagent_containers/syringe(src)
@@ -226,12 +205,10 @@
 	STR.max_items = 5
 	STR.max_w_class = WEIGHT_CLASS_NORMAL
 	STR.set_holdable(list(
-		/obj/item/melee/baton,
 		/obj/item/melee/classic_baton,
 		/obj/item/grenade,
 		/obj/item/reagent_containers/spray/pepper,
 		/obj/item/restraints/handcuffs,
-		/obj/item/assembly/flash/handheld,
 		/obj/item/clothing/glasses,
 		/obj/item/ammo_casing/shotgun,
 		/obj/item/ammo_box,
@@ -239,7 +216,6 @@
 		/obj/item/kitchen/knife/combat,
 		/obj/item/flashlight/seclite,
 		/obj/item/melee/classic_baton/telescopic,
-		/obj/item/radio,
 		/obj/item/clothing/gloves,
 		/obj/item/restraints/legcuffs/bola,
 		/obj/item/holosign_creator/security
@@ -249,8 +225,6 @@
 	new /obj/item/reagent_containers/spray/pepper(src)
 	new /obj/item/restraints/handcuffs(src)
 	new /obj/item/grenade/flashbang(src)
-	new /obj/item/assembly/flash/handheld(src)
-	new /obj/item/melee/baton/loaded(src)
 	update_appearance()
 
 /obj/item/storage/belt/security/webbing
@@ -289,10 +263,7 @@
 		/obj/item/wrench,
 		/obj/item/multitool,
 		/obj/item/flashlight,
-		/obj/item/stack/cable_coil,
-		/obj/item/analyzer,
 		/obj/item/extinguisher/mini,
-		/obj/item/radio,
 		/obj/item/clothing/gloves,
 		/obj/item/resonator,
 		/obj/item/mining_scanner,
@@ -498,7 +469,6 @@
 	STR.max_w_class = WEIGHT_CLASS_NORMAL // Set to this so the  light replacer can fit.
 	STR.set_holdable(list(
 		/obj/item/grenade/chem_grenade,
-		/obj/item/lightreplacer,
 		/obj/item/flashlight,
 		/obj/item/reagent_containers/spray,
 		/obj/item/soap,
@@ -507,13 +477,11 @@
 		/obj/item/key/janitor,
 		/obj/item/clothing/gloves,
 		/obj/item/melee/flyswatter,
-		/obj/item/assembly/mousetrap,
 		/obj/item/paint_remover,
 		/obj/item/pushbroom
 		))
 
 /obj/item/storage/belt/janitor/full/PopulateContents()
-	new /obj/item/lightreplacer(src)
 	new /obj/item/reagent_containers/spray/cleaner(src)
 	new /obj/item/soap/nanotrasen(src)
 	new /obj/item/holosign_creator(src)
@@ -687,5 +655,4 @@
 		/obj/item/secateurs,
 		/obj/item/geneshears,
 		/obj/item/shovel/spade,
-		/obj/item/gun/energy/floragun
 		))

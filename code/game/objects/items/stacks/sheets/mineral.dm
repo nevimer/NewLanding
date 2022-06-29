@@ -24,7 +24,6 @@ Mineral Sheets
  */
 
 GLOBAL_LIST_INIT(sandstone_recipes, list ( \
-	new/datum/stack_recipe("pile of dirt", /obj/machinery/hydroponics/soil, 3, time = 10, one_per_turf = TRUE, on_floor = TRUE), \
 	new/datum/stack_recipe("sandstone door", /obj/structure/mineral_door/sandstone, 10, one_per_turf = TRUE, on_floor = TRUE), \
 	new/datum/stack_recipe("fireplace", /obj/structure/fireplace, 15, time = 60, one_per_turf = TRUE, on_floor = TRUE), \
 	new/datum/stack_recipe("Breakdown into sand", /obj/item/stack/ore/glass, 1, one_per_turf = FALSE, on_floor = TRUE) \
@@ -186,7 +185,6 @@ GLOBAL_LIST_INIT(plasma_recipes, list ( \
 		return ..()
 
 /obj/item/stack/sheet/mineral/plasma/fire_act(exposed_temperature, exposed_volume)
-	atmos_spawn_air("plasma=[amount*10];TEMP=[exposed_temperature]")
 	qdel(src)
 
 /obj/item/stack/sheet/mineral/plasma/five
@@ -236,7 +234,6 @@ GLOBAL_LIST_INIT(gold_recipes, list ( \
 	point_value = 20
 	merge_type = /obj/item/stack/sheet/mineral/silver
 	material_type = /datum/material/silver
-	tableVariant = /obj/structure/table/optable
 	walltype = /turf/closed/wall/mineral/silver
 
 GLOBAL_LIST_INIT(silver_recipes, list ( \
@@ -439,7 +436,6 @@ GLOBAL_LIST_INIT(adamantine_recipes, list())
 		return ..()
 
 /obj/item/stack/sheet/mineral/coal/fire_act(exposed_temperature, exposed_volume)
-	atmos_spawn_air("co2=[amount*10];TEMP=[exposed_temperature]")
 	qdel(src)
 
 /obj/item/stack/sheet/mineral/coal/five

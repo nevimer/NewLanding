@@ -73,10 +73,6 @@
 	TEST_ASSERT(!surgery_step.initiate(user, patient_one, BODY_ZONE_CHEST, scalpel, surgery_for_one), "Was allowed to start a second surgery without the rod of asclepius")
 	TEST_ASSERT(!surgery_for_one.step_in_progress, "Surgery for patient one is somehow in progress, despite not initiating")
 
-	user.apply_status_effect(STATUS_EFFECT_HIPPOCRATIC_OATH)
-	INVOKE_ASYNC(surgery_step, /datum/surgery_step/proc/initiate, user, patient_one, BODY_ZONE_CHEST, scalpel, surgery_for_one)
-	TEST_ASSERT(surgery_for_one.step_in_progress, "Surgery on patient one was not initiated, despite having rod of asclepius")
-
 /datum/unit_test/tend_wounds/Run()
 	var/mob/living/carbon/human/patient = allocate(/mob/living/carbon/human)
 	patient.take_overall_damage(100, 100)
@@ -97,7 +93,7 @@
 	naked_patient.take_overall_damage(100)
 
 	var/mob/living/carbon/human/clothed_patient = allocate(/mob/living/carbon/human)
-	clothed_patient.equipOutfit(/datum/outfit/job/doctor, TRUE)
+	clothed_patient.equipOutfit(/datum/outfit/job/assistant, TRUE)
 	clothed_patient.take_overall_damage(100)
 
 	basic_brute_heal.success(user, naked_patient, BODY_ZONE_CHEST)

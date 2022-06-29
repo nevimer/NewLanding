@@ -3,7 +3,6 @@
 	smoothing_flags = NONE
 	canSmoothWith = null
 	smoothing_groups = null
-	rcd_memory = null
 
 /turf/closed/wall/vault/rock
 	name = "rocky wall"
@@ -16,7 +15,6 @@
 
 /turf/closed/wall/ice
 	desc = "A wall covered in a thick sheet of ice."
-	rcd_memory = null
 	hardness = 35
 	slicing_duration = 150 //welding through the ice+metal
 	bullet_sizzle = TRUE
@@ -52,10 +50,4 @@
 /turf/closed/wall/concrete/try_decon(obj/item/I, mob/user, turf/T)
 	if(I.tool_behaviour == TOOL_WELDER)
 		to_chat(user, SPAN_WARNING("This wall is way too hard to cut through!"))
-	return FALSE
-
-/turf/closed/wall/concrete/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	return FALSE
-
-/turf/closed/wall/concrete/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
 	return FALSE

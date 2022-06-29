@@ -1,6 +1,3 @@
-//NOT using the existing /obj/machinery/door type, since that has some complications on its own, mainly based on its
-//machineryness
-
 /obj/structure/mineral_door
 	name = "iron door"
 	density = TRUE
@@ -51,12 +48,6 @@
 		air_update_turf(TRUE, FALSE)
 	. = ..()
 
-/obj/structure/mineral_door/Move()
-	var/turf/T = loc
-	. = ..()
-	if(!door_opened)
-		move_update_air(T)
-
 /obj/structure/mineral_door/Bumped(atom/movable/AM)
 	..()
 	if(!door_opened && !locked)
@@ -92,8 +83,6 @@
 					SwitchState()
 			else
 				SwitchState()
-	else if(ismecha(user))
-		SwitchState()
 
 /obj/structure/mineral_door/proc/SwitchState()
 	if(door_opened)
@@ -345,10 +334,6 @@
 	color = "#AF4492"
 	sheetType = /obj/item/stack/sheet/mineral/plasma
 
-/obj/structure/mineral_door/transparent/plasma/Initialize(mapload)
-	. = ..()
-	AddElement(/datum/element/atmos_sensitive, mapload)
-
 /obj/structure/mineral_door/transparent/plasma/welder_act(mob/living/user, obj/item/I)
 	return
 
@@ -361,14 +346,7 @@
 	else
 		return ..()
 
-/obj/structure/mineral_door/transparent/plasma/should_atmos_process(datum/gas_mixture/air, exposed_temperature)
-	return exposed_temperature > 300
-
-/obj/structure/mineral_door/transparent/plasma/atmos_expose(datum/gas_mixture/air, exposed_temperature)
-	TemperatureAct()
-
 /obj/structure/mineral_door/transparent/plasma/proc/TemperatureAct()
-	atmos_spawn_air("plasma=500;TEMP=1000")
 	deconstruct(FALSE)
 
 /obj/structure/mineral_door/transparent/diamond

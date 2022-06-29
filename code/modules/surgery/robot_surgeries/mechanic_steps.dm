@@ -51,32 +51,6 @@
 	display_results(user, target, SPAN_NOTICE("You begin to weld [target]'s [parse_zone(target_zone)] plating..."),
 			"[user] begins to weld [target]'s [parse_zone(target_zone)] plating.",
 			"[user] begins to weld [target]'s [parse_zone(target_zone)] plating.")
-
-//replace wires
-/datum/surgery_step/replace_wires
-	name = "replace wires"
-	implements = list(/obj/item/stack/cable_coil = 100)
-	time = 24
-	var/cableamount = 5
-
-/datum/surgery_step/replace_wires/tool_check(mob/user, obj/item/tool)
-	var/obj/item/stack/cable_coil/coil = tool
-	if(coil.get_amount() < cableamount)
-		to_chat(user, SPAN_WARNING("Not enough cable!"))
-		return FALSE
-	return TRUE
-
-/datum/surgery_step/replace_wires/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	var/obj/item/stack/cable_coil/coil = tool
-	if(coil && !(coil.get_amount()<cableamount)) //failproof
-		coil.use(cableamount)
-	return TRUE
-
-/datum/surgery_step/replace_wires/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	display_results(user, target, SPAN_NOTICE("You begin to replace [target]'s [parse_zone(target_zone)] wiring..."),
-			"[user] begins to replace [target]'s [parse_zone(target_zone)] wiring.",
-			"[user] begins to replace [target]'s [parse_zone(target_zone)] wiring.")
-
 //add plating
 /datum/surgery_step/add_plating
 	name = "add plating"

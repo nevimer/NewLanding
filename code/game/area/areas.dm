@@ -67,11 +67,6 @@
 	///Typepath to limit the areas (subtypes included) that atoms in this area can smooth with. Used for shuttles.
 	var/area/area_limited_icon_smoothing
 
-	var/list/power_usage
-
-	/// Wire assignment for airlocks in this area
-	var/airlock_wires = /datum/wires/airlock
-
 	///This datum, if set, allows terrain generation behavior to be ran on Initialize()
 	var/datum/map_generator/map_generator
 
@@ -142,7 +137,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	// rather than waiting for atoms to initialize.
 	if (area_flags & UNIQUE_AREA)
 		GLOB.areas_by_type[type] = src
-	power_usage = new /list(AREA_USAGE_LEN) // Some atoms would like to use power in Initialize()
 	return ..()
 
 /*
@@ -181,7 +175,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	if(!mapload)
 		if(!network_root_id)
 			network_root_id = STATION_NETWORK_ROOT // default to station root because this might be created with a blueprint
-		SSnetworks.assign_area_network_id(src)
 
 	return INITIALIZE_HINT_LATELOAD
 
@@ -189,8 +182,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
  * Sets machine power levels in the area
  */
 /area/LateInitialize()
-	power_change() // all machines set to current power level, also updates icon
-	update_beauty()
 
 /area/proc/RunGeneration()
 	if(map_generator)
@@ -249,22 +240,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 /area/proc/poweralert(state, obj/source)
 	if (area_flags & NO_ALERTS)
 		return
-	if (state != poweralm)
-		poweralm = state
-		if(istype(source)) //Only report power alarms on the z-level where the source is located.
-			for (var/item in GLOB.alert_consoles)
-				var/obj/machinery/computer/station_alert/a = item
-				if(!state)
-					a.cancelAlarm("Power", src, source)
-				else
-					a.triggerAlarm("Power", src, cameras, source)
-
-			for(var/item in GLOB.alarmdisplay)
-				var/datum/computer_file/program/alarm_monitor/p = item
-				if(!state)
-					p.cancelAlarm("Power", src, source)
-				else
-					p.triggerAlarm("Power", src, cameras, source)
 
 /**
  * Generate an atmospheric alert for this area
@@ -275,22 +250,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	if (area_flags & NO_ALERTS)
 		return
 	if(isdangerous != atmosalm)
-		if(isdangerous)
-
-			for (var/item in GLOB.alert_consoles)
-				var/obj/machinery/computer/station_alert/a = item
-				a.triggerAlarm("Atmosphere", src, cameras, source)
-			for(var/item in GLOB.alarmdisplay)
-				var/datum/computer_file/program/alarm_monitor/p = item
-				p.triggerAlarm("Atmosphere", src, cameras, source)
-
-		else
-			for (var/item in GLOB.alert_consoles)
-				var/obj/machinery/computer/station_alert/a = item
-				a.cancelAlarm("Atmosphere", src, source)
-			for(var/item in GLOB.alarmdisplay)
-				var/datum/computer_file/program/alarm_monitor/p = item
-				p.cancelAlarm("Atmosphere", src, source)
 
 		atmosalm = isdangerous
 		return TRUE
@@ -300,25 +259,7 @@ GLOBAL_LIST_EMPTY(teleportlocs)
  * Try to close all the firedoors in the area
  */
 /area/proc/ModifyFiredoors(opening)
-	if(firedoors)
-		firedoors_last_closed_on = world.time
-		for(var/FD in firedoors)
-			var/obj/machinery/door/firedoor/D = FD
-			if (D.being_held_open)
-				continue
-			var/cont = !D.welded
-			if(cont && opening) //don't open if adjacent area is on fire
-				for(var/I in D.affecting_areas)
-					var/area/A = I
-					if(A.fire)
-						cont = FALSE
-						break
-			if(cont && D.is_operational)
-				if(D.operating)
-					D.nextstate = opening ? FIREDOOR_OPEN : FIREDOOR_CLOSED
-				else if(!(D.density ^ opening))
-					INVOKE_ASYNC(D, (opening ? /obj/machinery/door/firedoor.proc/open : /obj/machinery/door/firedoor.proc/close))
-
+	return
 /**
  * Generate a firealarm alert for this area
  *
@@ -327,19 +268,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
  * Also starts the area processing on SSobj
  */
 /area/proc/firealert(obj/source)
-	if (!fire)
-		set_fire_alarm_effect()
-		ModifyFiredoors(FALSE)
-		for(var/item in firealarms)
-			var/obj/machinery/firealarm/F = item
-			F.update_appearance()
-	if (!(area_flags & NO_ALERTS)) //Check here instead at the start of the proc so that fire alarms can still work locally even in areas that don't send alerts
-		for (var/item in GLOB.alert_consoles)
-			var/obj/machinery/computer/station_alert/a = item
-			a.triggerAlarm("Fire", src, cameras, source)
-		for(var/item in GLOB.alarmdisplay)
-			var/datum/computer_file/program/alarm_monitor/p = item
-			p.triggerAlarm("Fire", src, cameras, source)
 	START_PROCESSING(SSobj, src)
 
 /**
@@ -351,39 +279,11 @@ GLOBAL_LIST_EMPTY(teleportlocs)
  * Also cycles the icons of all firealarms and deregisters the area from processing on SSOBJ
  */
 /area/proc/firereset(obj/source)
-	var/should_reset_alarms = fire
-	if(source)
-		if(istype(source, /obj/machinery/firealarm))
-			var/obj/machinery/firealarm/alarm = source
-			if(alarm.triggered)
-				alarm.triggered = FALSE
-				triggered_firealarms -= 1
-		if(triggered_firealarms > 0)
-			should_reset_alarms = FALSE
-		should_reset_alarms = should_reset_alarms & power_environ //No resetting if there's no power
-
-	if (should_reset_alarms) // if there's a source, make sure there's no fire alarms left
-		unset_fire_alarm_effects()
-		ModifyFiredoors(TRUE)
-		for(var/item in firealarms)
-			var/obj/machinery/firealarm/F = item
-			F.update_appearance()
-	if (!(area_flags & NO_ALERTS)) //Check here instead at the start of the proc so that fire alarms can still work locally even in areas that don't send alerts
-		for (var/item in GLOB.alert_consoles)
-			var/obj/machinery/computer/station_alert/a = item
-			a.cancelAlarm("Fire", src, source)
-		for(var/item in GLOB.alarmdisplay)
-			var/datum/computer_file/program/alarm_monitor/p = item
-			p.cancelAlarm("Fire", src, source)
 	STOP_PROCESSING(SSobj, src)
 
 ///Get rid of any dangling camera refs
-/area/proc/clear_camera(obj/machinery/camera/cam)
-	LAZYREMOVE(cameras, cam)
-	for (var/obj/machinery/computer/station_alert/comp as anything in GLOB.alert_consoles)
-		comp.freeCamera(src, cam)
-	for(var/datum/computer_file/program/alarm_monitor/monitor as anything in GLOB.alarmdisplay)
-		monitor.freeCamera(src, cam)
+/area/proc/clear_camera()
+	return
 
 /**
  * If 100 ticks has elapsed, toggle all the firedoors closed again
@@ -393,17 +293,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 		firereset() //If there are no breaches or fires, and this alert was caused by a breach or fire, die
 	if(firedoors_last_closed_on + 100 < world.time) //every 10 seconds
 		ModifyFiredoors(FALSE)
-
-/**
- * Close and lock a door passed into this proc
- *
- * Does this need to exist on area? probably not
- */
-/area/proc/close_and_lock_door(obj/machinery/door/DOOR)
-	set waitfor = FALSE
-	DOOR.close()
-	if(DOOR.density)
-		DOOR.lock()
 
 /**
  * Raise a burglar alert for this area
@@ -417,9 +306,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 		return
 	//Trigger alarm effect
 	set_fire_alarm_effect()
-	//Lockdown airlocks
-	for(var/obj/machinery/door/DOOR in src)
-		close_and_lock_door(DOOR)
 
 /**
  * Trigger the fire alarm visual affects in an area
@@ -431,11 +317,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	if(!triggered_firealarms) //If there aren't any fires/breaches
 		triggered_firealarms = INFINITY //You're not allowed to naturally die
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	for(var/alarm in firealarms)
-		var/obj/machinery/firealarm/F = alarm
-		F.update_fire_effects(fire)
-	for(var/obj/machinery/light/L in src)
-		L.update()
 
 /**
  * unset the fire alarm visual affects in an area
@@ -446,12 +327,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	fire = FALSE
 	triggered_firealarms = 0
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	for(var/alarm in firealarms)
-		var/obj/machinery/firealarm/F = alarm
-		F.update_fire_effects(fire)
-		F.triggered = FALSE
-	for(var/obj/machinery/light/L in src)
-		L.update()
 
 /**
  * Update the icon state of the area
@@ -475,78 +350,6 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 /area/space/update_icon_state()
 	SHOULD_CALL_PARENT(FALSE)
 	icon_state = null
-
-
-/**
- * Returns int 1 or 0 if the area has power for the given channel
- *
- * evalutes a mixture of variables mappers can set, requires_power, always_unpowered and then
- * per channel power_equip, power_light, power_environ
- */
-/area/proc/powered(chan) // return true if the area has power to given channel
-
-	if(!requires_power)
-		return TRUE
-	if(always_unpowered)
-		return FALSE
-	switch(chan)
-		if(AREA_USAGE_EQUIP)
-			return power_equip
-		if(AREA_USAGE_LIGHT)
-			return power_light
-		if(AREA_USAGE_ENVIRON)
-			return power_environ
-
-	return FALSE
-
-/**
- * Space is not powered ever, so this returns false
- */
-/area/space/powered(chan) //Nope.avi
-	return FALSE
-
-/**
- * Called when the area power status changes
- *
- * Updates the area icon, calls power change on all machinees in the area, and sends the `COMSIG_AREA_POWER_CHANGE` signal.
- */
-/area/proc/power_change()
-	for(var/obj/machinery/M in src) // for each machine in the area
-		M.power_change() // reverify power status (to update icons etc.)
-	SEND_SIGNAL(src, COMSIG_AREA_POWER_CHANGE)
-	update_appearance()
-
-
-/**
- * Add a static amount of power load to an area
- *
- * Possible channels
- * *AREA_USAGE_STATIC_EQUIP
- * *AREA_USAGE_STATIC_LIGHT
- * *AREA_USAGE_STATIC_ENVIRON
- */
-/area/proc/addStaticPower(value, powerchannel)
-	switch(powerchannel)
-		if(AREA_USAGE_STATIC_START to AREA_USAGE_STATIC_END)
-			power_usage[powerchannel] += value
-
-/**
- * Clear all power usage in area
- *
- * Clears all power used for equipment, light and environment channels
- */
-/area/proc/clear_usage()
-	for(var/i in AREA_USAGE_DYNAMIC_START to AREA_USAGE_DYNAMIC_END)
-		power_usage[i] = 0
-
-/**
- * Add a power value amount to the stored used_x variables
- */
-/area/proc/use_power(amount, chan)
-	switch(chan)
-		if(AREA_USAGE_DYNAMIC_START to AREA_USAGE_DYNAMIC_END)
-			power_usage[chan] += amount
-
 
 /**
  * Call back when an atom enters an area

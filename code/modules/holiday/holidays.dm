@@ -87,7 +87,6 @@
 	name = "Groundhog Day"
 	begin_day = 2
 	begin_month = FEBRUARY
-	drone_hat = /obj/item/clothing/head/helmet/space/chronos
 
 /datum/holiday/groundhog/getStationPrefix()
 	return pick("Deja Vu") //I have been to this place before
@@ -181,15 +180,6 @@
 	begin_month = APRIL
 	begin_day = 1
 	end_day = 2
-
-/datum/holiday/april_fools/celebrate()
-	. = ..()
-	SSjob.set_overflow_role(/datum/job/clown)
-	SSticker.login_music = 'sound/ambience/clown.ogg'
-	for(var/i in GLOB.new_player_list)
-		var/mob/dead/new_player/P = i
-		if(P.client)
-			P.client.playtitlemusic()
 
 /datum/holiday/spess
 	name = "Cosmonautics Day"
@@ -487,24 +477,6 @@
 
 /datum/holiday/xmas/greet()
 	return "Have a merry Christmas!"
-
-/datum/holiday/xmas/celebrate()
-	. = ..()
-	SSticker.OnRoundstart(CALLBACK(src, .proc/roundstart_celebrate))
-	GLOB.maintenance_loot += list(
-		list(
-			/obj/item/clothing/head/santa = 1,
-			/obj/item/a_gift/anything = 1
-		) = maint_holiday_weight,
-	)
-
-/datum/holiday/xmas/proc/roundstart_celebrate()
-	for(var/obj/machinery/computer/security/telescreen/entertainment/Monitor in GLOB.machines)
-		Monitor.icon_state_on = "entertainment_xmas"
-
-	for(var/mob/living/simple_animal/pet/dog/corgi/ian/Ian in GLOB.mob_living_list)
-		Ian.place_on_head(new /obj/item/clothing/head/helmet/space/santahat(Ian))
-
 
 /datum/holiday/festive_season
 	name = FESTIVE_SEASON

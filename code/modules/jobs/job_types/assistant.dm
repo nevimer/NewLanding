@@ -10,7 +10,6 @@ Assistant
 	selection_color = "#dddddd"
 	exp_granted_type = EXP_TYPE_CREW
 	outfit = /datum/outfit/job/assistant
-	plasmaman_outfit = /datum/outfit/plasmaman
 
 	display_order = JOB_DISPLAY_ORDER_ASSISTANT
 

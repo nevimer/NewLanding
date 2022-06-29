@@ -176,8 +176,7 @@
 
 /obj/structure/mold/core/classic/fire/retaliate_effect()
 	visible_message(SPAN_WARNING("\The [src] releases a cloud of flames!"))
-	var/turf/my_turf = get_turf(src)
-	my_turf.atmos_spawn_air("o2=20;plasma=20;TEMP=600")
+	return
 
 /obj/structure/mold/resin/classic/fire
 	desc = "It looks like mold, but it seems alive. It feels hot to the touch."
@@ -194,8 +193,7 @@
 
 /obj/structure/mold/structure/bulb/fire/discharge_effect()
 	visible_message(SPAN_WARNING("\The [src] puffs into a cloud of flames!"))
-	var/turf/my_turf = get_turf(src)
-	my_turf.atmos_spawn_air("o2=20;plasma=20;TEMP=600")
+	return
 
 /obj/structure/mold/structure/hatchery/fire
 	color = FIRE_MOLD_COLOR
@@ -281,7 +279,6 @@
 			living_mob.soundbang_act(1, 20, 10, 5)
 	else
 		do_sparks(3, TRUE, src)
-		tesla_zap(src, 4, 10000, ZAP_MOB_DAMAGE | ZAP_OBJ_DAMAGE)
 
 /obj/structure/mold/resin/classic/emp
 	desc = "It looks like mold, but it seems alive. You can notice small sparks travelling in the vines."
@@ -305,7 +302,6 @@
 			living_mob.soundbang_act(1, 20, 10, 5)
 	else
 		do_sparks(3, TRUE, src)
-		tesla_zap(src, 4, 10000, ZAP_MOB_DAMAGE | ZAP_OBJ_DAMAGE)
 
 /obj/structure/mold/structure/hatchery/emp
 	color = EMP_MOLD_COLOR

@@ -158,29 +158,6 @@
 	empulse(location, round(created_volume / 12), round(created_volume / 7), 1)
 	holder.clear_reagents()
 
-
-/datum/chemical_reaction/beesplosion
-	required_reagents = list(/datum/reagent/consumable/honey = 1, /datum/reagent/medicine/strange_reagent = 1, /datum/reagent/uranium/radium = 1)
-	reaction_tags = REACTION_TAG_EASY | REACTION_TAG_EXPLOSIVE | REACTION_TAG_DANGEROUS
-
-/datum/chemical_reaction/beesplosion/on_reaction(datum/reagents/holder, datum/equilibrium/reaction, created_volume)
-	var/location = holder.my_atom.drop_location()
-	if(created_volume < 5)
-		playsound(location,'sound/effects/sparks1.ogg', 100, TRUE)
-	else
-		playsound(location,'sound/creatures/bee.ogg', 100, TRUE)
-		var/list/beeagents = list()
-		for(var/R in holder.reagent_list)
-			if(required_reagents[R])
-				continue
-			beeagents += R
-		var/bee_amount = round(created_volume * 0.2)
-		for(var/i in 1 to bee_amount)
-			var/mob/living/simple_animal/hostile/bee/short/new_bee = new(location)
-			if(LAZYLEN(beeagents))
-				new_bee.assign_reagent(pick(beeagents))
-
-
 /datum/chemical_reaction/stabilizing_agent
 	results = list(/datum/reagent/stabilizing_agent = 3)
 	required_reagents = list(/datum/reagent/iron = 1, /datum/reagent/oxygen = 1, /datum/reagent/hydrogen = 1)
@@ -378,9 +355,6 @@
 /datum/chemical_reaction/phlogiston/on_reaction(datum/reagents/holder, datum/equilibrium/reaction, created_volume)
 	if(holder.has_reagent(/datum/reagent/stabilizing_agent))
 		return
-	var/turf/open/T = get_turf(holder.my_atom)
-	if(istype(T))
-		T.atmos_spawn_air("plasma=[created_volume];TEMP=1000")
 	holder.clear_reagents()
 	return
 
@@ -544,7 +518,6 @@
 /datum/chemical_reaction/reagent_explosion/teslium_lightning/proc/zappy_zappy(datum/reagents/holder, power)
 	if(QDELETED(holder.my_atom))
 		return
-	tesla_zap(holder.my_atom, 7, power, zap_flags)
 	playsound(holder.my_atom, 'sound/machines/defib_zap.ogg', 50, TRUE)
 
 /datum/chemical_reaction/reagent_explosion/teslium_lightning/heat
@@ -564,20 +537,7 @@
 	var/range = clamp(sqrt(created_volume*2), 1, 6)
 	//This first throws people away and then it explodes
 	goonchem_vortex(turfie, 1, range)
-	turfie.atmos_spawn_air("o2=[created_volume/2];TEMP=[575]")
-	turfie.atmos_spawn_air("n2=[created_volume/2];TEMP=[575]")
 	return ..()
-
-/datum/chemical_reaction/firefighting_foam
-	results = list(/datum/reagent/firefighting_foam = 3)
-	required_reagents = list(/datum/reagent/stabilizing_agent = 1,/datum/reagent/fluorosurfactant = 1,/datum/reagent/carbon = 1)
-	required_temp = 200
-	is_cold_recipe = 1
-	optimal_temp = 50
-	overheat_temp = 5
-	thermic_constant= -1
-	H_ion_release = -0.02
-	reaction_tags = REACTION_TAG_EASY | REACTION_TAG_UNIQUE
 
 /datum/chemical_reaction/reagent_explosion/patriotism_overload
 	required_reagents = list(/datum/reagent/consumable/ethanol/planet_cracker = 1, /datum/reagent/consumable/ethanol/triumphal_arch = 1)

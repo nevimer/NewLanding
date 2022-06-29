@@ -33,12 +33,6 @@
 	taste_description = "metal"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 
-	//It has stable IN THE NAME. IT WAS MADE FOR THIS MOMENT.
-/datum/reagent/stabilizing_agent/on_hydroponics_apply(obj/item/seeds/myseed, datum/reagents/chems, obj/machinery/hydroponics/mytray, mob/user)
-	. = ..()
-	if(myseed && chems.has_reagent(type, 1))
-		myseed.adjust_instability(-1)
-
 /datum/reagent/clf3
 	name = "Chlorine Trifluoride"
 	description = "Makes a temporary 3x3 fireball when it comes into existence, so be careful when mixing. ClF3 applied to a surface burns things that wouldn't otherwise burn, sometimes through the very floors of the station and exposing it to the vacuum of space."
@@ -109,11 +103,6 @@
 /datum/reagent/gunpowder/on_mob_life(mob/living/carbon/M, delta_time, times_fired)
 	. = TRUE
 	..()
-	if(!isplasmaman(M))
-		return
-	M.set_drugginess(15 * REM * delta_time)
-	if(M.hallucination < volume)
-		M.hallucination += 5 * REM * delta_time
 
 /datum/reagent/gunpowder/on_ex_act()
 	var/location = get_turf(holder.my_atom)
@@ -198,15 +187,6 @@
 	process_flags = REAGENT_ORGANIC | REAGENT_SYNTHETIC
 	accelerant_quality = 20
 
-	// why, just why
-/datum/reagent/napalm/on_hydroponics_apply(obj/item/seeds/myseed, datum/reagents/chems, obj/machinery/hydroponics/mytray, mob/user)
-	. = ..()
-	if(chems.has_reagent(type, 1))
-		if(!(myseed.resistance_flags & FIRE_PROOF))
-			mytray.adjustHealth(-round(chems.get_reagent_amount(type) * 6))
-			mytray.adjustToxic(round(chems.get_reagent_amount(type) * 7))
-		mytray.adjustWeeds(-rand(5,9)) //At least give them a small reward if they bother.
-
 /datum/reagent/napalm/on_mob_life(mob/living/carbon/M, delta_time, times_fired)
 	M.adjust_fire_stacks(1 * REM * delta_time)
 	..()
@@ -269,8 +249,6 @@
 	. = ..()
 	if(reac_volume < 5)
 		return
-	for(var/mob/living/simple_animal/slime/exposed_slime in exposed_turf)
-		exposed_slime.adjustToxLoss(rand(15,30))
 
 #undef CRYO_SPEED_PREFACTOR
 #undef CRYO_SPEED_CONSTANT
@@ -341,40 +319,3 @@
 	color = "#CAFF43"
 	taste_description = "jelly"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
-
-/datum/reagent/firefighting_foam
-	name = "Firefighting Foam"
-	description = "A historical fire suppressant. Originally believed to simply displace oxygen to starve fires, it actually interferes with the combustion reaction itself. Vastly superior to the cheap water-based extinguishers found on NT vessels."
-	reagent_state = LIQUID
-	color = "#A6FAFF55"
-	taste_description = "the inside of a fire extinguisher"
-	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
-
-/datum/reagent/firefighting_foam/expose_turf(turf/open/exposed_turf, reac_volume)
-	. = ..()
-	if (!istype(exposed_turf))
-		return
-
-	if(reac_volume >= 1)
-		var/obj/effect/particle_effect/foam/firefighting/foam = (locate(/obj/effect/particle_effect/foam) in exposed_turf)
-		if(!foam)
-			foam = new(exposed_turf)
-		else if(istype(foam))
-			foam.lifetime = initial(foam.lifetime) //reduce object churn a little bit when using smoke by keeping existing foam alive a bit longer
-
-	var/obj/effect/hotspot/hotspot = (locate(/obj/effect/hotspot) in exposed_turf)
-	if(hotspot && !isspaceturf(exposed_turf) && exposed_turf.air)
-		var/datum/gas_mixture/air = exposed_turf.air
-		if(air.temperature > T20C)
-			air.temperature = max(air.temperature/2,T20C)
-		air.react(src)
-		qdel(hotspot)
-
-/datum/reagent/firefighting_foam/expose_obj(obj/exposed_obj, reac_volume)
-	. = ..()
-	exposed_obj.extinguish()
-
-/datum/reagent/firefighting_foam/expose_mob(mob/living/exposed_mob, methods=TOUCH, reac_volume)
-	. = ..()
-	if(methods & (TOUCH|VAPOR))
-		exposed_mob.extinguish_mob() //All stacks are removed

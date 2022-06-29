@@ -51,9 +51,7 @@
 	if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_GHOST, user) & COMPONENT_CANCEL_ATTACK_CHAIN)
 		return TRUE
 	if(user.client)
-		if(user.gas_scan && atmosanalyzer_scan(user, src))
-			return TRUE
-		else if(user.client.prefs.inquisitive_ghost)
+		if(user.client.prefs.inquisitive_ghost)
 			user.examinate(src)
 	return FALSE
 
@@ -62,13 +60,4 @@
 		healthscan(user, src, 1, TRUE)
 	if(user.client && user.chem_scan)
 		chemscan(user, src)
-	return ..()
-
-// ---------------------------------------
-// And here are some good things for free:
-// Now you can click through portals, wormholes, gateways, and teleporters while observing. -Sayu
-
-/obj/machinery/teleport/hub/attack_ghost(mob/user)
-	if(power_station?.engaged && power_station.teleporter_console && power_station.teleporter_console.target)
-		user.forceMove(get_turf(power_station.teleporter_console.target))
 	return ..()

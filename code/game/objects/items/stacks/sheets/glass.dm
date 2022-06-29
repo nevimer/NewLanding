@@ -45,17 +45,6 @@ GLOBAL_LIST_INIT(glass_recipes, list ( \
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user, params)
 	add_fingerprint(user)
-	if(istype(W, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/CC = W
-		if (get_amount() < 1 || CC.get_amount() < 5)
-			to_chat(user, "<span class='warning>You need five lengths of coil and one sheet of glass to make wired glass!</span>")
-			return
-		CC.use(5)
-		use(1)
-		to_chat(user, SPAN_NOTICE("You attach wire to the [name]."))
-		var/obj/item/stack/light_w/new_tile = new(user.loc)
-		new_tile.add_fingerprint(user)
-		return
 	if(istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/V = W
 		if (V.get_amount() >= 1 && get_amount() >= 1)
@@ -123,8 +112,6 @@ GLOBAL_LIST_INIT(pglass_recipes, list ( \
  * Reinforced glass sheets
  */
 GLOBAL_LIST_INIT(reinforced_glass_recipes, list ( \
-	new/datum/stack_recipe("windoor frame", /obj/structure/windoor_assembly, 5, time = 0, on_floor = TRUE, window_checks = TRUE), \
-	null, \
 	new/datum/stack_recipe("directional reinforced window", /obj/structure/window/reinforced/unanchored, time = 0, on_floor = TRUE, window_checks = TRUE), \
 	new/datum/stack_recipe("fulltile reinforced window", /obj/structure/window/reinforced/fulltile/unanchored, 2, time = 0, on_floor = TRUE, window_checks = TRUE), \
 	new/datum/stack_recipe("glass shard", /obj/item/shard, time = 0, on_floor = TRUE) \
@@ -307,10 +294,7 @@ GLOBAL_LIST_INIT(plastitaniumglass_recipes, list(
 			H.apply_damage(force*0.5, BRUTE, hit_hand)
 
 /obj/item/shard/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/lightreplacer))
-		var/obj/item/lightreplacer/L = I
-		L.attackby(src, user)
-	else if(istype(I, /obj/item/stack/sheet/cloth))
+	if(istype(I, /obj/item/stack/sheet/cloth))
 		var/obj/item/stack/sheet/cloth/C = I
 		to_chat(user, SPAN_NOTICE("You begin to wrap the [C] around the [src]..."))
 		if(do_after(user, 35, target = src))

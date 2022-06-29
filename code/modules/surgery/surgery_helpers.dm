@@ -1,10 +1,6 @@
 /proc/get_location_modifier(mob/located_mob)
 	var/turf/mob_turf = get_turf(located_mob)
-	if(locate(/obj/structure/table/optable, mob_turf))
-		return 1
-	else if(locate(/obj/machinery/stasis, mob_turf))
-		return 0.9
-	else if(locate(/obj/structure/table, mob_turf))
+	if(locate(/obj/structure/table, mob_turf))
 		return 0.8
 	else if(locate(/obj/structure/bed, mob_turf))
 		return 0.7

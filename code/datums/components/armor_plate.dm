@@ -33,19 +33,10 @@
 	SIGNAL_HANDLER
 
 	//upgrade_item could also be typecast here instead
-	if(ismecha(parent))
-		if(amount)
-			if(amount < maxamount)
-				examine_list += SPAN_NOTICE("Its armor is enhanced with [amount] [upgrade_name].")
-			else
-				examine_list += SPAN_NOTICE("It's wearing a fearsome carapace entirely composed of [upgrade_name] - its pilot must be an experienced monster hunter.")
-		else
-			examine_list += SPAN_NOTICE("It has attachment points for strapping monster hide on for added protection.")
+	if(amount)
+		examine_list += SPAN_NOTICE("It has been strengthened with [amount]/[maxamount] [upgrade_name].")
 	else
-		if(amount)
-			examine_list += SPAN_NOTICE("It has been strengthened with [amount]/[maxamount] [upgrade_name].")
-		else
-			examine_list += SPAN_NOTICE("It can be strengthened with up to [maxamount] [upgrade_name].")
+		examine_list += SPAN_NOTICE("It can be strengthened with up to [maxamount] [upgrade_name].")
 
 /datum/component/armor_plate/proc/applyplate(datum/source, obj/item/I, mob/user, params)
 	SIGNAL_HANDLER
@@ -68,29 +59,10 @@
 	amount++
 	O.armor = O.armor.attachArmor(added_armor)
 
-	if(ismecha(O))
-		var/obj/vehicle/sealed/mecha/R = O
-		R.update_appearance()
-		to_chat(user, SPAN_INFO("You strengthen [R], improving its resistance against melee, bullet and laser damage."))
-	else
-		SEND_SIGNAL(O, COMSIG_ARMOR_PLATED, amount, maxamount)
-		to_chat(user, SPAN_INFO("You strengthen [O], improving its resistance against melee attacks."))
+	SEND_SIGNAL(O, COMSIG_ARMOR_PLATED, amount, maxamount)
+	to_chat(user, SPAN_INFO("You strengthen [O], improving its resistance against melee attacks."))
 
 
 /datum/component/armor_plate/proc/dropplates(datum/source, force)
 	SIGNAL_HANDLER
-
-	if(ismecha(parent)) //items didn't drop the plates before and it causes erroneous behavior for the time being with collapsible helmets
-		for(var/i in 1 to amount)
-			new upgrade_item(get_turf(parent))
-
-/datum/component/armor_plate/proc/apply_mech_overlays(obj/vehicle/sealed/mecha/mech, list/overlays)
-	SIGNAL_HANDLER
-
-	if(amount)
-		var/overlay_string = "ripley-g"
-		if(amount >= 3)
-			overlay_string += "-full"
-		if(!LAZYLEN(mech.occupants))
-			overlay_string += "-open"
-		overlays += overlay_string
+	return

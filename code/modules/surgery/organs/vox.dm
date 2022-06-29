@@ -5,9 +5,6 @@
 	safe_oxygen_min = 0	//Dont need oxygen
 	safe_oxygen_max = 2 //But it is quite toxic to them
 	safe_nitro_min = 10 // Atleast 10 nitrogen
-	oxy_damage_type = TOX
-	oxy_breath_dam_min = 6
-	oxy_breath_dam_max = 20
 
 	cold_level_1_threshold = 0 // Vox should be able to breathe in cold gas without issues?
 	cold_level_2_threshold = 0

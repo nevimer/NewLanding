@@ -42,12 +42,6 @@
 			else
 				to_chat(user, SPAN_NOTICE("This firearm already has a firing pin installed."))
 
-/obj/item/firing_pin/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
-		return
-	obj_flags |= EMAGGED
-	to_chat(user, SPAN_NOTICE("You override the authentication mechanism."))
-
 /obj/item/firing_pin/proc/gun_insert(mob/living/user, obj/item/gun/G)
 	gun = G
 	forceMove(gun)

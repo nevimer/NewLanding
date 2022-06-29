@@ -19,7 +19,6 @@ SUBSYSTEM_DEF(mapping)
 
 	var/list/shuttle_templates = list()
 	var/list/shelter_templates = list()
-	var/list/holodeck_templates = list()
 
 	var/list/areas_in_z = list()
 
@@ -124,7 +123,6 @@ Used by the AI doomsday and the self-destruct nuke.
 	ruins_templates = SSmapping.ruins_templates
 	shuttle_templates = SSmapping.shuttle_templates
 	shelter_templates = SSmapping.shelter_templates
-	holodeck_templates = SSmapping.holodeck_templates
 
 	config = SSmapping.config
 	next_map_config = SSmapping.next_map_config
@@ -201,10 +199,6 @@ Used by the AI doomsday and the self-destruct nuke.
 			vlevel.up_linkage = ordered_vlevels[subi+up_value]
 		if(!isnull(down_value))
 			vlevel.down_linkage = ordered_vlevels[subi+down_value]
-	if(atmosphere_type)
-		var/datum/atmosphere/atmos = new atmosphere_type()
-		mapzone.set_planetary_atmos(atmos)
-		qdel(atmos)
 	var/datum/ore_node_seeder/ore_node_seeder
 	if(ore_node_seeder_type)
 		ore_node_seeder = new ore_node_seeder_type
@@ -402,7 +396,6 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 	preloadRuinTemplates()
 	preloadShuttleTemplates()
 	preloadShelterTemplates()
-	preloadHolodeckTemplates()
 
 /datum/controller/subsystem/mapping/proc/preloadRuinTemplates()
 	// Still supporting bans by filename
@@ -443,15 +436,6 @@ GLOBAL_LIST_EMPTY(the_station_areas)
 
 		shelter_templates[S.shelter_id] = S
 		map_templates[S.shelter_id] = S
-
-/datum/controller/subsystem/mapping/proc/preloadHolodeckTemplates()
-	for(var/item in subtypesof(/datum/map_template/holodeck))
-		var/datum/map_template/holodeck/holodeck_type = item
-		if(!(initial(holodeck_type.mappath)))
-			continue
-		var/datum/map_template/holodeck/holo_template = new holodeck_type()
-
-		holodeck_templates[holo_template.template_id] = holo_template
 
 ///Initialize all biomes, assoc as type || instance
 /datum/controller/subsystem/mapping/proc/initialize_biomes()

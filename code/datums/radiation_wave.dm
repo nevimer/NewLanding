@@ -116,12 +116,8 @@
 		// modify the ignored_things list in __HELPERS/radiation.dm instead
 		var/static/list/blacklisted = typecacheof(list(
 			/turf,
-			/obj/structure/cable,
-			/obj/machinery/atmospherics,
 			/obj/item/ammo_casing,
 			/obj/item/implant,
-			/obj/singularity,
-			/obj/energy_ball
 			))
 		if(!can_contaminate || !can_contam || blacklisted[thing.type])
 			continue

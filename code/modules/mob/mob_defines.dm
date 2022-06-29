@@ -13,7 +13,6 @@
 	animate_movement = SLIDE_STEPS
 	flags_1 = HEAR_1
 	hud_possible = list(ANTAG_HUD)
-	pressure_resistance = 8
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 	throwforce = 10
 	blocks_emissive = EMISSIVE_BLOCK_GENERIC
@@ -41,8 +40,6 @@
 	var/cached_multiplicative_actions_slowdown
 	/// List of action hud items the user has
 	var/list/datum/action/actions
-	/// A special action? No idea why this lives here
-	var/list/datum/action/chameleon_item_actions
 	///Cursor icon used when holding shift over things
 	var/examine_cursor_icon = 'icons/effects/mouse_pointers/examine_pointer.dmi'
 
@@ -62,11 +59,9 @@
 	var/computer_id = null
 	var/list/logging = list()
 
-	/// The machine the mob is interacting with (this is very bad old code btw)
-	var/obj/machinery/machine = null
-
 	/// Tick time the mob can next move
 	var/next_move = null
+	var/obj/machine = null
 
 	/**
 	  * Magic var that stops you moving and interacting with anything

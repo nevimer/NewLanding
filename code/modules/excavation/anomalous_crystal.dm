@@ -86,16 +86,13 @@
 	message_admins("Anomalous crystal effect was activated, with a power of [anom_pow]! [ADMIN_JMP(T)]")
 	switch(anom_type)
 		if(ANOM_CRYSTAL_FIRE)
-			var/gas_power = anom_pow/5
-			T.atmos_spawn_air("o2=[gas_power];plasma=[gas_power];TEMP=600")
+			return
 		if(ANOM_CRYSTAL_EMP)
 			var/heavy = round((anom_pow-20)/40)
 			var/light = round(anom_pow+20/20)
 			empulse(T, light, heavy)
 		if(ANOM_CRYSTAL_ELECTRIC)
-			var/power = anom_pow*70
 			do_sparks(3, TRUE, T)
-			tesla_zap(T, 4, power, ZAP_MOB_DAMAGE | ZAP_OBJ_DAMAGE | ZAP_MOB_STUN)
 		if(ANOM_CRYSTAL_RADIATION)
 			playsound(T, 'sound/effects/empulse.ogg', 50, TRUE)
 			radiation_pulse(T, anom_pow)
@@ -130,8 +127,7 @@
 			var/obj/effect/resin_container/RC = new(T)
 			RC.Smoke()
 		if(ANOM_CRYSTAL_NITROUS_OXIDE)
-			var/gas_power = anom_pow/2
-			T.atmos_spawn_air("n2o=[gas_power];TEMP=290")
+			return
 		if(ANOM_CRYSTAL_MEDICAL_FOAM)
 			var/foam_range = anom_pow/5
 			var/reagents_amount = anom_pow/5
@@ -149,8 +145,7 @@
 			foam.set_up(foam_range, T, R)
 			foam.start()
 		if(ANOM_CRYSTAL_FROST_VAPOUR)
-			var/gas_power = anom_pow*1.5
-			T.atmos_spawn_air("water_vapor=[gas_power];TEMP=3")
+			return
 
 #undef ANOM_CRYSTAL_FIRE
 #undef ANOM_CRYSTAL_EMP

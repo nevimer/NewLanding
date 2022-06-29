@@ -37,13 +37,6 @@
 	initialize_controller_action_type(/datum/action/vehicle/sealed/thank, VEHICLE_CONTROL_KIDNAPPED)
 
 /obj/vehicle/sealed/car/clowncar/auto_assign_occupant_flags(mob/M)
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(is_clown_job(H.mind?.assigned_role)) //Ensures only clowns can drive the car. (Including more at once)
-			add_control_flags(H, VEHICLE_CONTROL_DRIVE)
-			RegisterSignal(H, COMSIG_MOB_CLICKON, .proc/fire_cannon_at)
-			M.log_message("has entered [src] as a possible driver", LOG_ATTACK)
-			return
 	add_control_flags(M, VEHICLE_CONTROL_KIDNAPPED)
 
 /obj/vehicle/sealed/car/clowncar/mob_forced_enter(mob/M, silent = FALSE)
@@ -92,15 +85,6 @@
 	playsound(src, 'sound/vehicles/clowncar_crashpins.ogg', 75)
 	dump_mobs(TRUE)
 	log_combat(src, bumped, "crashed into", null, "dumping all passengers")
-
-/obj/vehicle/sealed/car/clowncar/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
-		return
-	obj_flags |= EMAGGED
-	to_chat(user, SPAN_DANGER("You scramble \the [src]'s child safety lock, and a panel with six colorful buttons appears!"))
-	initialize_controller_action_type(/datum/action/vehicle/sealed/roll_the_dice, VEHICLE_CONTROL_DRIVE)
-	initialize_controller_action_type(/datum/action/vehicle/sealed/cannon, VEHICLE_CONTROL_DRIVE)
-	AddElement(/datum/element/waddling)
 
 /obj/vehicle/sealed/car/clowncar/obj_destruction(damage_flag)
 	playsound(src, 'sound/vehicles/clowncar_fart.ogg', 100)

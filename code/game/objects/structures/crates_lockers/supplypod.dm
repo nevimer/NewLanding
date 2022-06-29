@@ -386,9 +386,7 @@
 			return FALSE
 		if(!obj_to_insert.anchored && reverse_option_list["Unanchored"])
 			return TRUE
-		if(obj_to_insert.anchored && !ismecha(obj_to_insert) && reverse_option_list["Anchored"]) //Mecha are anchored but there is a separate option for them
-			return TRUE
-		if(ismecha(obj_to_insert) && reverse_option_list["Mecha"])
+		if(obj_to_insert.anchored && reverse_option_list["Anchored"]) //Mecha are anchored but there is a separate option for them
 			return TRUE
 		return FALSE
 

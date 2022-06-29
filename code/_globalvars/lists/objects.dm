@@ -5,7 +5,6 @@ GLOBAL_LIST_EMPTY(curtains) //list of all curtains
 GLOBAL_LIST_EMPTY(mechas_list)         //list of all mechs. Used by hostile mobs target tracking.
 GLOBAL_LIST_EMPTY(shuttle_caller_list)     //list of all communication consoles and AIs, for automatic shuttle calls when there are none.
 GLOBAL_LIST_EMPTY(machines)         //NOTE: this is a list of ALL machines now. The processing machines list is SSmachine.processing !
-GLOBAL_LIST_EMPTY(navigation_computers) //list of all /obj/machinery/computer/camera_advanced/shuttle_docker
 GLOBAL_LIST_EMPTY(syndicate_shuttle_boards)         //important to keep track of for managing nukeops war declarations.
 GLOBAL_LIST_EMPTY(navbeacons)     //list of all bot nagivation beacons, used for patrolling.
 GLOBAL_LIST_EMPTY(teleportbeacons)         //list of all tracking beacons used by teleporters
@@ -14,8 +13,6 @@ GLOBAL_LIST_EMPTY(deliverybeacontags)     //list of all tags associated with del
 GLOBAL_LIST_EMPTY(wayfindingbeacons)     //list of all navigation beacons used by wayfinding pinpointers
 GLOBAL_LIST_EMPTY(nuke_list)
 GLOBAL_LIST_EMPTY(alarmdisplay)         //list of all machines or programs that can display station alerts
-GLOBAL_LIST_EMPTY_TYPED(singularities, /datum/component/singularity) //list of all singularities on the station
-GLOBAL_LIST_EMPTY(mechpad_list) //list of all /obj/machinery/mechpad
 
 GLOBAL_LIST(chemical_reactions_list) //list of all /datum/chemical_reaction datums indexed by their typepath. Use this for general lookup stuff
 GLOBAL_LIST(chemical_reactions_list_reactant_index) //list of all /datum/chemical_reaction datums. Used during chemical reactions. Indexed by REACTANT types
@@ -26,8 +23,6 @@ GLOBAL_LIST(fake_reagent_blacklist) //List of all reagents that are parent types
 GLOBAL_LIST_EMPTY(tech_list) //list of all /datum/tech datums indexed by id.
 GLOBAL_LIST_EMPTY(surgeries_list) //list of all surgeries by name, associated with their path.
 GLOBAL_LIST_EMPTY(crafting_recipes) //list of all table craft recipes
-GLOBAL_LIST_EMPTY(rcd_list) //list of Rapid Construction Devices.
-GLOBAL_LIST_EMPTY(apcs_list) //list of all Area Power Controller machines, separate from machines for powernet speeeeeeed.
 GLOBAL_LIST_EMPTY(tracked_implants) //list of all current implants that are tracked to work out what sort of trek everyone is on. Sadly not on lavaworld not implemented...
 GLOBAL_LIST_EMPTY(tracked_chem_implants) //list of implants the prisoner console can track and send inject commands too
 GLOBAL_LIST_EMPTY(poi_list) //list of points of interest for observe/follow
@@ -47,7 +42,6 @@ GLOBAL_LIST_EMPTY(wire_name_directory)
 GLOBAL_LIST_EMPTY(ai_status_displays)
 
 GLOBAL_LIST_EMPTY(mob_spawners)     // All mob_spawn objects
-GLOBAL_LIST_EMPTY(alert_consoles) // Station alert consoles, /obj/machinery/computer/station_alert
 
 GLOBAL_LIST_EMPTY(air_scrub_names) // Name list of all air scrubbers
 GLOBAL_LIST_EMPTY(air_vent_names) // Name list of all air vents

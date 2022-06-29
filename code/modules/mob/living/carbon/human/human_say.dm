@@ -9,16 +9,6 @@
 		. = ..()
 
 /mob/living/carbon/human/GetVoice()
-	if(istype(wear_mask, /obj/item/clothing/mask/chameleon))
-		var/obj/item/clothing/mask/chameleon/V = wear_mask
-		if(V.voice_change && wear_id)
-			var/obj/item/card/id/idcard = wear_id.GetID()
-			if(istype(idcard))
-				return idcard.registered_name
-			else
-				return real_name
-		else
-			return real_name
 	if(istype(wear_mask, /obj/item/clothing/mask/infiltrator))
 		var/obj/item/clothing/mask/infiltrator/V = wear_mask
 		if(V.voice_unknown)
@@ -52,10 +42,7 @@
 /mob/living/carbon/human/binarycheck()
 	if(stat >= SOFT_CRIT || !ears)
 		return FALSE
-	var/obj/item/radio/headset/dongle = ears
-	if(!istype(dongle))
-		return FALSE
-	return dongle.translate_binary
+	return FALSE
 
 /mob/living/carbon/human/radio(message, list/message_mods = list(), list/spans, language) //Poly has a copy of this, lazy bastard
 	. = ..()

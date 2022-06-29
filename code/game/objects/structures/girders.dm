@@ -76,15 +76,7 @@
 			playsound(src, 'sound/machines/clockcult/integration_cog_install.ogg', 50, TRUE)
 	add_fingerprint(user)
 
-	if(istype(W, /obj/item/gun/energy/plasmacutter))
-		to_chat(user, SPAN_NOTICE("You start slicing apart the girder..."))
-		if(W.use_tool(src, user, 40, volume=100))
-			to_chat(user, SPAN_NOTICE("You slice apart the girder."))
-			var/obj/item/stack/sheet/iron/M = new (loc, 2)
-			M.add_fingerprint(user)
-			qdel(src)
-
-	else if(istype(W, /obj/item/stack))
+	if(istype(W, /obj/item/stack))
 		if(iswallturf(loc))
 			to_chat(user, SPAN_WARNING("There is already a wall present!"))
 			return
@@ -167,12 +159,6 @@
 
 		add_hiddenprint(user)
 
-	else if(istype(W, /obj/item/pipe))
-		var/obj/item/pipe/P = W
-		if (P.pipe_type in list(0, 1, 5)) //simple pipes, simple bends, and simple manifolds.
-			if(!user.transferItemToLoc(P, drop_location()))
-				return
-			to_chat(user, SPAN_NOTICE("You fit the pipe into \the [src]."))
 	else
 		return ..()
 
@@ -268,31 +254,6 @@
 	state = GIRDER_REINF
 	reinforced_material = /datum/material/iron
 	girderpasschance = GIRDER_PASSCHANCE_REINFORCED
-
-/obj/structure/girder/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	switch(the_rcd.mode)
-		if(RCD_FLOORWALL)
-			return rcd_result_with_memory(
-				list("mode" = RCD_FLOORWALL, "delay" = 2 SECONDS, "cost" = 8),
-				get_turf(src), RCD_MEMORY_WALL,
-			)
-		if(RCD_DECONSTRUCT)
-			return list("mode" = RCD_DECONSTRUCT, "delay" = 20, "cost" = 13)
-	return FALSE
-
-/obj/structure/girder/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	var/turf/T = get_turf(src)
-	switch(passed_mode)
-		if(RCD_FLOORWALL)
-			to_chat(user, SPAN_NOTICE("You finish a wall."))
-			T.PlaceOnTop(/turf/closed/wall)
-			qdel(src)
-			return TRUE
-		if(RCD_DECONSTRUCT)
-			to_chat(user, SPAN_NOTICE("You deconstruct the girder."))
-			qdel(src)
-			return TRUE
-	return FALSE
 
 /obj/structure/girder/bronze
 	name = "wall gear"

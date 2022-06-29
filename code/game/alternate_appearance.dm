@@ -127,8 +127,6 @@ GLOBAL_LIST_EMPTY(active_alternate_appearances)
 			add_hud_to(mob)
 
 /datum/atom_hud/alternate_appearance/basic/blessed_aware/mobShouldSee(mob/M)
-	if(is_chaplain_job(M.mind?.assigned_role))
-		return TRUE
 	return FALSE
 
 /datum/atom_hud/alternate_appearance/basic/one_person

@@ -329,7 +329,6 @@
 	emote_type = EMOTE_AUDIBLE
 	mob_type_blacklist_typecache = list(
 		/mob/living/brain,
-		/mob/living/simple_animal/slime
 	)
 	vary = TRUE
 
@@ -480,8 +479,6 @@
 		if(istype(current_turf) && current_turf.pollution)
 			if(iscarbon(user))
 				var/mob/living/carbon/carbon_user = user
-				if(carbon_user.internal) //Breathing from internals means we cant smell
-					return
 				carbon_user.next_smell = world.time + SMELL_COOLDOWN
 			current_turf.pollution.smell_act(user)
 

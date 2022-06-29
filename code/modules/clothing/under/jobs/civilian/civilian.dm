@@ -147,12 +147,6 @@
 	name = "Lawyer suit"
 	can_adjust = FALSE
 
-/obj/item/clothing/under/rank/civilian/lawyer/dye_item(dye_color, dye_key_override)
-	if(dye_color == DYE_COSMIC || dye_color == DYE_SYNDICATE)
-		..(dye_color, DYE_LAWYER_SPECIAL)
-	else
-		..()
-
 /obj/item/clothing/under/rank/civilian/lawyer/black
 	name = "lawyer black suit"
 	icon_state = "lawyer_black"

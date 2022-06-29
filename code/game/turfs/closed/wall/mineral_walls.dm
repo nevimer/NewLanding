@@ -1,7 +1,6 @@
 /turf/closed/wall/mineral
 	name = "mineral wall"
 	desc = "This shouldn't exist"
-	rcd_memory = null
 	var/last_event = 0
 	var/active = null
 
@@ -80,7 +79,6 @@
 /turf/closed/wall/mineral/plasma
 	name = "plasma wall"
 	desc = "A wall with plasma plating. This is definitely a bad idea."
-	thermal_conductivity = 0.04
 	plating_material = /datum/material/plasma
 	color = "#c162ec" //To display in mapping softwares
 
@@ -95,10 +93,8 @@
 /turf/closed/wall/mineral/plasma/proc/PlasmaBurn(temperature)
 	break_wall(FALSE)
 	ScrapeAway()
-	var/turf/open/T = src
-	T.atmos_spawn_air("plasma=400;TEMP=[temperature]")
 
-/turf/closed/wall/mineral/plasma/temperature_expose(datum/gas_mixture/air, exposed_temperature)//Doesn't work because walls have superconduction turned off
+/turf/closed/wall/mineral/plasma/temperature_expose(exposed_temperature, explosed_volume)//Doesn't work because walls have superconduction turned off
 	if(exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
@@ -210,10 +206,5 @@
 /turf/closed/wall/mineral/plastitanium/nosmooth
 
 /turf/closed/wall/mineral/plastitanium/overspace
-
-/turf/closed/wall/mineral/plastitanium/explosive/ex_act(severity)
-	var/obj/item/bombcore/large/bombcore = new(get_turf(src))
-	bombcore.detonate()
-	return ..()
 
 /turf/closed/wall/mineral/plastitanium/interior

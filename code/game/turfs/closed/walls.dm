@@ -8,9 +8,6 @@
 	base_icon_state = "wall"
 	explosion_block = 1
 
-	thermal_conductivity = WALL_HEAT_TRANSFER_COEFFICIENT
-	heat_capacity = 62500 //a little over 5 cm thick , 62500 for 1 m by 2.5 m by 0.25 m iron wall. also indicates the temperature at wich the wall will melt (currently only able to melt with H/E pipes)
-
 	baseturfs = /turf/open/floor/plating
 
 	flags_ricochet = RICOCHET_HARD
@@ -18,8 +15,6 @@
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = list(SMOOTH_GROUP_CLOSED_TURFS, SMOOTH_GROUP_WALLS)
 	canSmoothWith = list(SMOOTH_GROUP_SHUTTERS_BLASTDOORS, SMOOTH_GROUP_WALLS, SMOOTH_GROUP_AIRLOCK, SMOOTH_GROUP_WINDOW_FULLTILE, SMOOTH_GROUP_LOW_WALL)
-
-	rcd_memory = RCD_MEMORY_WALL
 
 	color = "#57575c" //To display in mapping softwares
 
@@ -95,12 +90,10 @@
 	var/neighbor_stripe = NONE
 	if(!neighbor_typecache)
 		neighbor_typecache = typecacheof(list(
-			/obj/machinery/door/airlock, 
-			/obj/structure/window/reinforced/fulltile, 
-			/obj/structure/window/fulltile, 
-			/obj/structure/window/shuttle, 
-			/obj/machinery/door/poddoor, 
-			/obj/structure/window/plasma/reinforced/fulltile, 
+			/obj/structure/window/reinforced/fulltile,
+			/obj/structure/window/fulltile,
+			/obj/structure/window/shuttle,
+			/obj/structure/window/plasma/reinforced/fulltile,
 			/obj/structure/window/plasma/fulltile,
 			/obj/structure/low_wall
 			))
@@ -426,7 +419,7 @@
 					update_appearance()
 					to_chat(user, SPAN_NOTICE("You cut the outer grille."))
 					return TRUE
-	
+
 			if(SUPPORT_LINES)
 				if(I.tool_behaviour == TOOL_SCREWDRIVER)
 					to_chat(user, SPAN_NOTICE("You begin unsecuring the support lines..."))
@@ -437,14 +430,14 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("You unsecure the support lines."))
 					return TRUE
-	
+
 				else if(I.tool_behaviour == TOOL_WIRECUTTER)
 					I.play_tool_sound(src, 100)
 					d_state = INTACT
 					update_appearance()
 					to_chat(user, SPAN_NOTICE("You repair the outer grille."))
 					return TRUE
-	
+
 			if(COVER)
 				if(I.tool_behaviour == TOOL_WELDER)
 					if(!I.tool_start_check(user, amount=0))
@@ -457,7 +450,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("You press firmly on the cover, dislodging it."))
 					return TRUE
-	
+
 				if(I.tool_behaviour == TOOL_SCREWDRIVER)
 					to_chat(user, SPAN_NOTICE("You begin securing the support lines..."))
 					if(I.use_tool(src, user, 40, volume=100))
@@ -467,7 +460,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("The support lines have been secured."))
 					return TRUE
-	
+
 			if(CUT_COVER)
 				if(I.tool_behaviour == TOOL_CROWBAR)
 					to_chat(user, SPAN_NOTICE("You struggle to pry off the cover..."))
@@ -478,7 +471,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("You pry off the cover."))
 					return TRUE
-	
+
 				if(I.tool_behaviour == TOOL_WELDER)
 					if(!I.tool_start_check(user, amount=0))
 						return
@@ -490,7 +483,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("The metal cover has been welded securely to the frame."))
 					return TRUE
-	
+
 			if(ANCHOR_BOLTS)
 				if(I.tool_behaviour == TOOL_WRENCH)
 					to_chat(user, SPAN_NOTICE("You start loosening the anchoring bolts which secure the support rods to their frame..."))
@@ -501,7 +494,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("You remove the bolts anchoring the support rods."))
 					return TRUE
-	
+
 				if(I.tool_behaviour == TOOL_CROWBAR)
 					to_chat(user, SPAN_NOTICE("You start to pry the cover back into place..."))
 					if(I.use_tool(src, user, 20, volume=100))
@@ -511,7 +504,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("The metal cover has been pried back into place."))
 					return TRUE
-	
+
 			if(SUPPORT_RODS)
 				if(I.tool_behaviour == TOOL_WELDER)
 					if(!I.tool_start_check(user, amount=0))
@@ -524,7 +517,7 @@
 						update_appearance()
 						to_chat(user, SPAN_NOTICE("You slice through the support rods."))
 					return TRUE
-	
+
 				if(I.tool_behaviour == TOOL_WRENCH)
 					to_chat(user, SPAN_NOTICE("You start tightening the bolts which secure the support rods to their frame..."))
 					I.play_tool_sound(src, 100)
@@ -545,7 +538,7 @@
 						to_chat(user, SPAN_NOTICE("You pry off the outer sheath."))
 						dismantle_wall()
 					return TRUE
-	
+
 				if(I.tool_behaviour == TOOL_WELDER)
 					if(!I.tool_start_check(user, amount=0))
 						return
@@ -561,7 +554,7 @@
 		if(I.tool_behaviour == TOOL_WELDER)
 			if(!I.tool_start_check(user, amount=0))
 				return FALSE
-	
+
 			to_chat(user, SPAN_NOTICE("You begin slicing through the outer plating..."))
 			if(I.use_tool(src, user, slicing_duration, volume=100))
 				if(iswallturf(src))
@@ -570,24 +563,6 @@
 				return TRUE
 
 	return FALSE
-
-/turf/closed/wall/singularity_pull(S, current_size)
-	..()
-	wall_singularity_pull(current_size)
-
-/turf/closed/wall/proc/wall_singularity_pull(current_size)
-	if(hard_decon)
-		if(current_size >= STAGE_FIVE)
-			if(prob(30))
-				dismantle_wall()
-	else
-		if(current_size >= STAGE_FIVE)
-			if(prob(50))
-				dismantle_wall()
-			return
-		if(current_size == STAGE_FOUR)
-			if(prob(30))
-				dismantle_wall()
 
 /turf/closed/wall/get_dumping_location(obj/item/storage/source, mob/user)
 	return null
@@ -599,24 +574,6 @@
 
 /turf/closed/wall/acid_melt()
 	dismantle_wall(1)
-
-/turf/closed/wall/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
-	if(hard_decon && !the_rcd.canRturf)
-		return
-	switch(the_rcd.mode)
-		if(RCD_DECONSTRUCT)
-			return list("mode" = RCD_DECONSTRUCT, "delay" = 40, "cost" = 26)
-	return FALSE
-
-/turf/closed/wall/rcd_act(mob/user, obj/item/construction/rcd/the_rcd, passed_mode)
-	if(hard_decon && !the_rcd.canRturf)
-		return
-	switch(passed_mode)
-		if(RCD_DECONSTRUCT)
-			to_chat(user, SPAN_NOTICE("You deconstruct the wall."))
-			ScrapeAway()
-			return TRUE
-	return FALSE
 
 /turf/closed/wall/proc/add_dent(denttype, x=rand(-8, 8), y=rand(-8, 8))
 	if(LAZYLEN(dent_decals) >= MAX_DENT_DECALS)

@@ -28,12 +28,7 @@
 		add_collar(O, user)
 		return
 
-	if(istype(O, /obj/item/newspaper))
-		if(!stat)
-			user.visible_message(SPAN_NOTICE("[user] baps [name] on the nose with the rolled up [O]."))
-			dance_rotate(src)
-	else
-		..()
+	return ..()
 
 /mob/living/simple_animal/pet/Initialize()
 	. = ..()

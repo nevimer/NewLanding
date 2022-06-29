@@ -8,7 +8,6 @@
 	..()
 	new /obj/item/storage/firstaid/regular(src)
 	new /obj/item/storage/box/handcuffs(src)
-	new /obj/item/assembly/flash/handheld(src)
 	if(prob(50))
 		new /obj/item/ammo_box/magazine/m50(src)
 		new /obj/item/ammo_box/magazine/m50(src)
@@ -28,7 +27,6 @@
 	..()
 	new /obj/item/storage/box/flashbangs(src)
 	new /obj/item/storage/box/teargas(src)
-	new /obj/item/storage/box/flashes(src)
 	new /obj/item/storage/box/handcuffs(src)
 	new /obj/item/shield/riot/tele(src)
 
@@ -45,7 +43,6 @@
 	new /obj/item/storage/firstaid/fire(src)
 	new /obj/item/storage/firstaid/brute(src)
 	new /obj/item/storage/firstaid/regular(src)
-	new /obj/item/defibrillator/compact/combat/loaded/nanotrasen(src)
 
 /obj/structure/closet/secure_closet/ert_engi
 	name = "emergency response team engineer locker"
@@ -61,5 +58,3 @@
 	new /obj/item/stack/sheet/mineral/sandbags(src, 30)
 	new /obj/item/clothing/shoes/magboots(src)
 	new /obj/item/storage/box/smart_metal_foam(src)
-	for(var/i in 1 to 3)
-		new /obj/item/rcd_ammo/large(src)

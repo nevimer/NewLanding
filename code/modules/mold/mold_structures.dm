@@ -82,10 +82,6 @@
 				if(BURN)
 					living_thing.take_bodypart_damage(burn = attack_damage, check_armor = TRUE)
 			has_attacked = TRUE
-	else if(istype(thing, /obj/vehicle/sealed/mecha))
-		var/obj/vehicle/sealed/mecha/mecha_thing = thing
-		mecha_thing.take_damage(attack_damage, attack_damage_type, MELEE, 0, get_dir(mecha_thing, src))
-		has_attacked = TRUE
 	if(has_attacked)
 		thing.visible_message(SPAN_WARNING("\The [src] strikes [thing]!"), SPAN_USERDANGER("\The [src] strikes you!"))
 		playsound(loc, 'sound/effects/attackblob.ogg', 100, TRUE)

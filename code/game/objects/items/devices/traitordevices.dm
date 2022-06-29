@@ -271,7 +271,6 @@ effective or pretty fucking useless.
 	new /obj/item/wrench(src)
 	new /obj/item/weldingtool(src)
 	new /obj/item/crowbar(src)
-	new /obj/item/analyzer(src)
 	new /obj/item/wirecutters(src)
 
 /obj/item/storage/toolbox/emergency/turret/attackby(obj/item/I, mob/living/user, params)
@@ -279,8 +278,6 @@ effective or pretty fucking useless.
 		user.visible_message(SPAN_DANGER("[user] bashes [src] with [I]!"), \
 			SPAN_DANGER("You bash [src] with [I]!"), null, COMBAT_MESSAGE_RANGE)
 		playsound(src, "sound/items/drill_use.ogg", 80, TRUE, -1)
-		var/obj/machinery/porta_turret/syndicate/pod/toolbox/turret = new(get_turf(loc))
-		turret.faction = list("[REF(user)]")
 		qdel(src)
 
 	..()

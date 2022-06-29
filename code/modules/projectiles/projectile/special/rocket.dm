@@ -31,9 +31,6 @@
 	..()
 
 	do_boom(target)
-	if(anti_armour_damage && ismecha(target))
-		var/obj/vehicle/sealed/mecha/M = target
-		M.take_damage(anti_armour_damage)
 	return BULLET_ACT_HIT
 
 /// Since some rockets have different booms depending if they hit a living target or not, this is easier than having explosive radius vars
@@ -78,8 +75,6 @@
 	shrapnel_type = null
 	var/sturdy = list(
 	/turf/closed,
-	/obj/vehicle/sealed/mecha,
-	/obj/machinery/door,
 	/obj/structure/window,
 	/obj/structure/grille
 	)
@@ -98,5 +93,4 @@
 		if(istype(target, i))
 			explosion(target, heavy_impact_range = 1, light_impact_range = 1, flash_range = 2)
 			return BULLET_ACT_HIT
-	//if(istype(target, /turf/closed) || ismecha(target))
 	new /obj/item/broken_missile(get_turf(src), 1)

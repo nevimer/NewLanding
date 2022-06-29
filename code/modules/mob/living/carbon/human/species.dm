@@ -1261,7 +1261,7 @@ GLOBAL_LIST_EMPTY(customizable_races)
 				if(!disable_warning)
 					to_chat(H, SPAN_WARNING("The [I.name] is too big to attach!")) //should be src?
 				return FALSE
-			if( istype(I, /obj/item/pda) || istype(I, /obj/item/pen) || is_type_in_list(I, H.wear_suit.allowed) )
+			if(istype(I, /obj/item/pen) || is_type_in_list(I, H.wear_suit.allowed) )
 				return TRUE
 			return FALSE
 		if(ITEM_SLOT_HANDCUFFED)
@@ -1391,10 +1391,6 @@ GLOBAL_LIST_EMPTY(customizable_races)
 			var/hungry = (500 - H.nutrition) / 5 //So overeat would be 100 and default level would be 80
 			if(hungry >= 70)
 				H.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/hunger, multiplicative_slowdown = (hungry / 50))
-			else if(isethereal(H))
-				var/datum/species/ethereal/E = H.dna.species
-				if(E.get_charge(H) <= ETHEREAL_CHARGE_NORMAL)
-					H.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/hunger, multiplicative_slowdown = (1.5 * (1 - E.get_charge(H) / 100)))
 			else
 				H.remove_movespeed_modifier(/datum/movespeed_modifier/hunger)
 
@@ -1796,8 +1792,8 @@ GLOBAL_LIST_EMPTY(customizable_races)
  * * environment (required) The environment gas mix
  * * humi (required)(type: /mob/living/carbon/human) The mob we will target
  */
-/datum/species/proc/handle_environment(mob/living/carbon/human/humi, datum/gas_mixture/environment, delta_time, times_fired)
-	handle_environment_pressure(humi, environment, delta_time, times_fired)
+/datum/species/proc/handle_environment(mob/living/carbon/human/humi, delta_time, times_fired)
+	handle_environment_pressure(humi, delta_time, times_fired)
 
 /**
  * Body temperature handler for species
@@ -1808,10 +1804,6 @@ GLOBAL_LIST_EMPTY(customizable_races)
  * * humi (required)(type: /mob/living/carbon/human) The mob we will target
  */
 /datum/species/proc/handle_body_temperature(mob/living/carbon/human/humi, delta_time, times_fired)
-	//when in a cryo unit we suspend all natural body regulation
-	if(istype(humi.loc, /obj/machinery/atmospherics/components/unary/cryo_cell))
-		return
-
 	//Only stabilise core temp when alive and not in statis
 	if(humi.stat < DEAD && !IS_IN_STASIS(humi))
 		body_temperature_core(humi, delta_time, times_fired)
@@ -1854,13 +1846,8 @@ GLOBAL_LIST_EMPTY(customizable_races)
 
 	humi.adjust_coretemperature(skin_core_change)
 
-	// get the enviroment details of where the mob is standing
-	var/datum/gas_mixture/environment = humi.loc.return_air()
-	if(!environment) // if there is no environment (nullspace) drop out here.
-		return
-
 	// Get the temperature of the environment for area
-	var/area_temp = humi.get_temperature(environment)
+	var/area_temp = humi.get_temperature()
 
 	// Get the insulation value based on the area's temp
 	var/thermal_protection = humi.get_insulation_protection(area_temp)
@@ -2042,8 +2029,8 @@ GLOBAL_LIST_EMPTY(customizable_races)
 	humi.apply_damage(burn_damage * delta_time, BURN, bodypart)
 
 /// Handle the air pressure of the environment
-/datum/species/proc/handle_environment_pressure(mob/living/carbon/human/H, datum/gas_mixture/environment, delta_time, times_fired)
-	var/pressure = environment.return_pressure()
+/datum/species/proc/handle_environment_pressure(mob/living/carbon/human/H, delta_time, times_fired)
+	var/pressure = 101.3
 	var/adjusted_pressure = H.calculate_affecting_pressure(pressure)
 
 	// Set alerts and apply damage based on the amount of pressure
@@ -2333,12 +2320,7 @@ GLOBAL_LIST_EMPTY(customizable_races)
 	if(!T)
 		return FALSE
 
-	var/datum/gas_mixture/environment = T.return_air()
-	if(environment && !(environment.return_pressure() > 30))
-		to_chat(H, SPAN_WARNING("The atmosphere is too thin for you to fly!"))
-		return FALSE
-	else
-		return TRUE
+	return TRUE
 
 /datum/species/proc/flyslip(mob/living/carbon/human/H)
 	var/obj/buckled_obj

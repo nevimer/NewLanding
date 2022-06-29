@@ -197,13 +197,6 @@
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
 
-/datum/action/item_action/toggle_light/Trigger()
-	if(istype(target, /obj/item/pda))
-		var/obj/item/pda/P = target
-		P.toggle_light(owner)
-		return
-	..()
-
 /datum/action/item_action/toggle_hood
 	name = "Toggle Hood"
 
@@ -238,16 +231,6 @@
 /datum/action/item_action/toggle_paddles
 	name = "Toggle Paddles"
 
-/datum/action/item_action/set_internals
-	name = "Set Internals"
-
-/datum/action/item_action/set_internals/UpdateButtonIcon(status_only = FALSE, force)
-	if(..()) //button available
-		if(iscarbon(owner))
-			var/mob/living/carbon/C = owner
-			if(target == C.internal)
-				button.icon_state = "template_active"
-
 /datum/action/item_action/pick_color
 	name = "Choose A Color"
 
@@ -267,60 +250,6 @@
 	var/obj/item/clothing/head/hardhat/weldhat/H = target
 	if(istype(H))
 		H.toggle_welding_screen(owner)
-
-/datum/action/item_action/toggle_welding_screen/plasmaman
-	name = "Toggle Welding Screen"
-
-/datum/action/item_action/toggle_welding_screen/plasmaman/Trigger()
-	var/obj/item/clothing/head/helmet/space/plasmaman/H = target
-	if(istype(H))
-		H.toggle_welding_screen(owner)
-
-/datum/action/item_action/toggle_spacesuit
-	name = "Toggle Suit Thermal Regulator"
-	icon_icon = 'icons/mob/actions/actions_spacesuit.dmi'
-	button_icon_state = "thermal_off"
-
-/datum/action/item_action/toggle_spacesuit/New(Target)
-	. = ..()
-	RegisterSignal(target, COMSIG_SUIT_SPACE_TOGGLE, .proc/toggle)
-
-/datum/action/item_action/toggle_spacesuit/Destroy()
-	UnregisterSignal(target, COMSIG_SUIT_SPACE_TOGGLE)
-	return ..()
-
-/datum/action/item_action/toggle_spacesuit/Trigger()
-	var/obj/item/clothing/suit/space/suit = target
-	if(!istype(suit))
-		return
-	suit.toggle_spacesuit()
-
-/// Toggle the action icon for the space suit thermal regulator
-/datum/action/item_action/toggle_spacesuit/proc/toggle(obj/item/clothing/suit/space/suit)
-	SIGNAL_HANDLER
-
-	button_icon_state = "thermal_[suit.thermal_on ? "on" : "off"]"
-	UpdateButtonIcon()
-
-/datum/action/item_action/berserk_mode
-	name = "Berserk"
-	desc = "Increase your movement and melee speed while also increasing your melee armor for a short amount of time."
-	icon_icon = 'icons/mob/actions/actions_items.dmi'
-	button_icon_state = "berserk_mode"
-	background_icon_state = "bg_demon"
-
-/datum/action/item_action/berserk_mode/Trigger()
-	if(istype(target, /obj/item/clothing/head/helmet/space/hardsuit/berserker))
-		var/obj/item/clothing/head/helmet/space/hardsuit/berserker/berzerk = target
-		if(berzerk.berserk_active)
-			to_chat(owner, SPAN_WARNING("You are already berserk!"))
-			return
-		if(berzerk.berserk_charge < 100)
-			to_chat(owner, SPAN_WARNING("You don't have a full charge."))
-			return
-		berzerk.berserk_mode(owner)
-		return
-	..()
 
 /datum/action/item_action/toggle_helmet_flashlight
 	name = "Toggle Helmet Flashlight"
@@ -378,18 +307,6 @@
 
 /datum/action/item_action/toggle_helmet
 	name = "Toggle Helmet"
-
-/datum/action/item_action/toggle_jetpack
-	name = "Toggle Jetpack"
-
-/datum/action/item_action/jetpack_stabilization
-	name = "Toggle Jetpack Stabilization"
-
-/datum/action/item_action/jetpack_stabilization/IsAvailable()
-	var/obj/item/tank/jetpack/J = target
-	if(!istype(J) || !J.on)
-		return FALSE
-	return ..()
 
 /datum/action/item_action/hands_free
 	check_flags = AB_CHECK_CONSCIOUS

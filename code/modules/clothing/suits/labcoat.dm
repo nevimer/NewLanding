@@ -6,7 +6,6 @@
 	blood_overlay_type = "coat"
 	body_parts_covered = CHEST|ARMS
 	allowed = list(
-		/obj/item/analyzer,
 		/obj/item/dnainjector,
 		/obj/item/flashlight/pen,
 		/obj/item/healthanalyzer,
@@ -17,12 +16,9 @@
 		/obj/item/reagent_containers/hypospray,
 		/obj/item/reagent_containers/pill,
 		/obj/item/reagent_containers/syringe,
-		/obj/item/sensor_device,
 		/obj/item/soap,
 		/obj/item/stack/medical,
 		/obj/item/storage/pill_bottle,
-		/obj/item/tank/internals/emergency_oxygen,
-		/obj/item/tank/internals/plasmaman,
 		)
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0,ENERGY = 0, BOMB = 0, BIO = 50, RAD = 0, FIRE = 50, ACID = 50)
 	togglename = "buttons"

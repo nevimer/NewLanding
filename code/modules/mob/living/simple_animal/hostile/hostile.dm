@@ -149,7 +149,7 @@
 	if(!search_objects)
 		. = hearers(vision_range, target_from) - src //Remove self, so we don't suicide
 
-		var/static/hostile_machines = typecacheof(list(/obj/machinery/porta_turret, /obj/vehicle/sealed/mecha))
+		var/static/hostile_machines = typecacheof(list())
 
 		for(var/HM in typecache_filter_list(range(vision_range, target_from), hostile_machines))
 			if(can_see(target_from, HM, vision_range))
@@ -231,22 +231,6 @@
 			else
 				if((faction_check && !attack_same) || L.stat)
 					return FALSE
-			return TRUE
-
-		if(ismecha(the_target))
-			var/obj/vehicle/sealed/mecha/M = the_target
-			for(var/occupant in M.occupants)
-				if(CanAttack(occupant))
-					return TRUE
-
-		if(istype(the_target, /obj/machinery/porta_turret))
-			var/obj/machinery/porta_turret/P = the_target
-			if(P.in_faction(src)) //Don't attack if the turret is in the same faction
-				return FALSE
-			if(P.has_cover &&!P.raised) //Don't attack invincible turrets
-				return FALSE
-			if(P.machine_stat & BROKEN) //Or turrets that are already broken
-				return FALSE
 			return TRUE
 
 	if(isobj(the_target))
@@ -477,7 +461,7 @@
 	for(var/obj/O in T.contents)
 		if(!O.Adjacent(target_from))
 			continue
-		if((ismachinery(O) || isstructure(O)) && O.density && environment_smash >= ENVIRONMENT_SMASH_STRUCTURES && !O.IsObscured())
+		if((isstructure(O)) && O.density && environment_smash >= ENVIRONMENT_SMASH_STRUCTURES && !O.IsObscured())
 			O.attack_animal(src)
 			return
 
@@ -513,7 +497,7 @@
 		A.attack_animal(src)//Bang on it till we get out
 
 /mob/living/simple_animal/hostile/proc/FindHidden()
-	if(istype(target.loc, /obj/structure/closet) || istype(target.loc, /obj/machinery/disposal) || istype(target.loc, /obj/machinery/sleeper))
+	if(istype(target.loc, /obj/structure/closet))
 		var/atom/A = target.loc
 		var/atom/target_from = GET_TARGETS_FROM(src)
 		Goto(A,move_to_delay,minimum_distance)
@@ -593,7 +577,7 @@
 		toggle_ai(AI_ON)
 
 /mob/living/simple_animal/hostile/proc/ListTargetsLazy(_Z)//Step 1, find out what we can see
-	var/static/hostile_machines = typecacheof(list(/obj/machinery/porta_turret, /obj/vehicle/sealed/mecha))
+	var/static/hostile_machines = typecacheof(list())
 	. = list()
 	for (var/I in SSmobs.clients_by_zlevel[_Z])
 		var/mob/M = I

@@ -148,7 +148,7 @@
 		if("glasses")
 			options = typesof(/obj/item/clothing/glasses)
 		if("ears")
-			options = typesof(/obj/item/radio/headset)
+			options = typesof(/obj/item/clothing/ears)
 
 		if("neck")
 			options = typesof(/obj/item/clothing/neck)

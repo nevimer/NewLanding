@@ -8,7 +8,6 @@
 	anchored = TRUE
 	density = TRUE
 	var/moving = FALSE
-	var/datum/gas_mixture/air_contents = new()
 	var/occupied_icon_state = "pod_occupied"
 	var/obj/structure/transit_tube/current_tube = null
 	var/next_dir
@@ -20,10 +19,6 @@
 
 /obj/structure/transit_tube_pod/Initialize()
 	. = ..()
-	air_contents.add_gases(/datum/gas/oxygen, /datum/gas/nitrogen)
-	air_contents.gases[/datum/gas/oxygen][MOLES] = MOLES_O2STANDARD
-	air_contents.gases[/datum/gas/nitrogen][MOLES] = MOLES_N2STANDARD
-	air_contents.temperature = T20C
 
 
 /obj/structure/transit_tube_pod/Destroy()
@@ -72,11 +67,6 @@
 			SSexplosions.med_mov_atom += contents
 		if(EXPLODE_LIGHT)
 			SSexplosions.low_mov_atom += contents
-
-/obj/structure/transit_tube_pod/singularity_pull(S, current_size)
-	..()
-	if(current_size >= STAGE_FIVE)
-		deconstruct(FALSE)
 
 /obj/structure/transit_tube_pod/container_resist_act(mob/living/user)
 	if(!user.incapacitated())
@@ -173,19 +163,6 @@
 		var/atom/movable/AM = i
 		AM.throw_at(destination,rand(1,3),5)
 
-/obj/structure/transit_tube_pod/return_air()
-	return air_contents
-
-/obj/structure/transit_tube_pod/return_analyzable_air()
-	return air_contents
-
-/obj/structure/transit_tube_pod/assume_air(datum/gas_mixture/giver)
-	return air_contents.merge(giver)
-
-/obj/structure/transit_tube_pod/remove_air(amount)
-	return air_contents.remove(amount)
-
-
 /obj/structure/transit_tube_pod/relaymove(mob/living/user, direction)
 	if(!user.client || moving)
 		return
@@ -211,10 +188,6 @@
 			continue
 		setDir(direction)
 		return
-
-
-/obj/structure/transit_tube_pod/return_temperature()
-	return air_contents.temperature
 
 //special pod made by the dispenser, it fizzles away when reaching a station.
 

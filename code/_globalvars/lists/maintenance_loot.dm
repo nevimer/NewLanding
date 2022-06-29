@@ -43,12 +43,8 @@ GLOBAL_LIST_INIT(trash_loot, list(//junk: useless, very easy to get, or ghetto c
 		/obj/item/cigbutt = 1,
 		/obj/item/camera = 1,
 		/obj/item/camera_film = 1,
-		/obj/item/light/bulb = 1,
-		/obj/item/light/tube = 1,
 		/obj/item/food/urinalcake = 1,
 
-		/obj/item/airlock_painter = 1,
-		/obj/item/airlock_painter/decal = 1,
 		/obj/item/rack_parts = 1,
 		/obj/item/clothing/mask/breath = 1,
 		/obj/item/shard = 1,
@@ -57,11 +53,7 @@ GLOBAL_LIST_INIT(trash_loot, list(//junk: useless, very easy to get, or ghetto c
 		) = 8,
 
 	list(//tier 1 stock parts
-		/obj/item/stock_parts/capacitor = 1,
-		/obj/item/stock_parts/scanning_module = 1,
-		/obj/item/stock_parts/manipulator = 1,
-		/obj/item/stock_parts/micro_laser = 1,
-		/obj/item/stock_parts/matter_bin = 1,
+
 		) = 1,
 	))
 
@@ -75,7 +67,6 @@ GLOBAL_LIST_INIT(common_loot, list( //common: basic items
 		/obj/item/crowbar = 1,
 		/obj/item/t_scanner = 1,
 		/obj/item/geiger_counter = 1,
-		/obj/item/analyzer = 1,
 		/obj/item/mop = 1,
 		/obj/item/pushbroom = 1,
 		/obj/item/reagent_containers/glass/bucket = 1,
@@ -85,7 +76,6 @@ GLOBAL_LIST_INIT(common_loot, list( //common: basic items
 
 	list(//equipment
 		/obj/item/clothing/mask/gas = 1,
-		/obj/item/radio/headset = 1,
 		/obj/item/storage/backpack = 1,
 		/obj/item/clothing/shoes/sneakers/black = 1,
 		/obj/item/clothing/suit/hazardvest = 1,
@@ -101,21 +91,10 @@ GLOBAL_LIST_INIT(common_loot, list( //common: basic items
 		) = 1,
 
 	list(//construction and crafting
-		/obj/item/stack/cable_coil = 1,
-		/obj/item/stock_parts/cell = 1,
 		/obj/item/stack/rods/twentyfive = 1,
 		/obj/item/stack/sheet/iron/twenty = 1,
 		/obj/item/stack/sheet/mineral/plasma = 1,
 		/obj/item/sign = 1,
-
-		//assemblies
-		/obj/item/assembly/infra = 1,
-		/obj/item/assembly/signaler = 1,
-		/obj/item/assembly/mousetrap = 1,
-		/obj/item/assembly/prox_sensor = 1,
-		/obj/item/assembly/timer = 1,
-		/obj/item/assembly/igniter = 1,
-		/obj/item/assembly/health = 1,
 
 		/obj/item/stack/package_wrap = 1,
 		/obj/item/stack/wrapping_paper = 1,
@@ -138,9 +117,7 @@ GLOBAL_LIST_INIT(common_loot, list( //common: basic items
 		) = 1,
 
 	list(//misc
-		/obj/item/radio/off = 1,
 		/obj/item/extinguisher = 1,
-		/obj/item/tank/internals/emergency_oxygen = 1,
 		/obj/item/bodybag = 1,
 		/obj/item/grenade/smokebomb = 1,
 		/obj/item/stack/spacecash/c10 = 1,
@@ -166,7 +143,6 @@ GLOBAL_LIST_INIT(uncommon_loot, list(//uncommon: useful items
 		/obj/item/restraints/handcuffs/cable = 1,
 		/obj/item/spear = 1,
 		/obj/item/grenade/iedcasing/spawned = 1,
-		/obj/item/melee/baton/cattleprod = 1,
 		/obj/item/pen/fountain = 1,
 		) = 8,
 
@@ -185,7 +161,6 @@ GLOBAL_LIST_INIT(uncommon_loot, list(//uncommon: useful items
 		) = 8,
 
 	list(//construction and crafting
-		/obj/item/stock_parts/cell/high = 1,
 		/obj/item/stack/sheet/mineral/wood/fifty = 1,
 		/obj/item/beacon = 1,
 		/obj/item/weaponcrafting/receiver = 1,
@@ -245,11 +220,9 @@ GLOBAL_LIST_INIT(rarity_loot, list(//rare: really good items
 		/obj/item/kitchen/knife = 1,
 		/obj/item/restraints/handcuffs = 1,
 		/obj/item/shield/riot/buckler = 1,
-		/obj/item/melee/baton/cattleprod/teleprod = 1,
 		/obj/item/throwing_star = 1,
 		/obj/item/pen/survival = 1,
 		/obj/item/flashlight/flashdark = 1,
-		/obj/item/assembly/flash/memorizer = 1,
 		) = 1,
 
 	list(//equipment

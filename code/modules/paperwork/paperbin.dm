@@ -12,7 +12,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	throw_speed = 3
 	throw_range = 7
-	pressure_resistance = 8
 	var/papertype = /obj/item/paper
 	var/total_paper = 30
 	var/list/papers = list()
@@ -163,8 +162,6 @@
 			. += paper_overlay
 			if(paper_number == papers.len) //this is our top paper
 				. += current_paper.overlays //add overlays only for top paper
-				if(istype(src, /obj/item/paper_bin/bundlenatural))
-					bin_overlay.pixel_y = paper_overlay.pixel_y //keeps binding centred on stack
 				if(bin_pen)
 					pen_overlay.pixel_y = paper_overlay.pixel_y //keeps pen on top of stack
 		. += bin_overlay
@@ -176,55 +173,6 @@
 	name = "construction paper bin"
 	desc = "Contains all the paper you'll never need, IN COLOR!"
 	papertype = /obj/item/paper/construction
-
-/obj/item/paper_bin/bundlenatural
-	name = "natural paper bundle"
-	desc = "A bundle of paper created using traditional methods."
-	icon_state = null
-	papertype = /obj/item/paper/natural
-	resistance_flags = FLAMMABLE
-	bin_overlay_string = "paper_bundle_overlay"
-	///Cable this bundle is held together with.
-	var/obj/item/stack/cable_coil/binding_cable
-
-/obj/item/paper_bin/bundlenatural/Initialize(mapload)
-	binding_cable = new /obj/item/stack/cable_coil(src, 2)
-	binding_cable.color = COLOR_ORANGE_BROWN
-	binding_cable.cable_color = "brown"
-	binding_cable.desc += " Non-natural."
-	return ..()
-
-/obj/item/paper_bin/bundlenatural/dump_contents(atom/droppoint)
-	. = ..()
-	qdel(src)
-
-/obj/item/paper_bin/bundlenatural/update_overlays()
-	bin_overlay = mutable_appearance(icon, bin_overlay_string)
-	bin_overlay.color = binding_cable.color
-	return ..()
-
-/obj/item/paper_bin/bundlenatural/attack_hand(mob/user, list/modifiers)
-	. = ..()
-	if(!LAZYLEN(papers))
-		deconstruct(FALSE)
-
-/obj/item/paper_bin/bundlenatural/deconstruct(disassembled)
-	dump_contents()
-	return ..()
-
-/obj/item/paper_bin/bundlenatural/fire_act(exposed_temperature, exposed_volume)
-	qdel(src)
-
-/obj/item/paper_bin/bundlenatural/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/paper/carbon))
-		to_chat(user, SPAN_WARNING("[W] won't fit into [src]."))
-		return
-	if(W.get_sharpness())
-		if(W.use_tool(src, user, 1 SECONDS))
-			to_chat(user, SPAN_NOTICE("You slice the cable from [src]."))
-			deconstruct(TRUE)
-	else
-		..()
 
 /obj/item/paper_bin/carbon
 	name = "carbon paper bin"

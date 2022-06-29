@@ -14,7 +14,6 @@
 	var/threatscale = 1 // Used by advanced grenades to make them slightly more worthy.
 	var/no_splash = FALSE //If the grenade deletes even if it has no reagents to splash with. Used for slime core reactions.
 	var/casedesc = "This basic model accepts both beakers and bottles. It heats contents by 10 K upon ignition." // Appears when examining empty casings.
-	var/obj/item/assembly/prox_sensor/landminemode = null
 
 /obj/item/grenade/chem_grenade/ComponentInitialize()
 	. = ..()
@@ -24,7 +23,6 @@
 	. = ..()
 	create_reagents(1000)
 	stage_change() // If no argument is set, it will change the stage to the current stage, useful for stock grenades that start READY.
-	wires = new /datum/wires/explosive/chem_grenade(src)
 
 /obj/item/grenade/chem_grenade/examine(mob/user)
 	display_timer = (stage == GRENADE_READY) //show/hide the timer based on assembly state
@@ -49,12 +47,8 @@
 /obj/item/grenade/chem_grenade/attack_self(mob/user)
 	if(stage == GRENADE_READY && !active)
 		..()
-	if(stage == GRENADE_WIRED)
-		wires.interact(user)
 
 /obj/item/grenade/chem_grenade/attackby(obj/item/I, mob/user, params)
-	if(istype(I,/obj/item/assembly) && stage == GRENADE_WIRED)
-		wires.interact(user)
 	if(I.tool_behaviour == TOOL_SCREWDRIVER)
 		if(stage == GRENADE_WIRED)
 			if(beakers.len)
@@ -65,8 +59,6 @@
 				to_chat(user, SPAN_WARNING("You need to add at least one beaker before locking the [initial(name)] assembly!"))
 		else if(stage == GRENADE_READY)
 			det_time = det_time == 50 ? 30 : 50 //toggle between 30 and 50
-			if(landminemode)
-				landminemode.time = det_time * 0.1 //overwrites the proxy sensor activation timer
 
 			to_chat(user, SPAN_NOTICE("You modify the time delay. It's set for [DisplayTimeText(det_time)]."))
 		else
@@ -91,16 +83,6 @@
 			else
 				to_chat(user, SPAN_WARNING("[I] is empty!"))
 
-	else if(stage == GRENADE_EMPTY && istype(I, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/C = I
-		if (C.use(1))
-			det_time = 50 // In case the cable_coil was removed and readded.
-			stage_change(GRENADE_WIRED)
-			to_chat(user, SPAN_NOTICE("You rig the [initial(name)] assembly."))
-		else
-			to_chat(user, SPAN_WARNING("You need one length of coil to wire the assembly!"))
-			return
-
 	else if(stage == GRENADE_READY && I.tool_behaviour == TOOL_WIRECUTTER && !active)
 		stage_change(GRENADE_WIRED)
 		to_chat(user, SPAN_NOTICE("You unlock the [initial(name)] assembly."))
@@ -116,8 +98,6 @@
 			beakers = list()
 			to_chat(user, SPAN_NOTICE("You open the [initial(name)] assembly and remove the payload."))
 			return
-		wires.detach_assembly(wires.get_wire(1))
-		new /obj/item/stack/cable_coil(get_turf(src),1)
 		stage_change(GRENADE_EMPTY)
 		to_chat(user, SPAN_NOTICE("You remove the activation mechanism from the [initial(name)] assembly."))
 	else
@@ -139,11 +119,6 @@
 		desc = initial(desc)
 		icon_state = "[initial(icon_state)]_locked"
 
-/obj/item/grenade/chem_grenade/on_found(mob/finder)
-	var/obj/item/assembly/A = wires.get_attached(wires.get_wire(1))
-	if(A)
-		A.on_found(finder)
-
 /obj/item/grenade/chem_grenade/log_grenade(mob/user, turf/T)
 	var/reagent_string = ""
 	var/beaker_number = 1
@@ -151,10 +126,7 @@
 		if(!exploded_beaker.reagents)
 			continue
 		reagent_string += " ([exploded_beaker.name] [beaker_number++] : " + pretty_string_from_reagent_list(exploded_beaker.reagents.reagent_list) + ");"
-	if(landminemode)
-		log_bomber(user, "activated a proxy", src, "containing:[reagent_string]")
-	else
-		log_bomber(user, "primed a", src, "containing:[reagent_string]")
+	log_bomber(user, "primed a", src, "containing:[reagent_string]")
 
 /obj/item/grenade/chem_grenade/arm_grenade(mob/user, delayoverride, msg = TRUE, volume = 60)
 	var/turf/T = get_turf(src)
@@ -162,15 +134,9 @@
 	if(user)
 		add_fingerprint(user)
 		if(msg)
-			if(landminemode)
-				to_chat(user, SPAN_WARNING("You prime [src], activating its proximity sensor."))
-			else
-				to_chat(user, SPAN_WARNING("You prime [src]! [DisplayTimeText(det_time)]!"))
+			to_chat(user, SPAN_WARNING("You prime [src]! [DisplayTimeText(det_time)]!"))
 	playsound(src, 'sound/weapons/armbomb.ogg', volume, TRUE)
 	icon_state = initial(icon_state) + "_active"
-	if(landminemode)
-		landminemode.activate()
-		return
 	active = TRUE
 	addtimer(CALLBACK(src, .proc/detonate), isnull(delayoverride)? det_time : delayoverride)
 

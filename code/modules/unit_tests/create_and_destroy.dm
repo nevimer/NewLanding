@@ -11,12 +11,6 @@
 		/mob/living/carbon,
 		//Nother template type, doesn't like being created with no seed
 		/obj/item/food/grown,
-		//And another
-		/obj/item/slimecross/recurring,
-		//This should be obvious
-		/obj/machinery/doomsday_device,
-		//Template type
-		/obj/effect/mob_spawn,
 		//Say it with me now, type template
 		/obj/effect/mapping_helpers/component_injector,
 		//template type
@@ -31,16 +25,10 @@
 		/obj/structure/projected_forcefield,
 		//Deepfrying logic manages this
 		/obj/item/food/deepfryholder,
-		//Managed by aux contruction console
-		/mob/camera/ai_eye/remote/base_construction,
 	)
 	//This turf existing is an error in and of itself
 	ignore += typesof(/turf/baseturf_skipover)
 	ignore += typesof(/turf/baseturf_bottom)
-	//This demands a borg, so we'll let if off easy
-	ignore += typesof(/obj/item/modular_computer/tablet/integrated)
-	//This one demands a computer, ditto
-	ignore += typesof(/obj/item/modular_computer/processor)
 	//Needs special input, let's be nice
 	ignore += typesof(/obj/effect/abstract/proximity_checker)
 	//Very finiky, blacklisting to make things easier
@@ -60,50 +48,24 @@
 	//We don't have a pod
 	ignore += typesof(/obj/effect/pod_landingzone_effect)
 	ignore += typesof(/obj/effect/pod_landingzone)
-	//It's a trapdoor to nowhere
-	ignore += typesof(/obj/effect/mapping_helpers/trapdoor_placer)
 	//There's no shapeshift to hold
 	ignore += typesof(/obj/shapeshift_holder)
 	//No tauma to pass in
 	ignore += typesof(/mob/camera/imaginary_friend)
-	//No pod to gondola
-	ignore += typesof(/mob/living/simple_animal/pet/gondola/gondolapod)
-	//No heart to give
-	ignore += typesof(/obj/structure/ethereal_crystal)
-	//No linked console
-	ignore += typesof(/mob/camera/ai_eye/remote/base_construction)
-	//See above
-	ignore += typesof(/mob/camera/ai_eye/remote/shuttle_docker)
-	//Hangs a ref post invoke async, which we don't support. Could put a qdeleted check but it feels hacky
-	ignore += typesof(/obj/effect/anomaly/grav/high)
-	//See above
-	ignore += typesof(/obj/effect/timestop)
-	//this boi spawns turf changing stuff, and it stacks and causes pain. Let's just not
-	ignore += typesof(/obj/effect/sliding_puzzle)
-	//Stacks baseturfs, can't be tested here
-	ignore += typesof(/obj/effect/temp_visual/lava_warning)
 	//Our system doesn't support it without warning spam from unregister calls on things that never registered
 	ignore += typesof(/obj/docking_port)
 	//Asks for a shuttle that may not exist, let's leave it alone
 	ignore += typesof(/obj/item/pinpointer/shuttle)
-	//This spawns beams as a part of init, which can sleep past an async proc. This hangs a ref, and fucks us. It's only a problem here because the beam sleeps with CHECK_TICK
-	ignore += typesof(/obj/structure/alien/resin/flower_bud)
 	//Leads to errors as a consequence of the logic behind moving back to a tile that's moving you somewhere else
 	ignore += typesof(/obj/effect/mapping_helpers/component_injector/areabound)
 	//Expects a mob to holderize, we have nothing to give
 	ignore += typesof(/obj/item/clothing/head/mob_holder)
-	//Those require connections, and work fine
-	ignore += typesof(/obj/effect/mapping_helpers/smart_pipe)
-	//Those expect to be handled by the delivery system
-	ignore += typesof(/obj/item/delivery_cargo)
 	//Mold structures expect to be managed by a controller
 	ignore += typesof(/obj/structure/mold)
 	//Screen objects have all sorts of dependencies
 	ignore += typesof(/atom/movable/screen)
 	//Plane master controllers expect to be managed by huds
 	ignore += typesof(/atom/movable/plane_master_controller)
-	//Magic hands from the cult are managed by their spells
-	ignore += typesof(/obj/item/melee/blood_magic)
 	//Spews warnings about not causing a change as there is no wall
 	ignore += typesof(/obj/effect/mapping_helpers/paint_wall)
 

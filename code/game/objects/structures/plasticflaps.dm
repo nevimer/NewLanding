@@ -89,9 +89,6 @@
 		if(C.move_delay)
 			return FALSE
 
-	if(ismecha(A))
-		return FALSE
-
 	else if(isliving(A)) // You Shall Not Pass!
 		var/mob/living/M = A
 

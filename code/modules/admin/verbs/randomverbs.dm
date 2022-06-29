@@ -45,42 +45,6 @@
 	admin_ticket_log(M, msg)
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Subtle Message") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/cmd_admin_headset_message(mob/M in GLOB.mob_list)
-	set category = "Admin.Events"
-	set name = "Headset Message"
-
-	admin_headset_message(M)
-
-/client/proc/admin_headset_message(mob/M in GLOB.mob_list, sender = null)
-	var/mob/living/carbon/human/H = M
-
-	if(!check_rights(R_ADMIN))
-		return
-
-	if(!istype(H))
-		to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human", confidential = TRUE)
-		return
-	if(!istype(H.ears, /obj/item/radio/headset))
-		to_chat(usr, "The person you are trying to contact is not wearing a headset.", confidential = TRUE)
-		return
-
-	if (!sender)
-		sender = input("Who is the message from?", "Sender") as null|anything in list(RADIO_CHANNEL_CENTCOM,RADIO_CHANNEL_SYNDICATE)
-		if(!sender)
-			return
-
-	message_admins("[key_name_admin(src)] has started answering [key_name_admin(H)]'s [sender] request.")
-	var/input = input("Please enter a message to reply to [key_name(H)] via their headset.","Outgoing message from [sender]", "") as text|null
-	if(!input)
-		message_admins("[key_name_admin(src)] decided not to answer [key_name_admin(H)]'s [sender] request.")
-		return
-
-	log_directed_talk(mob, H, input, LOG_ADMIN, "reply")
-	message_admins("[key_name_admin(src)] replied to [key_name_admin(H)]'s [sender] message with: \"[input]\"")
-	to_chat(H, SPAN_HEAR("You hear something crackle in your ears for a moment before a voice speaks. \"Please stand by for a message from [sender == "Syndicate" ? "your benefactor" : "Central Command"]. Message as follows[sender == "Syndicate" ? ", agent." : ":"] <b>[input].</b> Message ends.\""), confidential = TRUE)
-
-	SSblackbox.record_feedback("tally", "admin_verb", 1, "Headset Message") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /client/proc/cmd_admin_world_narrate()
 	set category = "Admin.Events"
 	set name = "Global Narrate"
@@ -505,100 +469,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	SSblackbox.record_feedback("nested tally", "admin_toggle", 1, list("Change View Range", "[view]")) //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/admin_call_shuttle()
-	set category = "Admin.Events"
-	set name = "Call Shuttle"
-
-	if(EMERGENCY_AT_LEAST_DOCKED)
-		return
-
-	if(!check_rights(R_ADMIN))
-		return
-
-	var/confirm = tgui_alert(usr, "You sure?", "Confirm", list("Yes", "Yes (No Recall)", "No"))
-	switch(confirm)
-		if(null, "No")
-			return
-		if("Yes (No Recall)")
-			SSshuttle.admin_emergency_no_recall = TRUE
-			SSshuttle.emergency.mode = SHUTTLE_IDLE
-
-	SSshuttle.emergency.request()
-	SSblackbox.record_feedback("tally", "admin_verb", 1, "Call Shuttle") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
-	message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] admin-called the emergency shuttle[confirm == "Yes (No Recall)" ? " (non-recallable)" : ""]."))
-	return
-
-/client/proc/admin_cancel_shuttle()
-	set category = "Admin.Events"
-	set name = "Cancel Shuttle"
-	if(!check_rights(0))
-		return
-	if(tgui_alert(usr, "You sure?", "Confirm", list("Yes", "No")) != "Yes")
-		return
-
-	if(SSshuttle.admin_emergency_no_recall)
-		SSshuttle.admin_emergency_no_recall = FALSE
-
-	if(EMERGENCY_AT_LEAST_DOCKED)
-		return
-
-	SSshuttle.emergency.cancel()
-	SSblackbox.record_feedback("tally", "admin_verb", 1, "Cancel Shuttle") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] admin-recalled the emergency shuttle.")
-	message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] admin-recalled the emergency shuttle."))
-
-	return
-
-/client/proc/admin_disable_shuttle()
-	set category = "Admin.Events"
-	set name = "Disable Shuttle"
-
-	if(!check_rights(R_ADMIN))
-		return
-
-	if(SSshuttle.emergency.mode == SHUTTLE_DISABLED)
-		to_chat(usr, SPAN_WARNING("Error, shuttle is already disabled."))
-		return
-
-	if(tgui_alert(usr, "You sure?", "Confirm", list("Yes", "No")) != "Yes")
-		return
-
-	message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] disabled the shuttle."))
-
-	SSshuttle.last_mode = SSshuttle.emergency.mode
-	SSshuttle.last_call_time = SSshuttle.emergency.timeLeft(1)
-	SSshuttle.admin_emergency_no_recall = TRUE
-	SSshuttle.emergency.setTimer(0)
-	SSshuttle.emergency.mode = SHUTTLE_DISABLED
-	priority_announce("Warning: Emergency Shuttle uplink failure, shuttle disabled until further notice.", "Emergency Shuttle Uplink Alert", 'sound/misc/announce_dig.ogg')
-
-/client/proc/admin_enable_shuttle()
-	set category = "Admin.Events"
-	set name = "Enable Shuttle"
-
-	if(!check_rights(R_ADMIN))
-		return
-
-	if(SSshuttle.emergency.mode != SHUTTLE_DISABLED)
-		to_chat(usr, SPAN_WARNING("Error, shuttle not disabled."))
-		return
-
-	if(tgui_alert(usr, "You sure?", "Confirm", list("Yes", "No")) != "Yes")
-		return
-
-	message_admins(SPAN_ADMINNOTICE("[key_name_admin(usr)] enabled the emergency shuttle."))
-	SSshuttle.admin_emergency_no_recall = FALSE
-	SSshuttle.emergency_no_recall = FALSE
-	if(SSshuttle.last_mode == SHUTTLE_DISABLED) //If everything goes to shit, fix it.
-		SSshuttle.last_mode = SHUTTLE_IDLE
-
-	SSshuttle.emergency.mode = SSshuttle.last_mode
-	if(SSshuttle.last_call_time < 10 SECONDS && SSshuttle.last_mode != SHUTTLE_IDLE)
-		SSshuttle.last_call_time = 10 SECONDS //Make sure no insta departures.
-	SSshuttle.emergency.setTimer(SSshuttle.last_call_time)
-	priority_announce("Warning: Emergency Shuttle uplink reestablished, shuttle enabled.", "Emergency Shuttle Uplink Alert", 'sound/misc/announce_dig.ogg')
-
 /client/proc/admin_change_sec_level()
 	set category = "Admin.Events"
 	set name = "Set Security Level"
@@ -838,19 +708,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	message_admins(msg)
 	admin_ticket_log(whom, msg)
 	log_admin("[key_name(src)] punished [key_name(whom)] with [punishment].")
-
-/client/proc/trigger_centcom_recall()
-	if(!check_rights(R_ADMIN))
-		return
-	var/message = pick(GLOB.admiral_messages)
-	message = input("Enter message from the on-call admiral to be put in the recall report.", "Admiral Message", message) as text|null
-
-	if(!message)
-		return
-
-	message_admins("[key_name_admin(usr)] triggered a CentCom recall, with the admiral message of: [message]")
-	log_game("[key_name(usr)] triggered a CentCom recall, with the message of: [message]")
-	SSshuttle.centcom_recall(SSshuttle.emergency.timer, message)
 
 /client/proc/cmd_admin_check_player_exp() //Allows admins to determine who the newer players are.
 	set category = "Admin"

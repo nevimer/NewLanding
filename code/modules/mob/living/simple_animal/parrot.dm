@@ -81,9 +81,6 @@
 	var/speech_shuffle_rate = 20
 	var/list/available_channels = list()
 
-	//Headset for Poly to yell at engineers :)
-	var/obj/item/radio/headset/ears = null
-
 	//The thing the parrot is currently interested in. This gets used for items the parrot wants to pick up, mobs it wants to steal from,
 	//mobs it wants to attack or mobs that have attacked it
 	var/atom/movable/parrot_interest = null
@@ -91,14 +88,8 @@
 	//Parrots will generally sit on their perch unless something catches their eye.
 	//These vars store their preffered perch and if they dont have one, what they can use as a perch
 	var/obj/parrot_perch = null
-	var/obj/desired_perches = list(/obj/structure/frame/computer,
-		/obj/structure/displaycase,
+	var/obj/desired_perches = list(
 		/obj/structure/filingcabinet,
-		/obj/machinery/teleport,
-		/obj/machinery/telecomms,
-		/obj/machinery/smartfridge,
-		/obj/machinery/computer,
-		/obj/machinery/suit_storage_unit,
 	)
 
 	//Parrots are kleptomaniacs. This variable ... stores the item a parrot is holding.
@@ -107,14 +98,6 @@
 
 /mob/living/simple_animal/parrot/Initialize()
 	. = ..()
-	if(!ears)
-		var/headset = pick(/obj/item/radio/headset/headset_sec, \
-						/obj/item/radio/headset/headset_eng, \
-						/obj/item/radio/headset/headset_med, \
-						/obj/item/radio/headset/headset_sci, \
-						/obj/item/radio/headset/headset_cargo)
-		ears = new headset(src)
-
 	parrot_sleep_dur = parrot_sleep_max //In case someone decides to change the max without changing the duration var
 
 	add_verb(src, list(/mob/living/simple_animal/parrot/proc/steal_from_ground, \
@@ -124,7 +107,6 @@
 			  /mob/living/simple_animal/parrot/proc/toggle_mode,
 			  /mob/living/simple_animal/parrot/proc/perch_mob_player))
 
-	AddElement(/datum/element/strippable, GLOB.strippable_parrot_items)
 	AddElement(/datum/element/simple_flying)
 
 /mob/living/simple_animal/parrot/examine(mob/user)
@@ -162,117 +144,6 @@
 			speech_buffer |= html_decode(raw_message)
 	if(speaker == src && !client) //If a parrot squawks in the woods and no one is around to hear it, does it make a sound? This code says yes!
 		return message
-
-/mob/living/simple_animal/parrot/radio(message, list/message_mods = list(), list/spans, language) //literally copied from human/radio(), but there's no other way to do this. at least it's better than it used to be.
-	. = ..()
-	if(.)
-		return
-
-	if(message_mods[MODE_HEADSET])
-		if(ears)
-			ears.talk_into(src, message, , spans, language, message_mods)
-		return ITALICS | REDUCE_RANGE
-	else if(message_mods[RADIO_EXTENSION] == MODE_DEPARTMENT)
-		if(ears)
-			ears.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
-		return ITALICS | REDUCE_RANGE
-	else if(message_mods[RADIO_EXTENSION] in GLOB.radiochannels)
-		if(ears)
-			ears.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
-			return ITALICS | REDUCE_RANGE
-
-	return FALSE
-
-GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
-	/datum/strippable_item/parrot_headset,
-)))
-
-/datum/strippable_item/parrot_headset
-	key = STRIPPABLE_ITEM_PARROT_HEADSET
-
-/datum/strippable_item/parrot_headset/get_item(atom/source)
-	var/mob/living/simple_animal/parrot/parrot_source = source
-	return istype(parrot_source) ? parrot_source.ears : null
-
-/datum/strippable_item/parrot_headset/try_equip(atom/source, obj/item/equipping, mob/user)
-	. = ..()
-	if (!.)
-		return FALSE
-
-	if (!istype(equipping, /obj/item/radio/headset))
-		to_chat(user, SPAN_WARNING("[equipping] won't fit!"))
-		return FALSE
-
-	return TRUE
-
-// There is no delay for putting a headset on a parrot.
-/datum/strippable_item/parrot_headset/start_equip(atom/source, obj/item/equipping, mob/user)
-	return TRUE
-
-/datum/strippable_item/parrot_headset/finish_equip(atom/source, obj/item/equipping, mob/user)
-	var/obj/item/radio/headset/radio = equipping
-	if (!istype(radio))
-		return
-
-	var/mob/living/simple_animal/parrot/parrot_source = source
-	if (!istype(parrot_source))
-		return
-
-	if (!user.transferItemToLoc(radio, source))
-		return
-
-	parrot_source.ears = radio
-
-	to_chat(user, SPAN_NOTICE("You fit [radio] onto [source]."))
-
-	parrot_source.available_channels.Cut()
-
-	for (var/channel in radio.channels)
-		var/channel_to_add
-
-		switch (channel)
-			if (RADIO_CHANNEL_ENGINEERING)
-				channel_to_add = RADIO_TOKEN_ENGINEERING
-			if (RADIO_CHANNEL_COMMAND)
-				channel_to_add = RADIO_TOKEN_COMMAND
-			if (RADIO_CHANNEL_SECURITY)
-				channel_to_add = RADIO_TOKEN_SECURITY
-			if (RADIO_CHANNEL_SCIENCE)
-				channel_to_add = RADIO_TOKEN_SCIENCE
-			if (RADIO_CHANNEL_MEDICAL)
-				channel_to_add = RADIO_TOKEN_MEDICAL
-			if (RADIO_CHANNEL_SUPPLY)
-				channel_to_add = RADIO_TOKEN_SUPPLY
-			if (RADIO_CHANNEL_SERVICE)
-				channel_to_add = RADIO_TOKEN_SERVICE
-
-		if (channel_to_add)
-			parrot_source.available_channels += channel_to_add
-
-	if (radio.translate_binary)
-		parrot_source.available_channels.Add(MODE_TOKEN_BINARY)
-
-/datum/strippable_item/parrot_headset/start_unequip(atom/source, mob/user)
-	. = ..()
-	if (!.)
-		return FALSE
-
-	var/mob/living/simple_animal/parrot/parrot_source = source
-	if (!istype(parrot_source))
-		return
-
-	if (!parrot_source.stat)
-		parrot_source.say("[parrot_source.available_channels.len ? "[pick(parrot_source.available_channels)] " : null]BAWWWWWK LEAVE THE HEADSET BAWKKKKK!")
-
-	return TRUE
-
-/datum/strippable_item/parrot_headset/finish_unequip(atom/source, mob/user)
-	var/mob/living/simple_animal/parrot/parrot_source = source
-	if (!istype(parrot_source))
-		return
-
-	parrot_source.ears.forceMove(parrot_source.drop_location())
-	parrot_source.ears = null
 
 /*
  * Attack responces
@@ -418,26 +289,8 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 			if(speak.len)
 				var/list/newspeak = list()
 
-				if(available_channels.len && src.ears)
-					for(var/possible_phrase in speak)
-
-						//50/50 chance to not use the radio at all
-						var/useradio = 0
-						if(prob(50))
-							useradio = 1
-
-						if((possible_phrase[1] in GLOB.department_radio_prefixes) && (copytext_char(possible_phrase, 2, 3) in GLOB.department_radio_keys))
-							possible_phrase = "[useradio?pick(available_channels):""][copytext_char(possible_phrase, 3)]" //crop out the channel prefix
-						else
-							possible_phrase = "[useradio?pick(available_channels):""][possible_phrase]"
-
-						newspeak.Add(possible_phrase)
-
-				else //If we have no headset or channels to use, dont try to use any!
-					for(var/possible_phrase in speak)
-						if((possible_phrase[1] in GLOB.department_radio_prefixes) && (copytext_char(possible_phrase, 2, 3) in GLOB.department_radio_keys))
-							possible_phrase = copytext_char(possible_phrase, 3) //crop out the channel prefix
-						newspeak.Add(possible_phrase)
+				for(var/possible_phrase in speak)
+					newspeak.Add(possible_phrase)
 				speak = newspeak
 
 			//Search for item to steal
@@ -882,8 +735,6 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 	var/longest_deathstreak = 0
 
 /mob/living/simple_animal/parrot/poly/Initialize()
-	ears = new /obj/item/radio/headset/headset_eng(src)
-	available_channels = list(":e")
 	Read_Memory()
 	if(rounds_survived == longest_survival)
 		speak += pick("...[longest_survival].", "The things I've seen!", "I have lived many lives!", "What are you before me?")

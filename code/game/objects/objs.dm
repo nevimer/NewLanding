@@ -42,9 +42,6 @@
 	/// Map tag for something.  Tired of it being used on snowflake items.  Moved here for some semblance of a standard.
 	/// Next pr after the network fix will have me refactor door interactions, so help me god.
 	var/id_tag = null
-	/// Network id. If set it can be found by either its hardware id or by the id tag if thats set.  It can also be
-	/// broadcasted to as long as the other guys network is on the same branch or above.
-	var/network_id = null
 
 /obj/vv_edit_var(vname, vval)
 	if(vname == NAMEOF(src, obj_flags))
@@ -76,23 +73,8 @@
 		var/turf/T = loc
 		T.add_blueprints_preround(src)
 
-	if(network_id)
-		var/area/A = get_area(src)
-		if(A)
-			if(!A.network_root_id)
-				log_telecomms("Area '[A.name]([REF(A)])' has no network network_root_id, force assigning in object [src]([REF(src)])")
-				SSnetworks.lookup_area_root_id(A)
-			network_id = NETWORK_NAME_COMBINE(A.network_root_id, network_id) // I regret nothing!!
-		else
-			log_telecomms("Created [src]([REF(src)] in nullspace, assuming network to be in station")
-			network_id = NETWORK_NAME_COMBINE(STATION_NETWORK_ROOT, network_id) // I regret nothing!!
-		AddComponent(/datum/component/ntnet_interface, network_id, id_tag)
-		/// Needs to run before as ComponentInitialize runs after this statement...why do we have ComponentInitialize again?
-
 
 /obj/Destroy(force=FALSE)
-	if(!ismachinery(src))
-		STOP_PROCESSING(SSobj, src) // TODO: Have a processing bitflag to reduce on unnecessary loops through the processing lists
 	SStgui.close_uis(src)
 	. = ..()
 
@@ -103,37 +85,8 @@
 		visible_message(SPAN_DANGER("[src] shatters into a million pieces!"))
 		qdel(src)
 
-
-/obj/assume_air(datum/gas_mixture/giver)
-	if(loc)
-		return loc.assume_air(giver)
-	else
-		return null
-
-/obj/remove_air(amount)
-	if(loc)
-		return loc.remove_air(amount)
-	else
-		return null
-
-/obj/return_air()
-	if(loc)
-		return loc.return_air()
-	else
-		return null
-
 /obj/proc/handle_internal_lifeform(mob/lifeform_inside_me, breath_request)
-	//Return: (NONSTANDARD)
-	// null if object handles breathing logic for lifeform
-	// datum/air_group to tell lifeform to process using that breath return
-	//DEFAULT: Take air from turf to give to have mob process
-
-	if(breath_request>0)
-		var/datum/gas_mixture/environment = return_air()
-		var/breath_percentage = BREATH_VOLUME / environment.return_volume()
-		return remove_air(environment.total_moles() * breath_percentage)
-	else
-		return null
+	return null
 
 /obj/proc/updateUsrDialog()
 	if((obj_flags & IN_USE) && !(obj_flags & USES_TGUI))
@@ -203,13 +156,6 @@
 	var/mob/M = src.loc
 	if(istype(M) && M.client && M.machine == src)
 		src.attack_self(M)
-
-/obj/singularity_pull(S, current_size)
-	..()
-	if(move_resist == INFINITY)
-		return
-	if(!anchored || current_size >= STAGE_FIVE)
-		step_towards(src,S)
 
 /obj/get_dumping_location(datum/component/storage/source,mob/user)
 	return get_turf(src)
@@ -362,11 +308,6 @@
 		return FALSE
 	return TRUE
 
-/obj/analyzer_act(mob/living/user, obj/item/I)
-	if(atmosanalyzer_scan(user, src))
-		return TRUE
-	return ..()
-
 /obj/proc/plunger_act(obj/item/plunger/P, mob/living/user, reinforced)
 	return
 
@@ -394,3 +335,42 @@
 	for(var/reagent in reagents)
 		var/datum/reagent/R = reagent
 		. |= R.expose_obj(src, reagents[R])
+
+/obj/proc/can_be_unfasten_wrench(mob/user, silent) //if we can unwrench this object; returns SUCCESSFUL_UNFASTEN and FAILED_UNFASTEN, which are both TRUE, or CANT_UNFASTEN, which isn't.
+	if(!(isfloorturf(loc) || istype(loc, /turf/open/indestructible)) && !anchored)
+		to_chat(user, SPAN_WARNING("[src] needs to be on the floor to be secured!"))
+		return FAILED_UNFASTEN
+	return SUCCESSFUL_UNFASTEN
+
+/obj/proc/default_unfasten_wrench(mob/user, obj/item/I, time = 20) //try to unwrench an object in a WONDERFUL DYNAMIC WAY
+	if(!(flags_1 & NODECONSTRUCT_1) && I.tool_behaviour == TOOL_WRENCH)
+		var/turf/ground = get_turf(src)
+		if(!anchored && ground.is_blocked_turf(exclude_mobs = TRUE, source_atom = src))
+			to_chat(user, SPAN_NOTICE("You fail to secure [src]."))
+			return CANT_UNFASTEN
+		var/can_be_unfasten = can_be_unfasten_wrench(user)
+		if(!can_be_unfasten || can_be_unfasten == FAILED_UNFASTEN)
+			return can_be_unfasten
+		if(time)
+			to_chat(user, SPAN_NOTICE("You begin [anchored ? "un" : ""]securing [src]..."))
+		I.play_tool_sound(src, 50)
+		var/prev_anchored = anchored
+		//as long as we're the same anchored state and we're either on a floor or are anchored, toggle our anchored state
+		if(I.use_tool(src, user, time, extra_checks = CALLBACK(src, .proc/unfasten_wrench_check, prev_anchored, user)))
+			if(!anchored && ground.is_blocked_turf(exclude_mobs = TRUE, source_atom = src))
+				to_chat(user, SPAN_NOTICE("You fail to secure [src]."))
+				return CANT_UNFASTEN
+			to_chat(user, SPAN_NOTICE("You [anchored ? "un" : ""]secure [src]."))
+			set_anchored(!anchored)
+			playsound(src, 'sound/items/deconstruct.ogg', 50, TRUE)
+			SEND_SIGNAL(src, COMSIG_OBJ_DEFAULT_UNFASTEN_WRENCH, anchored)
+			return SUCCESSFUL_UNFASTEN
+		return FAILED_UNFASTEN
+	return CANT_UNFASTEN
+
+/obj/proc/unfasten_wrench_check(prev_anchored, mob/user) //for the do_after, this checks if unfastening conditions are still valid
+	if(anchored != prev_anchored)
+		return FALSE
+	if(can_be_unfasten_wrench(user, TRUE) != SUCCESSFUL_UNFASTEN) //if we aren't explicitly successful, cancel the fuck out
+		return FALSE
+	return TRUE

@@ -53,21 +53,15 @@
 	var/msg = copytext_char(sanitize(text), 1, MAX_MESSAGE_LEN)
 	msg = SPAN_ADMINNOTICE("<b><font color=orange>CENTCOM:</font>[ADMIN_FULLMONTY(sender)] [ADMIN_CENTCOM_REPLY(sender)]:</b> [msg]")
 	to_chat(GLOB.admins, msg, confidential = TRUE)
-	for(var/obj/machinery/computer/communications/console in GLOB.machines)
-		console.override_cooldown()
 
 /// Used by communications consoles to message the Syndicate
 /proc/message_syndicate(text, mob/sender)
 	var/msg = copytext_char(sanitize(text), 1, MAX_MESSAGE_LEN)
 	msg = SPAN_ADMINNOTICE("<b><font color=crimson>SYNDICATE:</font>[ADMIN_FULLMONTY(sender)] [ADMIN_SYNDICATE_REPLY(sender)]:</b> [msg]")
 	to_chat(GLOB.admins, msg, confidential = TRUE)
-	for(var/obj/machinery/computer/communications/console in GLOB.machines)
-		console.override_cooldown()
 
 /// Used by communications consoles to request the nuclear launch codes
 /proc/nuke_request(text, mob/sender)
 	var/msg = copytext_char(sanitize(text), 1, MAX_MESSAGE_LEN)
 	msg = SPAN_ADMINNOTICE("<b><font color=orange>NUKE CODE REQUEST:</font>[ADMIN_FULLMONTY(sender)] [ADMIN_CENTCOM_REPLY(sender)] [ADMIN_SET_SD_CODE]:</b> [msg]")
 	to_chat(GLOB.admins, msg, confidential = TRUE)
-	for(var/obj/machinery/computer/communications/console in GLOB.machines)
-		console.override_cooldown()

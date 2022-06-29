@@ -74,9 +74,6 @@
 	to_be_destroyed = FALSE
 	return src
 
-/turf/open/indestructible/singularity_act()
-	return
-
 /turf/open/indestructible/TerraformTurf(path, new_baseturf, flags, defer_change = FALSE, ignore_air = FALSE)
 	return
 
@@ -117,7 +114,6 @@
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "necro1"
 	baseturfs = /turf/open/indestructible/necropolis
-	initial_gas_mix = PLANETARY_ATMOS
 	footstep = FOOTSTEP_LAVA
 	barefootstep = FOOTSTEP_LAVA
 	clawfootstep = FOOTSTEP_LAVA
@@ -129,24 +125,14 @@
 	if(prob(12))
 		icon_state = "necro[rand(2,3)]"
 
-/turf/open/indestructible/necropolis/air
-	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
-
 /turf/open/indestructible/boss //you put stone tiles on this and use it as a base
 	name = "necropolis floor"
 	icon = 'icons/turf/boss_floors.dmi'
 	icon_state = "boss"
 	baseturfs = /turf/open/indestructible/boss
-	planetary_atmos = TRUE
-	initial_gas_mix = PLANETARY_ATMOS
-
-/turf/open/indestructible/boss/air
-	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
 
 /turf/open/indestructible/hierophant
 	icon = 'icons/turf/floors/hierophant_floor.dmi'
-	planetary_atmos = TRUE
-	initial_gas_mix = PLANETARY_ATMOS
 	baseturfs = /turf/open/indestructible/hierophant
 	smoothing_flags = SMOOTH_CORNERS
 	tiled_dirt = FALSE
@@ -180,30 +166,6 @@
 	icon_state = "bluespace"
 	blocks_air = TRUE
 	baseturfs = /turf/open/indestructible/airblock
-
-/turf/open/Initalize_Atmos(times_fired)
-	excited = FALSE
-	update_visuals()
-
-	current_cycle = times_fired
-	ImmediateCalculateAdjacentTurfs()
-	for(var/i in atmos_adjacent_turfs)
-		var/turf/open/enemy_tile = i
-		var/datum/gas_mixture/enemy_air = enemy_tile.return_air()
-		if(!excited && air.compare(enemy_air))
-			//testing("Active turf found. Return value of compare(): [is_active]")
-			excited = TRUE
-			SSair.active_turfs += src
-
-/turf/open/GetHeatCapacity()
-	. = air.heat_capacity()
-
-/turf/open/GetTemperature()
-	. = air.temperature
-
-/turf/open/TakeTemperature(temp)
-	air.temperature += temp
-	air_update_turf(FALSE, FALSE)
 
 /turf/open/proc/freon_gas_act()
 	for(var/obj/I in contents)
@@ -283,31 +245,6 @@
 
 /turf/open/proc/ClearWet()//Nuclear option of immediately removing slipperyness from the tile instead of the natural drying over time
 	qdel(GetComponent(/datum/component/wet_floor))
-
-/turf/open/rad_act(strength)
-	. = ..()
-	var/gas_change = FALSE
-	var/list/cached_gases = air.gases
-	if(cached_gases[/datum/gas/oxygen] && cached_gases[/datum/gas/carbon_dioxide] && air.temperature <= PLUOXIUM_TEMP_CAP)
-		gas_change = TRUE
-		var/pulse_strength = min(strength, cached_gases[/datum/gas/oxygen][MOLES] * 1000, cached_gases[/datum/gas/carbon_dioxide][MOLES] * 2000)
-		cached_gases[/datum/gas/carbon_dioxide][MOLES] -= pulse_strength / 2000
-		cached_gases[/datum/gas/oxygen][MOLES] -= pulse_strength / 1000
-		ASSERT_GAS(/datum/gas/pluoxium, air)
-		cached_gases[/datum/gas/pluoxium][MOLES] += pulse_strength / 4000
-		strength -= pulse_strength
-
-	if(cached_gases[/datum/gas/hydrogen])
-		gas_change = TRUE
-		var/pulse_strength = min(strength, cached_gases[/datum/gas/hydrogen][MOLES] * 1000)
-		cached_gases[/datum/gas/hydrogen][MOLES] -= pulse_strength / 1000
-		ASSERT_GAS(/datum/gas/tritium, air)
-		cached_gases[/datum/gas/tritium][MOLES] += pulse_strength / 1000
-		strength -= pulse_strength
-
-	if(gas_change)
-		air.garbage_collect()
-		air_update_turf(FALSE, FALSE)
 
 /turf/open/IgniteTurf(power)
 	if(turf_fire)

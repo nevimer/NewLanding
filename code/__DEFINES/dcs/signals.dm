@@ -152,12 +152,8 @@
 #define COMSIG_ATOM_USED_IN_CRAFT "atom_used_in_craft"
 ///from base of atom/acid_act(): (acidpwr, acid_volume)
 #define COMSIG_ATOM_ACID_ACT "atom_acid_act"
-///from base of atom/emag_act(): (/mob/user)
-#define COMSIG_ATOM_EMAG_ACT "atom_emag_act"
 ///from base of atom/rad_act(intensity)
 #define COMSIG_ATOM_RAD_ACT "atom_rad_act"
-///from base of atom/rcd_act(): (/mob, /obj/item/construction/rcd, passed_mode)
-#define COMSIG_ATOM_RCD_ACT "atom_rcd_act"
 ///from base of atom/singularity_pull(): (/datum/component/singularity, current_size)
 #define COMSIG_ATOM_SING_PULL "atom_sing_pull"
 ///from obj/machinery/bsa/full/proc/fire(): ()

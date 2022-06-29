@@ -42,10 +42,6 @@
 		"spawn" = choice,
 	))
 	var/msg = "<span class=danger>After making your selection, you notice a strange target on the ground. It might be best to step back!</span>"
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(istype(H.ears, /obj/item/radio/headset))
-			msg = "You hear something crackle in your ears for a moment before a voice speaks.  \"Please stand by for a message from Central Command.  Message as follows: [SPAN_BOLD("Item request received. Your package is inbound, please stand back from the landing site.")] Message ends.\""
 	to_chat(M, msg)
 
 /obj/item/choice_beacon/ingredient
@@ -179,7 +175,6 @@
 		new /obj/item/food/grown/oat(src)
 	new /obj/item/food/grown/wheat(src)
 	new /obj/item/food/grown/cocoapod(src)
-	new /obj/item/reagent_containers/honeycomb(src)
 	new /obj/item/seeds/poppy(src)
 
 /obj/item/storage/box/ingredients/carnivore
@@ -244,16 +239,6 @@
 	new /obj/item/clothing/shoes/workboots/mining(src)
 	new /obj/item/melee/curator_whip(src)
 
-/obj/item/storage/box/hero/astronaut
-	name = "First Man on the Moon - 1960's."
-	desc = "One small step for a man, one giant leap for mankind. Relive the beginnings of space exploration with this fully functional set of vintage EVA equipment."
-
-/obj/item/storage/box/hero/astronaut/PopulateContents()
-	new /obj/item/clothing/suit/space/nasavoid(src)
-	new /obj/item/clothing/head/helmet/space/nasavoid(src)
-	new /obj/item/tank/internals/oxygen(src)
-	new /obj/item/gps(src)
-
 /obj/item/storage/box/hero/scottish
 	name = "Braveheart, the Scottish rebel - 1300's."
 	desc = "Seemingly a legendary figure in the battle for Scottish independence, this historical figure is closely associated with blue facepaint, big swords, strange man skirts, and his ever enduring catchphrase: 'FREEDOM!!'"
@@ -269,7 +254,6 @@
 	desc = "Despite his nickname, this wildlife expert was mainly known as a passionate environmentalist and conservationist, often coming in contact with dangerous wildlife to teach about the beauty of nature."
 
 /obj/item/storage/box/hero/carphunter/PopulateContents()
-	new /obj/item/clothing/suit/space/hardsuit/carp/old(src)
 	new /obj/item/clothing/mask/gas/carp(src)
 	new /obj/item/kitchen/knife/hunting(src)
 	new /obj/item/storage/box/papersack/meat(src)
@@ -306,10 +290,6 @@
 	w_class = WEIGHT_CLASS_BULKY
 	attack_verb_continuous = list("skubs")
 	attack_verb_simple = list("skub")
-
-/obj/item/skub/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/container_item/tank_holder, "holder_skub", FALSE)
 
 /obj/item/skub/suicide_act(mob/living/user)
 	user.visible_message(SPAN_SUICIDE("[user] has declared themself as anti-skub! The skub tears them apart!"))

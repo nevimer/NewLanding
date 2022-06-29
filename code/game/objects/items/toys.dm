@@ -690,7 +690,6 @@
 	icon_state = "deck_nanotrasen_full"
 	w_class = WEIGHT_CLASS_SMALL
 	var/cooldown = 0
-	var/obj/machinery/computer/holodeck/holo = null // Holodeck cards should not be infinite
 	var/list/cards = list()
 
 /obj/item/toy/cards/deck/Initialize()
@@ -722,8 +721,6 @@
 		to_chat(user, SPAN_WARNING("There are no more cards to draw!"))
 		return
 	var/obj/item/toy/cards/singlecard/H = new/obj/item/toy/cards/singlecard(user.loc)
-	if(holo)
-		holo.spawned += H // track them leaving the holodeck
 	choice = cards[1]
 	H.cardname = choice
 	H.parentdeck = src
@@ -1049,13 +1046,6 @@
 		var/timeleft = (cooldown - world.time)
 		to_chat(user, SPAN_ALERT("Nothing happens, and '</span>[round(timeleft/10)]<span class='alert'>' appears on the small display."))
 		sleep(5)
-
-
-/obj/item/toy/nuke/emag_act(mob/user)
-	if (obj_flags & EMAGGED)
-		return
-	to_chat(user, "<span class = 'notice'> You short-circuit \the [src].</span>")
-	obj_flags |= EMAGGED
 /*
  * Fake meteor
  */
@@ -1066,12 +1056,6 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "minimeteor"
 	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/toy/minimeteor/emag_act(mob/user)
-	if (obj_flags & EMAGGED)
-		return
-	to_chat(user, "<span class = 'notice'> You short-circuit whatever electronics exist inside \the [src], if there even are any.</span>")
-	obj_flags |= EMAGGED
 
 /obj/item/toy/minimeteor/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	if (obj_flags & EMAGGED)
@@ -1806,12 +1790,6 @@ GLOBAL_LIST_EMPTY(intento_players)
 
 	START_PROCESSING(SSfastprocess, src)
 	COOLDOWN_START(src, next_icon_reset, TIME_TO_RESET_ICON)
-
-/obj/item/toy/intento/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
-		return
-	obj_flags |= EMAGGED
-	to_chat(user, SPAN_NOTICE("You short-circuit [src], activating the negative feedback loop."))
 
 /obj/item/toy/intento/Destroy()
 	STOP_PROCESSING(SSfastprocess, src)

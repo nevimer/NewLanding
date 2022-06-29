@@ -102,7 +102,6 @@
 	icon_state = "internals"
 	illustration = "emergencytank"
 	var/mask_type = /obj/item/clothing/mask/breath
-	var/internal_type = /obj/item/tank/internals/emergency_oxygen
 	var/medipen_type = /obj/item/reagent_containers/hypospray/medipen
 
 /obj/item/storage/box/survival/PopulateContents()
@@ -110,22 +109,7 @@
 	if(!isnull(medipen_type))
 		new medipen_type(src)
 
-	if(isplasmaman(loc))
-		new /obj/item/tank/internals/plasmaman/belt(src)
-	else if(isvox(loc))
-		new /obj/item/tank/internals/nitrogen/belt/emergency(src)
-	else
-		new /obj/item/tank/internals/emergency_oxygen(src)
-
 	new /obj/item/crowbar(src)
-
-	if(HAS_TRAIT(SSstation, STATION_TRAIT_PREMIUM_INTERNALS))
-		new /obj/item/flashlight/flare(src)
-		new /obj/item/radio/off(src)
-
-/obj/item/storage/box/survival/radio/PopulateContents()
-	..() // we want the survival stuff too.
-	new /obj/item/radio/off(src)
 
 // Mining survival box
 /obj/item/storage/box/survival/mining
@@ -140,28 +124,18 @@
 	name = "extended-capacity survival box"
 	desc = "A box with the bare essentials of ensuring the survival of you and others. This one is labelled to contain an extended-capacity tank."
 	illustration = "extendedtank"
-	internal_type = /obj/item/tank/internals/emergency_oxygen/engi
-
-/obj/item/storage/box/survival/engineer/radio/PopulateContents()
-	..() // we want the regular items too.
-	new /obj/item/radio/off(src)
 
 // Syndie survival box
 /obj/item/storage/box/survival/syndie //why is this its own thing if it's just the engi box with a syndie mask and medipen? // Good question.
 	name = "extended-capacity survival box"
 	desc = "A box with the bare essentials of ensuring the survival of you and others. This one is labelled to contain an extended-capacity tank."
 	mask_type = /obj/item/clothing/mask/gas/syndicate
-	internal_type = /obj/item/tank/internals/emergency_oxygen/engi
 	medipen_type = null
 	illustration = "extendedtank"
 
 // Security survival box
 /obj/item/storage/box/survival/security
 	mask_type = /obj/item/clothing/mask/gas/sechailer
-
-/obj/item/storage/box/survival/security/radio/PopulateContents()
-	..() // we want the regular stuff too
-	new /obj/item/radio/off(src)
 
 // Medical survival box
 /obj/item/storage/box/survival/medical
@@ -288,36 +262,6 @@
 /obj/item/storage/box/stingbangs/PopulateContents()
 	for(var/i in 1 to 5)
 		new /obj/item/grenade/stingbang(src)
-
-/obj/item/storage/box/flashes
-	name = "box of flashbulbs"
-	desc = "<B>WARNING: Flashes can cause serious eye damage, protective eyewear is required.</B>"
-	icon_state = "secbox"
-	illustration = "flash"
-
-/obj/item/storage/box/flashes/PopulateContents()
-	for(var/i in 1 to 6)
-		new /obj/item/assembly/flash/handheld(src)
-
-/obj/item/storage/box/wall_flash
-	name = "wall-mounted flash kit"
-	desc = "This box contains everything necessary to build a wall-mounted flash. <B>WARNING: Flashes can cause serious eye damage, protective eyewear is required.</B>"
-	icon_state = "secbox"
-	illustration = "flash"
-
-/obj/item/storage/box/wall_flash/PopulateContents()
-	var/id = rand(1000, 9999)
-	// FIXME what if this conflicts with an existing one?
-
-	new /obj/item/wallframe/button(src)
-	new /obj/item/electronics/airlock(src)
-	var/obj/item/assembly/control/flasher/remote = new(src)
-	remote.id = id
-	var/obj/item/wallframe/flasher/frame = new(src)
-	frame.id = id
-	new /obj/item/assembly/flash/handheld(src)
-	new /obj/item/screwdriver(src)
-
 
 /obj/item/storage/box/teargas
 	name = "box of tear gas grenades (WARNING)"
@@ -521,24 +465,6 @@
 	for(var/i in 1 to 7)
 		new /obj/item/card/id/advanced(src)
 
-//Some spare PDAs in a box
-/obj/item/storage/box/pdas
-	name = "spare PDAs"
-	desc = "A box of spare PDA microcomputers."
-	illustration = "pda"
-
-/obj/item/storage/box/pdas/PopulateContents()
-	for(var/i in 1 to 4)
-		new /obj/item/pda(src)
-	new /obj/item/cartridge/head(src)
-
-	var/newcart = pick( /obj/item/cartridge/engineering,
-						/obj/item/cartridge/security,
-						/obj/item/cartridge/medical,
-						/obj/item/cartridge/signal/toxins,
-						/obj/item/cartridge/quartermaster)
-	new newcart(src)
-
 /obj/item/storage/box/silver_ids
 	name = "box of spare silver IDs"
 	desc = "Shiny IDs for important people."
@@ -563,17 +489,6 @@
 	new /obj/item/card/id/advanced/prisoner/five(src)
 	new /obj/item/card/id/advanced/prisoner/six(src)
 	new /obj/item/card/id/advanced/prisoner/seven(src)
-
-/obj/item/storage/box/seccarts
-	name = "box of PDA security cartridges"
-	desc = "A box full of PDA cartridges used by Security."
-	icon_state = "secbox"
-	illustration = "pda"
-
-/obj/item/storage/box/seccarts/PopulateContents()
-	new /obj/item/cartridge/detective(src)
-	for(var/i in 1 to 6)
-		new /obj/item/cartridge/security(src)
 
 /obj/item/storage/box/firingpins
 	name = "box of standard firing pins"
@@ -624,15 +539,6 @@
 /obj/item/storage/box/fakesyndiesuit/PopulateContents()
 	new /obj/item/clothing/head/syndicatefake(src)
 	new /obj/item/clothing/suit/syndicatefake(src)
-
-/obj/item/storage/box/mousetraps
-	name = "box of Pest-B-Gon mousetraps"
-	desc = SPAN_ALERT("Keep out of reach of children.")
-	illustration = "mousetrap"
-
-/obj/item/storage/box/mousetraps/PopulateContents()
-	for(var/i in 1 to 6)
-		new /obj/item/assembly/mousetrap(src)
 
 /obj/item/storage/box/pillbottles
 	name = "box of pill bottles"
@@ -710,47 +616,6 @@
 	custom_price = PAYCHECK_ASSISTANT * 0.7
 	matches_amount = 20
 
-/obj/item/storage/box/lights
-	name = "box of replacement bulbs"
-	icon = 'icons/obj/storage.dmi'
-	illustration = "light"
-	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
-	inhand_icon_state = "syringe_kit"
-	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
-	foldable = /obj/item/stack/sheet/cardboard //BubbleWrap
-
-/obj/item/storage/box/lights/ComponentInitialize()
-	. = ..()
-	var/datum/component/storage/STR = GetComponent(/datum/component/storage)
-	STR.max_items = 21
-	STR.set_holdable(list(/obj/item/light/tube, /obj/item/light/bulb))
-	STR.max_combined_w_class = 21
-	STR.click_gather = FALSE //temp workaround to re-enable filling the light replacer with the box
-
-/obj/item/storage/box/lights/bulbs/PopulateContents()
-	for(var/i in 1 to 21)
-		new /obj/item/light/bulb(src)
-
-/obj/item/storage/box/lights/tubes
-	name = "box of replacement tubes"
-	illustration = "lighttube"
-
-/obj/item/storage/box/lights/tubes/PopulateContents()
-	for(var/i in 1 to 21)
-		new /obj/item/light/tube(src)
-
-/obj/item/storage/box/lights/mixed
-	name = "box of replacement lights"
-	illustration = "lightmixed"
-
-/obj/item/storage/box/lights/mixed/PopulateContents()
-	for(var/i in 1 to 14)
-		new /obj/item/light/tube(src)
-	for(var/i in 1 to 7)
-		new /obj/item/light/bulb(src)
-
-
 /obj/item/storage/box/deputy
 	name = "box of deputy armbands"
 	desc = "To be issued to those authorized to act as deputy of security."
@@ -813,18 +678,7 @@
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/reagent_containers/hypospray/medipen(src)
 
-	if(isplasmaman(loc))
-		new /obj/item/tank/internals/plasmaman/belt(src)
-	else if(isvox(loc))
-		new /obj/item/tank/internals/nitrogen/belt/emergency(src)
-	else
-		new /obj/item/tank/internals/emergency_oxygen(src)
-
 	new /obj/item/crowbar(src)
-
-	if(HAS_TRAIT(SSstation, STATION_TRAIT_PREMIUM_INTERNALS))
-		new /obj/item/flashlight/flare(src)
-		new /obj/item/radio/off(src)
 
 /obj/item/storage/box/hug/plushes
 	name = "tactical cuddle kit"
@@ -1013,50 +867,6 @@
 	for(var/i in 1 to 7)
 		new/obj/item/grenade/chem_grenade/holy(src)
 
-/obj/item/storage/box/stockparts/basic //for ruins where it's a bad idea to give access to an autolathe/protolathe, but still want to make stock parts accessible
-	name = "box of stock parts"
-	desc = "Contains a variety of basic stock parts."
-
-/obj/item/storage/box/stockparts/basic/PopulateContents()
-	var/static/items_inside = list(
-		/obj/item/stock_parts/capacitor = 3,
-		/obj/item/stock_parts/scanning_module = 3,
-		/obj/item/stock_parts/manipulator = 3,
-		/obj/item/stock_parts/micro_laser = 3,
-		/obj/item/stock_parts/matter_bin = 3)
-	generate_items_inside(items_inside,src)
-
-/obj/item/storage/box/stockparts/deluxe
-	name = "box of deluxe stock parts"
-	desc = "Contains a variety of deluxe stock parts."
-	icon_state = "syndiebox"
-
-/obj/item/storage/box/stockparts/deluxe/PopulateContents()
-	var/static/items_inside = list(
-		/obj/item/stock_parts/capacitor/quadratic = 3,
-		/obj/item/stock_parts/scanning_module/triphasic = 3,
-		/obj/item/stock_parts/manipulator/femto = 3,
-		/obj/item/stock_parts/micro_laser/quadultra = 3,
-		/obj/item/stock_parts/matter_bin/bluespace = 3)
-	generate_items_inside(items_inside,src)
-
-/obj/item/storage/box/dishdrive
-	name = "DIY Dish Drive Kit"
-	desc = "Contains everything you need to build your own Dish Drive!"
-	custom_premium_price = PAYCHECK_EASY * 3
-
-/obj/item/storage/box/dishdrive/PopulateContents()
-	var/static/items_inside = list(
-		/obj/item/stack/sheet/iron/five = 1,
-		/obj/item/stack/cable_coil/five = 1,
-		/obj/item/circuitboard/machine/dish_drive = 1,
-		/obj/item/stack/sheet/glass = 1,
-		/obj/item/stock_parts/manipulator = 1,
-		/obj/item/stock_parts/matter_bin = 2,
-		/obj/item/screwdriver = 1,
-		/obj/item/wrench = 1)
-	generate_items_inside(items_inside,src)
-
 /obj/item/storage/box/material
 	name = "box of materials"
 	illustration = "implant"
@@ -1090,12 +900,7 @@
 /obj/item/storage/box/debugtools/PopulateContents()
 	var/static/items_inside = list(
 		/obj/item/flashlight/emp/debug=1,\
-		/obj/item/pda=1,\
-		/obj/item/modular_computer/tablet/preset/advanced=1,\
 		/obj/item/geiger_counter=1,\
-		/obj/item/construction/rcd/combat/admin=1,\
-		/obj/item/pipe_dispenser=1,\
-		/obj/item/card/emag=1,\
 		/obj/item/stack/spacecash/c1000=50,\
 		/obj/item/healthanalyzer/advanced=1,\
 		/obj/item/storage/box/beakers/bluespace=1,\
@@ -1215,23 +1020,10 @@
 
 /obj/item/storage/box/shipping/PopulateContents()
 	var/static/items_inside = list(
-		/obj/item/dest_tagger=1,\
 		/obj/item/stack/package_wrap/small=2,\
 		/obj/item/stack/wrapping_paper/small=1
 		)
 	generate_items_inside(items_inside,src)
-
-/obj/item/storage/box/plumbing
-	name = "box of plumbing supplies"
-	desc = "Contains a small supply of pipes, water recyclers, and iron to connect to the rest of the station."
-
-/obj/item/storage/box/plumbing/PopulateContents()
-	var/list/items_inside = list(
-		/obj/item/stock_parts/water_recycler = 2,
-		/obj/item/stack/ducts/fifty = 1,
-		/obj/item/stack/sheet/iron/ten = 1,
-		)
-	generate_items_inside(items_inside, src)
 
 /obj/item/storage/box/tail_pin
 	name = "pin the tail on the corgi supplies"
@@ -1241,23 +1033,3 @@
 	for(var/i in 1 to 3)
 		new /obj/item/poster/tail_board(src)
 		new /obj/item/tail_pin(src)
-
-/obj/item/storage/box/emergencytank
-	name = "emergency oxygen tank box"
-	desc = "A box of emergency oxygen tanks."
-	illustration = "emergencytank"
-
-/obj/item/storage/box/emergencytank/PopulateContents()
-	..()
-	for(var/i in 1 to 7)
-		new /obj/item/tank/internals/emergency_oxygen(src) //in case anyone ever wants to do anything with spawning them, apart from crafting the box
-
-/obj/item/storage/box/engitank
-	name = "extended-capacity emergency oxygen tank box"
-	desc = "A box of extended-capacity emergency oxygen tanks."
-	illustration = "extendedtank"
-
-/obj/item/storage/box/engitank/PopulateContents()
-	..()
-	for(var/i in 1 to 7)
-		new /obj/item/tank/internals/emergency_oxygen/engi(src) //in case anyone ever wants to do anything with spawning them, apart from crafting the box

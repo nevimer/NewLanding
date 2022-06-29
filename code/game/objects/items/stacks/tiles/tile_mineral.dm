@@ -45,7 +45,6 @@
 		return ..()
 
 /obj/item/stack/tile/mineral/plasma/fire_act(exposed_temperature, exposed_volume)
-	atmos_spawn_air("plasma=[amount*2.5];TEMP=[exposed_temperature]")
 	qdel(src)
 
 /obj/item/stack/tile/mineral/uranium
@@ -227,6 +226,6 @@
 	desc = "A layer of snow."
 	icon_state = "tile_snow"
 	inhand_icon_state = "tile-silver"
-	turf_type = /turf/open/floor/grass/snow/safe
+	turf_type = /turf/open/floor/grass/snow
 	mineralType = "snow"
 	merge_type = /obj/item/stack/tile/mineral/snow

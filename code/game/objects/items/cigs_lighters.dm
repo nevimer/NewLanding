@@ -165,11 +165,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 /obj/item/clothing/mask/cigarette/attackby(obj/item/W, mob/user, params)
 	if(lit || smoketime <= 0)
 		return ..()
-	if(!reagents.has_reagent(/datum/reagent/oxygen)) //cigarettes need oxygen
-		var/datum/gas_mixture/air = return_air()
-		if(!air || !air.has_gas(/datum/gas/oxygen, 1)) //or oxygen on a tile to burn
-			to_chat(user, SPAN_NOTICE("Your [name] needs a source of oxygen to burn."))
-			return ..()
 	var/lighting_text = W.ignition_effect(src, user)
 	if(lighting_text)
 		light(lighting_text)
@@ -290,11 +285,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/mob/living/M = loc
 	if(isliving(loc))
 		M.IgniteMob()
-	if(!reagents.has_reagent(/datum/reagent/oxygen)) //cigarettes need oxygen
-		var/datum/gas_mixture/air = return_air()
-		if(!air || !air.has_gas(/datum/gas/oxygen, 1)) //or oxygen on a tile to burn
-			extinguish()
-			return
 	location.pollute_turf(pollution_type, 5, POLLUTION_PASSIVE_EMITTER_CAP)
 	smoketime -= delta_time
 	if(smoketime <= 0)
@@ -881,23 +871,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		else
 			..()
 
-
-/obj/item/clothing/mask/vape/emag_act(mob/user)// I WON'T REGRET WRITTING THIS, SURLY.
-	if(screw)
-		if(!(obj_flags & EMAGGED))
-			cut_overlays()
-			obj_flags |= EMAGGED
-			super = FALSE
-			to_chat(user, SPAN_WARNING("You maximize the voltage of [src]."))
-			add_overlay("vapeopen_high")
-			var/datum/effect_system/spark_spread/sp = new /datum/effect_system/spark_spread //for effect
-			sp.set_up(5, 1, src)
-			sp.start()
-		else
-			to_chat(user, SPAN_WARNING("[src] is already emagged!"))
-	else
-		to_chat(user, SPAN_WARNING("You need to open the cap to do that!"))
-
 /obj/item/clothing/mask/vape/attack_self(mob/user)
 	if(reagents.total_volume > 0)
 		to_chat(user, SPAN_NOTICE("You empty [src] of all reagents."))
@@ -960,13 +933,13 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	my_turf.pollute_turf(/datum/pollutant/smoke/vape, 5, POLLUTION_PASSIVE_EMITTER_CAP)
 
 	if(super && vapetime >= vapedelay)//Time to start puffing those fat vapes, yo.
-		var/datum/effect_system/smoke_spread/chem/smoke_machine/s = new
+		var/datum/effect_system/smoke_spread/chem/s = new
 		s.set_up(reagents, 1, 24, loc)
 		s.start()
 		vapetime -= vapedelay
 
 	if((obj_flags & EMAGGED) && vapetime >= vapedelay)
-		var/datum/effect_system/smoke_spread/chem/smoke_machine/s = new
+		var/datum/effect_system/smoke_spread/chem/s = new
 		s.set_up(reagents, 4, 24, loc)
 		s.start()
 		vapetime -= vapedelay

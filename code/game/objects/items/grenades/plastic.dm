@@ -22,23 +22,18 @@
 /obj/item/grenade/c4/Initialize()
 	. = ..()
 	plastic_overlay = mutable_appearance(icon, "[inhand_icon_state]2", HIGH_OBJ_LAYER)
-	wires = new /datum/wires/explosive/c4(src)
 
 /obj/item/grenade/c4/ComponentInitialize()
 	. = ..()
 	AddElement(/datum/element/empprotection, EMP_PROTECT_WIRES)
 
 /obj/item/grenade/c4/Destroy()
-	qdel(wires)
-	wires = null
 	target = null
 	return ..()
 
 /obj/item/grenade/c4/attackby(obj/item/item, mob/user, params)
 	if(item.tool_behaviour == TOOL_SCREWDRIVER)
 		to_chat(user, SPAN_NOTICE("The wire panel can be accessed without a screwdriver."))
-	else if(is_wire_tool(item))
-		wires.interact(user)
 	else
 		return ..()
 

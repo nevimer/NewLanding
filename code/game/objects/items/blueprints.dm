@@ -207,10 +207,6 @@
 	var/prevname = "[A.name]"
 	set_area_machinery_title(A, new_name, prevname)
 	A.name = new_name
-	if(A.firedoors)
-		for(var/D in A.firedoors)
-			var/obj/machinery/door/firedoor/FD = D
-			FD.CalculateAffectingAreas()
 	A.update_areasize()
 	return TRUE
 
@@ -218,14 +214,4 @@
 /proc/set_area_machinery_title(area/A, title, oldtitle)
 	if(!oldtitle) // or replacetext goes to infinite loop
 		return
-	for(var/obj/machinery/airalarm/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
-	for(var/obj/machinery/power/apc/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
-	for(var/obj/machinery/atmospherics/components/unary/vent_scrubber/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
-	for(var/obj/machinery/atmospherics/components/unary/vent_pump/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
-	for(var/obj/machinery/door/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
 	//TODO: much much more. Unnamed airlocks, cameras, etc.

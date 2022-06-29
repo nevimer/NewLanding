@@ -77,10 +77,6 @@
 /obj/item/stack/package_wrap/suicide_act(mob/living/user)
 	user.visible_message(SPAN_SUICIDE("[user] begins wrapping [user.p_them()]self in \the [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
 	if(use(3))
-		var/obj/structure/big_delivery/P = new /obj/structure/big_delivery(get_turf(user.loc))
-		P.icon_state = "deliverypackage5"
-		user.forceMove(P)
-		P.add_fingerprint(user)
 		return OXYLOSS
 	else
 		to_chat(user, SPAN_WARNING("You need more paper!"))
@@ -128,23 +124,6 @@
 			P.w_class = size
 			size = min(size, 5)
 			P.icon_state = "deliverypackage[size]"
-
-	else if(istype (target, /obj/structure/closet))
-		var/obj/structure/closet/O = target
-		if(O.opened)
-			return
-		if(!O.delivery_icon) //no delivery icon means unwrappable closet (e.g. body bags)
-			to_chat(user, SPAN_WARNING("You can't wrap this!"))
-			return
-		if(use(3))
-			var/obj/structure/big_delivery/P = new /obj/structure/big_delivery(get_turf(O.loc))
-			P.icon_state = O.delivery_icon
-			O.forceMove(P)
-			P.add_fingerprint(user)
-			O.add_fingerprint(user)
-		else
-			to_chat(user, SPAN_WARNING("You need more paper!"))
-			return
 	else
 		to_chat(user, SPAN_WARNING("The object you are trying to wrap is unsuitable for the sorting machinery!"))
 		return

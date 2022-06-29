@@ -141,16 +141,6 @@
 		return
 	var/list/dat = list("<html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'><title>Round Status</title></head><body><h1><B>Round Status</B></h1>")
 	dat += "Round Duration: <B>[DisplayTimeText(world.time - SSticker.round_start_time)]</B><BR>"
-	dat += "<B>Emergency shuttle</B><BR>"
-	if(EMERGENCY_IDLE_OR_RECALLED)
-		dat += "<a href='?_src_=holder;[HrefToken()];call_shuttle=1'>Call Shuttle</a><br>"
-	else
-		var/timeleft = SSshuttle.emergency.timeLeft()
-		if(SSshuttle.emergency.mode == SHUTTLE_CALL)
-			dat += "ETA: <a href='?_src_=holder;[HrefToken()];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_leading(num2text(timeleft % 60), 2, "0")]</a><BR>"
-			dat += "<a href='?_src_=holder;[HrefToken()];call_shuttle=2'>Send Back</a><br>"
-		else
-			dat += "ETA: <a href='?_src_=holder;[HrefToken()];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_leading(num2text(timeleft % 60), 2, "0")]</a><BR>"
 	dat += "<a href='?_src_=holder;[HrefToken()];end_round=[REF(usr)]'>End Round Now</a><br>"
 	if(SSticker.delay_end)
 		dat += "<a href='?_src_=holder;[HrefToken()];undelay_round_end=1'>End Round Normally</a><br>"

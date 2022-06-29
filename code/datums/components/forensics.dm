@@ -75,8 +75,6 @@
 	if(!isliving(M))
 		if(!iscameramob(M))
 			return
-		if(isaicamera(M))
-			return
 	add_hiddenprint(M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -143,8 +141,6 @@
 /datum/component/forensics/proc/add_hiddenprint(mob/M)
 	if(!isliving(M))
 		if(!iscameramob(M))
-			return
-		if(isaicamera(M))
 			return
 	if(!M.key)
 		return

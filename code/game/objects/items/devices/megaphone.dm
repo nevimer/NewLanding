@@ -38,13 +38,6 @@
 			spamcheck = world.time + 50
 			speech_args[SPEECH_SPANS] |= voicespan
 
-/obj/item/megaphone/emag_act(mob/user)
-	if(obj_flags & EMAGGED)
-		return
-	to_chat(user, SPAN_WARNING("You overload \the [src]'s voice synthesizer."))
-	obj_flags |= EMAGGED
-	voicespan = list(SPEECH_SPAN_REALLYBIG, "userdanger")
-
 /obj/item/megaphone/sec
 	name = "security megaphone"
 	icon_state = "megaphone-sec"

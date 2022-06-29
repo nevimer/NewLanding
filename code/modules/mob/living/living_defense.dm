@@ -303,12 +303,6 @@
 	for(var/obj/O in contents)
 		O.emp_act(severity)
 
-///Logs, gibs and returns point values of whatever mob is unfortunate enough to get eaten.
-/mob/living/singularity_act()
-	investigate_log("([key_name(src)]) has been consumed by the singularity.", INVESTIGATE_SINGULO) //Oh that's where the clown ended up!
-	gib()
-	return 20
-
 //called when the mob receives a bright flash
 /mob/living/proc/flash_act(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /atom/movable/screen/fullscreen/flash, length = 25)
 	if(HAS_TRAIT(src, TRAIT_NOFLASH))

@@ -418,14 +418,6 @@
 	tastes = list("chicken" = 1, "the country" = 1, "chicken bouillon" = 1)
 	spawned_mob = /mob/living/simple_animal/chicken
 
-/obj/item/food/monkeycube/bee
-	name = "bee cube"
-	desc = "We were sure it was a good idea. Just add water."
-	bite_consumption = 20
-	food_reagents = list(/datum/reagent/consumable/honey = 10, /datum/reagent/toxin = 5, /datum/reagent/medicine/strange_reagent = 1)
-	tastes = list("buzzing" = 1, "honey" = 1, "regret" = 1)
-	spawned_mob = /mob/living/simple_animal/hostile/bee
-
 /obj/item/food/stewedsoymeat
 	name = "stewed soy meat"
 	desc = "Even non-vegetarians will LOVE this!"
