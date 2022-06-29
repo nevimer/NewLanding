@@ -185,49 +185,6 @@
 	tastes = list("cake" = 5, "sweetness" = 1)
 	foodtypes = GRAIN | DAIRY | JUNKFOOD | SUGAR
 
-/obj/item/food/cake/birthday/energy
-	name = "energy cake"
-	desc = "Just enough calories for a whole nuclear operative squad."
-	icon_state = "energycake"
-	force = 5
-	hitsound = 'sound/weapons/blade1.ogg'
-	food_reagents = list(/datum/reagent/consumable/nutriment = 10, /datum/reagent/consumable/sprinkles = 10, /datum/reagent/consumable/nutriment/vitamin = 5, /datum/reagent/consumable/pwr_game = 10, /datum/reagent/consumable/liquidelectricity/enriched = 10)
-	tastes = list("cake" = 3, "a Vlad's Salad" = 1)
-
-/obj/item/food/cake/birthday/energy/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/cakeslice/birthday/energy, 5, 30)
-
-/obj/item/food/cake/birthday/energy/proc/energy_bite(mob/living/user)
-	to_chat(user, "<font color='red' size='5'>As you eat the cake, you accidentally hurt yourself on the embedded energy sword!</font>")
-	user.apply_damage(30,BRUTE,BODY_ZONE_HEAD)
-	playsound(user, 'sound/weapons/blade1.ogg', 5, TRUE)
-
-/obj/item/food/cake/birthday/energy/attack(mob/living/M, mob/living/user)
-	. = ..()
-	if(HAS_TRAIT(user, TRAIT_PACIFISM) && M != user) //Prevents pacifists from attacking others directly
-		return
-	energy_bite(M, user)
-
-/obj/item/food/cakeslice/birthday/energy
-	name = "energy cake slice"
-	desc = "For the traitor on the go."
-	icon_state = "energycakeslice"
-	force = 2
-	hitsound = 'sound/weapons/blade1.ogg'
-	food_reagents = list(/datum/reagent/consumable/nutriment = 4, /datum/reagent/consumable/sprinkles = 2, /datum/reagent/consumable/nutriment/vitamin = 1,  /datum/reagent/consumable/pwr_game = 2, /datum/reagent/consumable/liquidelectricity/enriched = 2)
-	tastes = list("cake" = 3, "a Vlad's Salad" = 1)
-
-/obj/item/food/cakeslice/birthday/energy/proc/energy_bite(mob/living/user)
-	to_chat(user, "<font color='red' size='5'>As you eat the cake slice, you accidentally hurt yourself on the embedded energy dagger!</font>")
-	user.apply_damage(18,BRUTE,BODY_ZONE_HEAD)
-	playsound(user, 'sound/weapons/blade1.ogg', 5, TRUE)
-
-/obj/item/food/cakeslice/birthday/energy/attack(mob/living/M, mob/living/user)
-	. = ..()
-	if(HAS_TRAIT(user, TRAIT_PACIFISM) && M != user) //Prevents pacifists from attacking others directly
-		return
-	energy_bite(M, user)
-
 /obj/item/food/cake/apple
 	name = "apple cake"
 	desc = "A cake centred with Apple."

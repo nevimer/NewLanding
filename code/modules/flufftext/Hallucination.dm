@@ -1056,15 +1056,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 				target.throw_alert(alert_type, /atom/movable/screen/alert/highpressure, 2, override = TRUE)
 			else
 				target.throw_alert(alert_type, /atom/movable/screen/alert/lowpressure, 2, override = TRUE)
-		//BEEP BOOP I AM A ROBOT
-		if("newlaw")
-			target.throw_alert(alert_type, /atom/movable/screen/alert/newlaw, override = TRUE)
-		if("locked")
-			target.throw_alert(alert_type, /atom/movable/screen/alert/locked, override = TRUE)
-		if("hacked")
-			target.throw_alert(alert_type, /atom/movable/screen/alert/hacked, override = TRUE)
-		if("charge")
-			target.throw_alert(alert_type, /atom/movable/screen/alert/emptycell, override = TRUE)
 
 	addtimer(CALLBACK(src, .proc/cleanup), duration)
 

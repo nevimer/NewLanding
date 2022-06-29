@@ -2184,12 +2184,6 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 						if(!allow_advanced_colors)
 							reset_colors()
 
-				if("color_ethereal")
-					needs_update = TRUE
-					var/new_etherealcolor = input(user, "Choose your ethereal color", "Character Preference") as null|anything in GLOB.color_list_ethereal
-					if(new_etherealcolor)
-						features["ethcolor"] = GLOB.color_list_ethereal[new_etherealcolor]
-
 
 				/*if("tail_lizard")
 					var/new_tail

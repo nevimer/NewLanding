@@ -44,19 +44,6 @@
 	strengthdiv = 7
 	modifier = 2
 
-/datum/chemical_reaction/reagent_explosion/rdx_explosion2 //makes rdx unique , on its own it is a good bomb, but when combined with liquid electricity it becomes truly destructive
-	required_reagents = list(/datum/reagent/rdx = 1 , /datum/reagent/consumable/liquidelectricity = 1)
-	strengthdiv = 3.5 //actually a decrease of 1 becaused of how explosions are calculated. This is due to the fact we require 2 reagents
-	modifier = 4
-
-/datum/chemical_reaction/reagent_explosion/rdx_explosion2/on_reaction(datum/reagents/holder, datum/equilibrium/reaction, created_volume)
-	var/fire_range = round(created_volume/30)
-	var/turf/T = get_turf(holder.my_atom)
-	for(var/turf/target as anything in RANGE_TURFS(fire_range,T))
-		new /obj/effect/hotspot(target)
-	holder.chem_temp = 500
-	..()
-
 /datum/chemical_reaction/reagent_explosion/rdx_explosion3
 	required_reagents = list(/datum/reagent/rdx = 1 , /datum/reagent/teslium = 1)
 	strengthdiv = 3.5 //actually a decrease of 1 becaused of how explosions are calculated. This is due to the fact we require 2 reagents

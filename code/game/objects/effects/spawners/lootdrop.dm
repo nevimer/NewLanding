@@ -273,7 +273,6 @@
 		/obj/item/organ/tongue/fly,
 		/obj/item/organ/tongue/snail,
 		/obj/item/organ/tongue/lizard,
-		/obj/item/organ/tongue/ethereal,
 		/obj/item/organ/tongue/robot,
 		/obj/item/organ/tongue/zombie,
 		/obj/item/organ/appendix,

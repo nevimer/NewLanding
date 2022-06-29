@@ -185,12 +185,6 @@
 	rate = 0.15
 	mutability_flags = PLANT_GENE_GRAFTABLE
 
-/datum/plant_gene/reagent/liquidelectricity
-	name = "Enriched Liquid Electricity"
-	reagent_id = /datum/reagent/consumable/liquidelectricity/enriched
-	rate = 0.1
-	mutability_flags = PLANT_GENE_GRAFTABLE
-
 /datum/plant_gene/reagent/carbon
 	name = "Carbon"
 	reagent_id = /datum/reagent/carbon
