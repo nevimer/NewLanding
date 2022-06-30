@@ -211,6 +211,11 @@
 		stack_trace("Warning: [src]([type]) initialized multiple times!")
 	flags_1 |= INITIALIZED_1
 
+	// This isn't on /datum level because datums don't have Initialize() and their New() doesn't enforce calling parent.
+	if(is_abstract(type))
+		stack_trace("Warning: [src]([type]) initialized as an abstract type!")
+		// Return an INITIALIZE_HINT_QDEL here? I think it's fine with just a warning.
+
 	if(loc)
 		SEND_SIGNAL(loc, COMSIG_ATOM_CREATED, src) /// Sends a signal that the new atom `src`, has been created at `loc`
 
@@ -675,10 +680,12 @@
 		if(LAZYLEN(managed_vis_overlays))
 			SSvis_overlays.remove_vis_overlay(src, managed_vis_overlays)
 
-		var/list/new_overlays = update_overlays(updates)
+		// First clear managed overlays because atoms can be managing the appearance of their own overlays on updates.
 		if(managed_overlays)
 			cut_overlay(managed_overlays)
 			managed_overlays = null
+		// Then get the new overlays and apply them if any.
+		var/list/new_overlays = update_overlays(updates)
 		if(length(new_overlays))
 			if (length(new_overlays) == 1)
 				managed_overlays = new_overlays[1]
