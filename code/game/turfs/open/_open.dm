@@ -1,5 +1,6 @@
 /turf/open
 	plane = FLOOR_PLANE
+	CanAtmosPass = ATMOS_PASS_PROC
 	var/slowdown = 0 //negative for faster, positive for slower
 
 	var/footstep = null
@@ -8,31 +9,10 @@
 	var/heavyfootstep = null
 	/// Reference to the turf fire on the turf
 	var/obj/effect/abstract/turf_fire/turf_fire
-	/// Whether this turf can have catwalk tiles placed on
-	var/can_have_catwalk
+	/// Active hotspot on this turf.
+	var/obj/effect/hotspot/active_hotspot
 	/// Pollution of this turf
 	var/datum/pollution/pollution
-
-/turf/open/attackby(obj/item/item, mob/user, params)
-	if(istype(item, /obj/item/stack/catwalk))
-		if(can_have_catwalk)
-			var/obj/item/stack/catwalk/catitem = item
-			if(locate(/obj/structure/lattice/catwalk, src))
-				return
-			var/cost = 2
-			var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-			if(L)
-				qdel(L)
-				cost = 1
-			if(catitem.use(cost))
-				new catitem.catwalk_type(src)
-				playsound(src, 'sound/weapons/genhit.ogg', 50, TRUE)
-				to_chat(user, SPAN_NOTICE("You place down the catwalk."))
-			else
-				to_chat(user, SPAN_WARNING("You need two rods to build a catwalk!"))
-			return
-		to_chat(user, SPAN_WARNING("You can't place down a catwalk in this spot!"))
-	return ..()
 
 //direction is direction of travel of A
 /turf/open/zPassIn(atom/movable/A, direction, turf/source)
@@ -59,113 +39,6 @@
 //direction is direction of travel of air
 /turf/open/zAirOut(direction, turf/source)
 	return (direction == UP)
-
-/turf/open/indestructible
-	name = "floor"
-	icon = 'icons/turf/floors.dmi'
-	icon_state = "floor"
-	footstep = FOOTSTEP_FLOOR
-	barefootstep = FOOTSTEP_HARD_BAREFOOT
-	clawfootstep = FOOTSTEP_HARD_CLAW
-	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
-	tiled_dirt = TRUE
-
-/turf/open/indestructible/Melt()
-	to_be_destroyed = FALSE
-	return src
-
-/turf/open/indestructible/TerraformTurf(path, new_baseturf, flags, defer_change = FALSE, ignore_air = FALSE)
-	return
-
-/turf/open/indestructible/white
-	icon_state = "white"
-
-/turf/open/indestructible/light
-	icon_state = "light_on-1"
-
-/turf/open/indestructible/permalube
-	icon_state = "darkfull"
-
-/turf/open/indestructible/permalube/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/wet_floor, TURF_WET_LUBE, INFINITY, 0, INFINITY, TRUE)
-
-/turf/open/indestructible/honk
-	name = "bananium floor"
-	icon_state = "bananium"
-	footstep = null
-	barefootstep = null
-	clawfootstep = null
-	heavyfootstep = null
-	var/sound = 'sound/effects/clownstep1.ogg'
-
-/turf/open/indestructible/honk/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/wet_floor, TURF_WET_SUPERLUBE, INFINITY, 0, INFINITY, TRUE)
-
-/turf/open/indestructible/honk/Entered(atom/movable/arrived, direction)
-	. = ..()
-	if(ismob(arrived))
-		playsound(src, sound, 50, TRUE)
-
-/turf/open/indestructible/necropolis
-	name = "necropolis floor"
-	desc = "It's regarding you suspiciously."
-	icon = 'icons/turf/floors.dmi'
-	icon_state = "necro1"
-	baseturfs = /turf/open/indestructible/necropolis
-	footstep = FOOTSTEP_LAVA
-	barefootstep = FOOTSTEP_LAVA
-	clawfootstep = FOOTSTEP_LAVA
-	heavyfootstep = FOOTSTEP_LAVA
-	tiled_dirt = FALSE
-
-/turf/open/indestructible/necropolis/Initialize(mapload, inherited_virtual_z)
-	. = ..()
-	if(prob(12))
-		icon_state = "necro[rand(2,3)]"
-
-/turf/open/indestructible/boss //you put stone tiles on this and use it as a base
-	name = "necropolis floor"
-	icon = 'icons/turf/boss_floors.dmi'
-	icon_state = "boss"
-	baseturfs = /turf/open/indestructible/boss
-
-/turf/open/indestructible/hierophant
-	icon = 'icons/turf/floors/hierophant_floor.dmi'
-	baseturfs = /turf/open/indestructible/hierophant
-	smoothing_flags = SMOOTH_CORNERS
-	tiled_dirt = FALSE
-
-/turf/open/indestructible/hierophant/two
-
-/turf/open/indestructible/hierophant/get_smooth_underlay_icon(mutable_appearance/underlay_appearance, turf/asking_turf, adjacency_dir)
-	return FALSE
-
-/turf/open/indestructible/paper
-	name = "notebook floor"
-	desc = "A floor made of invulnerable notebook paper."
-	icon_state = "paperfloor"
-	footstep = null
-	barefootstep = null
-	clawfootstep = null
-	heavyfootstep = null
-	tiled_dirt = FALSE
-
-/turf/open/indestructible/binary
-	name = "tear in the fabric of reality"
-	CanAtmosPass = ATMOS_PASS_NO
-	baseturfs = /turf/open/indestructible/binary
-	icon_state = "binary"
-	footstep = null
-	barefootstep = null
-	clawfootstep = null
-	heavyfootstep = null
-
-/turf/open/indestructible/airblock
-	icon_state = "bluespace"
-	blocks_air = TRUE
-	baseturfs = /turf/open/indestructible/airblock
 
 /turf/open/proc/freon_gas_act()
 	for(var/obj/I in contents)

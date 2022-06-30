@@ -69,9 +69,6 @@
 				obj_flags &= ~string_to_objflag[flag]
 			else
 				obj_flags |= string_to_objflag[flag]
-	if((obj_flags & ON_BLUEPRINTS) && isturf(loc))
-		var/turf/T = loc
-		T.add_blueprints_preround(src)
 
 
 /obj/Destroy(force=FALSE)
@@ -337,7 +334,7 @@
 		. |= R.expose_obj(src, reagents[R])
 
 /obj/proc/can_be_unfasten_wrench(mob/user, silent) //if we can unwrench this object; returns SUCCESSFUL_UNFASTEN and FAILED_UNFASTEN, which are both TRUE, or CANT_UNFASTEN, which isn't.
-	if(!(isfloorturf(loc) || istype(loc, /turf/open/indestructible)) && !anchored)
+	if(!(isfloorturf(loc) && !anchored))
 		to_chat(user, SPAN_WARNING("[src] needs to be on the floor to be secured!"))
 		return FAILED_UNFASTEN
 	return SUCCESSFUL_UNFASTEN
