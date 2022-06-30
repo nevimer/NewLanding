@@ -38,27 +38,9 @@
 /datum/loadout_item/backpack/fragrance/nectarine
 	path = /obj/item/perfume/nectarine
 
-//MISC
-/datum/loadout_item/backpack/matches
-	path = /obj/item/storage/box/matches
-
-/datum/loadout_item/backpack/cheaplighter
-	path = /obj/item/lighter/greyscale
-
-/datum/loadout_item/backpack/zippolighter
-	path = /obj/item/lighter
-	cost = 2
-
 /datum/loadout_item/backpack/ttsdevice
 	path = /obj/item/ttsdevice
 	cost = 7
-
-/datum/loadout_item/backpack/cigar
-	path = /obj/item/clothing/mask/cigarette/cigar
-	cost = 4 //smoking is bad mkay
-
-/datum/loadout_item/backpack/cigarettes
-	path = /obj/item/storage/fancy/cigarettes
 
 /datum/loadout_item/backpack/wallet
 	path = /obj/item/storage/wallet
@@ -101,13 +83,6 @@
 	name = "iron coin"
 	path = /obj/item/coin/iron
 
-/datum/loadout_item/backpack/havana_cigar_case
-	path = /obj/item/storage/fancy/cigarettes/cigars/havana
-	cost = 3
-
-/datum/loadout_item/backpack/vape
-	path = /obj/item/clothing/mask/vape
-
 //TOYS
 /datum/loadout_item/backpack/toy
 	subcategory = LOADOUT_SUBCATEGORY_BACKPACK_TOYS
@@ -138,27 +113,6 @@
 
 /datum/loadout_item/backpack/toy/plushborb
 	path = /obj/item/toy/plush/borbplushie
-
-/datum/loadout_item/backpack/toy/tennis
-	path = /obj/item/toy/tennis
-
-/datum/loadout_item/backpack/toy/tennisred
-	path = /obj/item/toy/tennis/red
-
-/datum/loadout_item/backpack/toy/tennisyellow
-	path = /obj/item/toy/tennis/yellow
-
-/datum/loadout_item/backpack/toy/tennisgreen
-	path = /obj/item/toy/tennis/green
-
-/datum/loadout_item/backpack/toy/tenniscyan
-	path = /obj/item/toy/tennis/cyan
-
-/datum/loadout_item/backpack/toy/tennisblue
-	path = /obj/item/toy/tennis/blue
-
-/datum/loadout_item/backpack/toy/tennispurple
-	path = /obj/item/toy/tennis/purple
 
 /datum/loadout_item/backpack/toy/toykatana
 	path = /obj/item/toy/katana
