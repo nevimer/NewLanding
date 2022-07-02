@@ -70,9 +70,6 @@
 	/// Should this job be allowed to be picked for the bureaucratic error event?
 	var/allow_bureaucratic_error = TRUE
 
-	/// Is this job affected by weird spawns like the ones from station traits
-	var/random_spawns_possible = TRUE
-
 	/// List of family heirlooms this job can get with the family heirloom quirk. List of types.
 	var/list/family_heirlooms
 
@@ -100,10 +97,13 @@
 
 	/// String. If set to a non-empty one, it will be the key for the policy text value to show this role on spawn.
 	var/policy_index = ""
+	/// The job listing that the job belongs to
+	var/datum/job_listing/job_listing
 
 
-/datum/job/New()
+/datum/job/New(datum/job_listing/passed_job_listing)
 	. = ..()
+	job_listing = passed_job_listing
 	var/list/jobs_changes = get_map_changes()
 	if(!jobs_changes)
 		return
@@ -204,71 +204,6 @@
 /datum/outfit/job
 	name = "Standard Gear"
 
-	var/jobtype = null
-
-	id = /obj/item/card/id/advanced
-	back = /obj/item/storage/backpack
-	box = /obj/item/storage/box/survival
-
-	var/backpack = /obj/item/storage/backpack
-	var/satchel  = /obj/item/storage/backpack/satchel
-	var/duffelbag = /obj/item/storage/backpack/duffelbag
-
-	var/pda_slot = ITEM_SLOT_BELT
-
-/datum/outfit/job/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	switch(H.backpack)
-		if(GBACKPACK)
-			back = /obj/item/storage/backpack //Grey backpack
-		if(GSATCHEL)
-			back = /obj/item/storage/backpack/satchel //Grey satchel
-		if(GDUFFELBAG)
-			back = /obj/item/storage/backpack/duffelbag //Grey Duffel bag
-		if(LSATCHEL)
-			back = /obj/item/storage/backpack/satchel/leather //Leather Satchel
-		if(DSATCHEL)
-			back = satchel //Department satchel
-		if(DDUFFELBAG)
-			back = duffelbag //Department duffel bag
-		else
-			back = backpack //Department backpack
-
-	//converts the uniform string into the path we'll wear, whether it's the skirt or regular variant
-	var/holder
-	if(H.jumpsuit_style == PREF_SKIRT)
-		holder = "[uniform]/skirt"
-		if(!text2path(holder))
-			holder = "[uniform]"
-	else
-		holder = "[uniform]"
-	uniform = text2path(holder)
-
-/datum/outfit/job/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	if(visualsOnly)
-		return
-
-	var/datum/job/J = SSjob.GetJobType(jobtype)
-	if(!J)
-		J = SSjob.GetJob(H.job)
-
-	var/obj/item/card/id/C = H.wear_id
-	if(istype(C))
-		shuffle_inplace(C.access) // Shuffle access list to make NTNet passkeys less predictable
-		C.registered_name = H.real_name
-		if(H.age)
-			C.registered_age = H.age
-		C.update_label()
-		C.update_icon()
-		H.sec_hud_set_ID()
-
-
-/datum/outfit/job/get_chameleon_disguise_info()
-	var/list/types = ..()
-	types -= /obj/item/storage/backpack //otherwise this will override the actual backpacks
-	types += backpack
-	types += satchel
-	types += duffelbag
-	return types
 
 /// An overridable getter for more dynamic goodies.
 /datum/job/proc/get_mail_goodies(mob/recipient)
@@ -279,50 +214,39 @@
 
 
 /// Returns an atom where the mob should spawn in.
-/datum/job/proc/get_roundstart_spawn_point()
-	if(random_spawns_possible)
-		if(HAS_TRAIT(SSstation, STATION_TRAIT_LATE_ARRIVALS))
-			return get_latejoin_spawn_point()
-		if(HAS_TRAIT(SSstation, STATION_TRAIT_RANDOM_ARRIVALS))
-			return get_safe_random_station_turf(typesof(/area/outdoors/jungle)) || get_latejoin_spawn_point()
-		if(HAS_TRAIT(SSstation, STATION_TRAIT_HANGOVER))
-			var/obj/effect/landmark/start/hangover_spawn_point
-			for(var/obj/effect/landmark/start/hangover/hangover_landmark in GLOB.start_landmarks_list)
-				hangover_spawn_point = hangover_landmark
-				if(hangover_landmark.used) //so we can revert to spawning them on top of eachother if something goes wrong
-					continue
-				hangover_landmark.used = TRUE
-				break
-			return hangover_spawn_point || get_latejoin_spawn_point()
-	if(length(GLOB.jobspawn_overrides[title]))
-		return pick(GLOB.jobspawn_overrides[title])
-	var/obj/effect/landmark/start/spawn_point = get_default_roundstart_spawn_point()
-	if(!spawn_point) //if there isn't a spawnpoint send them to latejoin, if there's no latejoin go yell at your mapper
-		return get_latejoin_spawn_point()
-	return spawn_point
+/datum/job/proc/get_spawn_point(roundstart = TRUE)
+	if(!job_listing)
+		CRASH("Tried to get a spawn point of a job that has no job listing. Job: [type].")
+	if(roundstart)
+		if(length(job_listing.job_start_landmarks[type]))
+			return evaluated_start_landmark(job_listing.job_start_landmarks[type], roundstart)
+		if(length(job_listing.start_landmarks))
+			return evaluated_start_landmark(job_listing.start_landmarks, roundstart)
+	else
+		if(length(job_listing.job_latejoin_landmarks[type]))
+			return evaluated_start_landmark(job_listing.job_latejoin_landmarks[type], roundstart)
+		if(length(job_listing.latejoin_landmarks))
+			return evaluated_start_landmark(job_listing.latejoin_landmarks, roundstart)
 
+#define LATEJOIN_SPAWN_COOLDOWN 3 MINUTES
 
-/// Handles finding and picking a valid roundstart effect landmark spawn point, in case no uncommon different spawning events occur.
-/datum/job/proc/get_default_roundstart_spawn_point()
-	for(var/obj/effect/landmark/start/spawn_point as anything in GLOB.start_landmarks_list)
-		if(spawn_point.name != title)
-			continue
-		. = spawn_point
-		if(spawn_point.used) //so we can revert to spawning them on top of eachother if something goes wrong
-			continue
-		spawn_point.used = TRUE
-		break
-	if(!.)
-		log_world("Couldn't find a round start spawn point for [title]")
+/// Returns a landmark while respecting things like roundstart positions, latejoin cooldowns etc.
+/datum/job/proc/evaluated_start_landmark(list/landmark_list, roundstart)
+	for(var/obj/effect/landmark/start/mark as anything in shuffle(landmark_list))
+		// Set the landmark in case all of them fail, we want to use one regardless of cooldown / being taken
+		. = mark
+		if(roundstart)
+			if(mark.spawned_roundstart)
+				continue
+			mark.spawned_roundstart = TRUE
+			return mark
+		else
+			if(mark.next_latejoin_spawn > world.time)
+				continue
+			mark.next_latejoin_spawn = world.time + LATEJOIN_SPAWN_COOLDOWN
+			return mark
 
-
-/// Finds a valid latejoin spawn point, checking for events and special conditions.
-/datum/job/proc/get_latejoin_spawn_point()
-	if(length(GLOB.jobspawn_overrides[title])) //We're doing something special today.
-		return pick(GLOB.jobspawn_overrides[title])
-	if(length(SSjob.latejoin_trackers))
-		return pick(SSjob.latejoin_trackers)
-	return SSjob.get_last_resort_spawn_points()
+#undef LATEJOIN_SPAWN_COOLDOWN
 
 /// Spawns the mob to be played as, taking into account preferences and the desired spawn point.
 /datum/job/proc/get_spawn_mob(client/player_client, atom/spawn_point)
