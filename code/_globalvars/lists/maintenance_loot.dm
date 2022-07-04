@@ -24,9 +24,6 @@ GLOBAL_LIST_INIT(trash_loot, list(//junk: useless, very easy to get, or ghetto c
 		/obj/item/trash/popcorn = 1,
 		/obj/item/trash/sosjerky = 1,
 		/obj/item/trash/pistachios = 1,
-
-		/obj/item/poster/random_contraband = 1,
-		/obj/item/poster/random_official = 1,
 		/obj/item/folder/yellow = 1,
 		/obj/item/hand_labeler = 1,
 		/obj/item/pen = 1,
@@ -42,7 +39,6 @@ GLOBAL_LIST_INIT(trash_loot, list(//junk: useless, very easy to get, or ghetto c
 		/obj/effect/decal/cleanable/ash = 1,
 		/obj/item/camera = 1,
 		/obj/item/camera_film = 1,
-		/obj/item/food/urinalcake = 1,
 
 		/obj/item/rack_parts = 1,
 		/obj/item/shard = 1,
@@ -82,7 +78,6 @@ GLOBAL_LIST_INIT(common_loot, list( //common: basic items
 		/obj/item/stack/rods/twentyfive = 1,
 		/obj/item/stack/sheet/iron/twenty = 1,
 		/obj/item/stack/sheet/mineral/plasma = 1,
-		/obj/item/sign = 1,
 
 		/obj/item/stack/package_wrap = 1,
 		/obj/item/stack/wrapping_paper = 1,
@@ -122,7 +117,6 @@ GLOBAL_LIST_INIT(uncommon_loot, list(//uncommon: useful items
 		/obj/item/weldingtool/largetank = 1,
 		/obj/item/multitool = 1,
 		/obj/item/hatchet = 1,
-		/obj/item/roller = 1,
 		/obj/item/restraints/legcuffs/bola = 1,
 		/obj/item/restraints/handcuffs/cable = 1,
 		/obj/item/spear = 1,
@@ -140,7 +134,6 @@ GLOBAL_LIST_INIT(uncommon_loot, list(//uncommon: useful items
 		/obj/item/beacon = 1,
 		/obj/item/weaponcrafting/receiver = 1,
 		/obj/item/paper/fluff/stations/soap = 1, //recipes count as crafting.
-		/obj/item/plaque = 1,
 		/obj/item/storage/box/clown = 1,
 		) = 8,
 

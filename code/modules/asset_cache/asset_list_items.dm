@@ -260,14 +260,6 @@
 		var/datum/language/L = new path ()
 		L.get_icon()
 
-/datum/asset/spritesheet/pipes
-	name = "pipes"
-
-/datum/asset/spritesheet/pipes/register()
-	for (var/each in list('icons/obj/atmospherics/pipes/pipe_item.dmi', 'icons/obj/atmospherics/pipes/disposal.dmi', 'icons/obj/atmospherics/pipes/transit_tube.dmi', 'icons/obj/plumbing/fluid_ducts.dmi'))
-		InsertAll("", each, GLOB.alldirs)
-	..()
-
 /datum/asset/simple/genetics
 	assets = list(
 		"dna_discovered.gif" = 'icons/ui_icons/dna/dna_discovered.gif',
@@ -323,20 +315,6 @@
 	assets = list(
 		"safe_dial.png" = 'icons/ui_icons/safe/safe_dial.png'
 	)
-
-/datum/asset/spritesheet/fish
-	name = "fish"
-
-/datum/asset/spritesheet/fish/register()
-	for (var/path in subtypesof(/datum/aquarium_behaviour/fish))
-		var/datum/aquarium_behaviour/fish/fish_type = path
-		var/fish_icon = initial(fish_type.icon)
-		var/fish_icon_state = initial(fish_type.icon_state)
-		var/id = sanitize_css_class_name("[fish_icon][fish_icon_state]")
-		if(sprites[id]) //no dupes
-			continue
-		Insert(id, fish_icon, fish_icon_state)
-	..()
 
 /datum/asset/simple/adventure
 	assets = list(
