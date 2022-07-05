@@ -38,15 +38,9 @@
 /datum/loadout_item/backpack/fragrance/nectarine
 	path = /obj/item/perfume/nectarine
 
-/datum/loadout_item/backpack/wallet
-	path = /obj/item/storage/wallet
-
 /datum/loadout_item/backpack/flask
 	path = /obj/item/reagent_containers/food/drinks/flask
 	cost = 2
-
-/datum/loadout_item/backpack/skub
-	path = /obj/item/skub
 
 /datum/loadout_item/backpack/multipen
 	path = /obj/item/pen/fourcolor
@@ -64,31 +58,10 @@
 	subcategory = LOADOUT_SUBCATEGORY_BACKPACK_TOYS
 
 /datum/loadout_item/backpack/toy/dice
-	path = /obj/item/storage/pill_bottle/dice
-
-/datum/loadout_item/backpack/toy/deathroll_dice
-	path = /obj/item/deathroll_dice
-
-/datum/loadout_item/backpack/toy/eightball
-	path = /obj/item/toy/eightball
+	path = /obj/item/storage/dice
 
 /datum/loadout_item/backpack/toy/cards
 	path = /obj/item/toy/cards/deck
-
-/datum/loadout_item/backpack/toy/plushcarp
-	path = /obj/item/toy/plush/carpplushie
-
-/datum/loadout_item/backpack/toy/plushliz
-	path = /obj/item/toy/plush/lizard_plushie
-
-/datum/loadout_item/backpack/toy/plushsnek
-	path = /obj/item/toy/plush/snakeplushie
-
-/datum/loadout_item/backpack/toy/plushslime
-	path = /obj/item/toy/plush/slimeplushie
-
-/datum/loadout_item/backpack/toy/plushborb
-	path = /obj/item/toy/plush/borbplushie
 
 /datum/loadout_item/backpack/toy/toykatana
 	path = /obj/item/toy/katana

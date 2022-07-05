@@ -21,7 +21,6 @@
 	name = "ear of corn"
 	desc = "Needs some butter!"
 	icon_state = "corn"
-	microwaved_type = /obj/item/food/popcorn
 	trash_type = /obj/item/grown/corncob
 	bite_consumption_mod = 2
 	foodtypes = VEGETABLES
@@ -61,19 +60,3 @@
 	throwforce = 0
 	throw_speed = 3
 	throw_range = 7
-	var/snap_pops = 1
-
-/obj/item/grown/snapcorn/add_juice()
-	..()
-	snap_pops = max(round(seed.potency/8), 1)
-
-/obj/item/grown/snapcorn/attack_self(mob/user)
-	..()
-	to_chat(user, SPAN_NOTICE("You pick a snap pop from the cob."))
-	var/obj/item/toy/snappop/S = new /obj/item/toy/snappop(user.loc)
-	if(ishuman(user))
-		user.put_in_hands(S)
-	snap_pops -= 1
-	if(!snap_pops)
-		new /obj/item/grown/corncob(user.loc)
-		qdel(src)

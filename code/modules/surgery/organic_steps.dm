@@ -4,7 +4,6 @@
 	name = "make incision"
 	implements = list(
 		TOOL_SCALPEL = 100,
-		/obj/item/melee/transforming/energy/sword = 75,
 		/obj/item/kitchen/knife = 65,
 		/obj/item/shard = 45,
 		/obj/item = 30) // 30% success with any sharp item.
@@ -44,7 +43,6 @@
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_WIRECUTTER = 60,
-		/obj/item/stack/package_wrap = 35,
 		)
 	time = 24
 
@@ -117,7 +115,6 @@
 	name = "saw bone"
 	implements = list(
 		TOOL_SAW = 100,
-		/obj/item/fireaxe = 50,
 		/obj/item/hatchet = 35,
 		/obj/item/kitchen/knife/butcher = 25,
 		/obj/item = 20) //20% success (sort of) with any sharp item with a force>=10
@@ -145,8 +142,6 @@
 	name = "drill bone"
 	implements = list(
 		TOOL_DRILL = 100,
-		/obj/item/screwdriver/power = 80,
-		/obj/item/pickaxe/drill = 60,
 		TOOL_SCREWDRIVER = 25,
 		/obj/item/kitchen/spoon = 20)
 	time = 30

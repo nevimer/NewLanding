@@ -19,8 +19,6 @@
 // BUFFS //
 ///////////
 
-#define STATUS_EFFECT_HISGRACE /datum/status_effect/his_grace //His Grace.
-
 #define STATUS_EFFECT_WISH_GRANTERS_GIFT /datum/status_effect/wish_granters_gift //If you're currently resurrecting with the Wish Granter
 
 #define STATUS_EFFECT_BLOODDRUNK /datum/status_effect/blooddrunk //Stun immunity and greatly reduced damage taken
@@ -32,8 +30,6 @@
 #define STATUS_EFFECT_HIPPOCRATIC_OATH /datum/status_effect/hippocratic_oath //Gives you an aura of healing as well as regrowing the Rod of Asclepius if lost
 
 #define STATUS_EFFECT_GOOD_MUSIC /datum/status_effect/good_music
-
-#define STATUS_EFFECT_REGENERATIVE_CORE /datum/status_effect/regenerative_core
 
 #define STATUS_EFFECT_ANTIMAGIC /datum/status_effect/antimagic //grants antimagic (and reapplies if lost) for the duration
 

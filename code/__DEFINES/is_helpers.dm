@@ -111,8 +111,6 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 
 #define isammocasing(A) (istype(A, /obj/item/ammo_casing))
 
-#define isidcard(I) (istype(I, /obj/item/card/id))
-
 #define isstructure(A) (istype(A, /obj/structure))
 
 #define isvehicle(A) (istype(A, /obj/vehicle))
@@ -122,8 +120,6 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 #define isorgan(A) (istype(A, /obj/item/organ))
 
 #define isclothing(A) (istype(A, /obj/item/clothing))
-
-#define iscash(A) (istype(A, /obj/item/coin) || istype(A, /obj/item/stack/spacecash) || istype(A, /obj/item/holochip))
 
 #define isbodypart(A) (istype(A, /obj/item/bodypart))
 

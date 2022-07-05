@@ -306,7 +306,6 @@
 		/obj/item/food/grown/onion = 1,
 		/obj/item/food/spaghetti/nizaya = 1,
 		/obj/item/food/meatball = 2,
-		/obj/item/food/peanuts = 1
 	)
 	result = /obj/item/food/soup/meatball_noodles
 	subcategory = CAT_LIZARD
@@ -379,17 +378,6 @@
 		/datum/reagent/consumable/salt = 2
 	)
 	result = /obj/item/food/cake/korta_brittle
-	subcategory = CAT_LIZARD
-
-/datum/crafting_recipe/food/korta_ice
-	name = "Korta ice"
-	reqs = list(
-		/obj/item/reagent_containers/food/drinks/sillycup = 1,
-		/datum/reagent/consumable/ice = 15,
-		/datum/reagent/consumable/korta_nectar = 5,
-		/obj/item/food/grown/berries = 1
-	)
-	result = /obj/item/food/snowcones/korta_ice
 	subcategory = CAT_LIZARD
 
 /datum/crafting_recipe/food/candied_mushrooms

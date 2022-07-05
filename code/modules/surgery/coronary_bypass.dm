@@ -23,7 +23,6 @@
 	name = "incise heart"
 	implements = list(
 		TOOL_SCALPEL = 90,
-		/obj/item/melee/transforming/energy/sword = 45,
 		/obj/item/kitchen/knife = 45,
 		/obj/item/shard = 25)
 	time = 16
@@ -62,7 +61,6 @@
 	implements = list(
 		TOOL_HEMOSTAT = 90,
 		TOOL_WIRECUTTER = 35,
-		/obj/item/stack/package_wrap = 15,
 		)
 	time = 90
 

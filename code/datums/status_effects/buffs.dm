@@ -1,56 +1,5 @@
 //Largely beneficial effects go here, even if they have drawbacks.
 
-/datum/status_effect/his_grace
-	id = "his_grace"
-	duration = -1
-	tick_interval = 4
-	alert_type = /atom/movable/screen/alert/status_effect/his_grace
-	var/bloodlust = 0
-
-/atom/movable/screen/alert/status_effect/his_grace
-	name = "His Grace"
-	desc = "His Grace hungers, and you must feed Him."
-	icon_state = "his_grace"
-	alerttooltipstyle = "hisgrace"
-
-/atom/movable/screen/alert/status_effect/his_grace/MouseEntered(location,control,params)
-	desc = initial(desc)
-	var/datum/status_effect/his_grace/HG = attached_effect
-	desc += "<br><font size=3><b>Current Bloodthirst: [HG.bloodlust]</b></font>\
-	<br>Becomes undroppable at <b>[HIS_GRACE_FAMISHED]</b>\
-	<br>Will consume you at <b>[HIS_GRACE_CONSUME_OWNER]</b>"
-	return ..()
-
-/datum/status_effect/his_grace/on_apply()
-	owner.log_message("gained His Grace's stun immunity", LOG_ATTACK)
-	owner.add_stun_absorption("hisgrace", INFINITY, 3, null, "His Grace protects you from the stun!")
-	return ..()
-
-/datum/status_effect/his_grace/tick()
-	bloodlust = 0
-	var/graces = 0
-	for(var/obj/item/his_grace/HG in owner.held_items)
-		if(HG.bloodthirst > bloodlust)
-			bloodlust = HG.bloodthirst
-		if(HG.awakened)
-			graces++
-	if(!graces)
-		owner.apply_status_effect(STATUS_EFFECT_HISWRATH)
-		qdel(src)
-		return
-	var/grace_heal = bloodlust * 0.05
-	owner.adjustBruteLoss(-grace_heal)
-	owner.adjustFireLoss(-grace_heal)
-	owner.adjustToxLoss(-grace_heal, TRUE, TRUE)
-	owner.adjustOxyLoss(-(grace_heal * 2))
-	owner.adjustCloneLoss(-grace_heal)
-
-/datum/status_effect/his_grace/on_remove()
-	owner.log_message("lost His Grace's stun immunity", LOG_ATTACK)
-	if(islist(owner.stun_absorption) && owner.stun_absorption["hisgrace"])
-		owner.stun_absorption -= "hisgrace"
-
-
 /datum/status_effect/wish_granters_gift //Fully revives after ten seconds.
 	id = "wish_granters_gift"
 	duration = 50
@@ -189,31 +138,6 @@
 		owner.set_confusion(max(0, owner.get_confusion() - 1))
 		SEND_SIGNAL(owner, COMSIG_ADD_MOOD_EVENT, "goodmusic", /datum/mood_event/goodmusic)
 
-/atom/movable/screen/alert/status_effect/regenerative_core
-	name = "Regenerative Core Tendrils"
-	desc = "You can move faster than your broken body could normally handle!"
-	icon_state = "regenerative_core"
-
-/datum/status_effect/regenerative_core
-	id = "Regenerative Core"
-	duration = 1 MINUTES
-	status_type = STATUS_EFFECT_REPLACE
-	alert_type = /atom/movable/screen/alert/status_effect/regenerative_core
-
-/datum/status_effect/regenerative_core/on_apply()
-	ADD_TRAIT(owner, TRAIT_IGNOREDAMAGESLOWDOWN, STATUS_EFFECT_TRAIT)
-	owner.adjustBruteLoss(-25)
-	owner.adjustFireLoss(-25)
-	owner.remove_CC()
-	owner.bodytemperature = owner.get_body_temp_normal()
-	if(istype(owner, /mob/living/carbon/human))
-		var/mob/living/carbon/human/humi = owner
-		humi.set_coretemperature(humi.get_body_temp_normal())
-	return TRUE
-
-/datum/status_effect/regenerative_core/on_remove()
-	REMOVE_TRAIT(owner, TRAIT_IGNOREDAMAGESLOWDOWN, STATUS_EFFECT_TRAIT)
-
 /datum/status_effect/antimagic
 	id = "antimagic"
 	duration = 10 SECONDS
@@ -344,34 +268,6 @@
 	name = "Lightning Orb"
 	desc = "The speed surges through you!"
 	icon_state = "lightningorb"
-
-/datum/status_effect/mayhem
-	id = "Mayhem"
-	duration = 2 MINUTES
-	/// The chainsaw spawned by the status effect
-	var/obj/item/chainsaw/doomslayer/chainsaw
-
-/datum/status_effect/mayhem/on_apply()
-	. = ..()
-	to_chat(owner, "<span class='reallybig redtext'>RIP AND TEAR</span>")
-	SEND_SOUND(owner, sound('sound/hallucinations/veryfar_noise.ogg'))
-	new /datum/hallucination/delusion(owner, forced = TRUE, force_kind = "demon", duration = duration, skip_nearby = FALSE)
-	chainsaw = new(get_turf(owner))
-	owner.log_message("entered a blood frenzy", LOG_ATTACK)
-	ADD_TRAIT(chainsaw, TRAIT_NODROP, CHAINSAW_FRENZY_TRAIT)
-	owner.drop_all_held_items()
-	owner.put_in_hands(chainsaw, forced = TRUE)
-	chainsaw.attack_self(owner)
-	owner.reagents.add_reagent(/datum/reagent/medicine/adminordrazine,25)
-	to_chat(owner, SPAN_WARNING("KILL, KILL, KILL! YOU HAVE NO ALLIES ANYMORE, KILL THEM ALL!"))
-	var/datum/client_colour/colour = owner.add_client_colour(/datum/client_colour/bloodlust)
-	QDEL_IN(colour, 1.1 SECONDS)
-
-/datum/status_effect/mayhem/on_remove()
-	. = ..()
-	to_chat(owner, SPAN_NOTICE("Your bloodlust seeps back into the bog of your subconscious and you regain self control."))
-	owner.log_message("exited a blood frenzy", LOG_ATTACK)
-	QDEL_NULL(chainsaw)
 
 /datum/status_effect/speed_boost
 	id = "speed_boost"

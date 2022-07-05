@@ -474,10 +474,7 @@
 #undef BRAINS_BLOWN_THROW_SPEED
 #undef BRAINS_BLOWN_THROW_RANGE
 
-GLOBAL_LIST_INIT(gun_saw_types, typecacheof(list(
-	/obj/item/melee/transforming/energy,
-	/obj/item/dualsaber
-	)))
+GLOBAL_LIST_INIT(gun_saw_types, typecacheof(list()))
 
 ///Handles all the logic of sawing off guns,
 /obj/item/gun/ballistic/proc/sawoff(mob/user, obj/item/saw)
@@ -518,7 +515,7 @@ GLOBAL_LIST_INIT(gun_saw_types, typecacheof(list(
 		update_appearance()
 		return TRUE
 
-/obj/item/gun/ballistic/proc/guncleaning(mob/user, /obj/item/A)
+/obj/item/gun/ballistic/proc/guncleaning(mob/user, obj/item/A)
 	if(misfire_probability == 0)
 		to_chat(user, SPAN_NOTICE("\The [src] seems to be already clean of fouling."))
 		return
