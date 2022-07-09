@@ -23,6 +23,7 @@
 	transform = new_matrix
 	pixel_x = 0
 	pixel_y = 0
+	icon_state = "tree[rand(1,6)]"
 
 /obj/structure/tree/ex_act(severity, target)
 	if(severity <= EXPLODE_LIGHT)
@@ -87,6 +88,7 @@
 	icon_state = "stump"
 	density = TRUE
 	anchored = TRUE
+	pass_flags_self = PASSTABLE | LETPASSTHROW
 
 /obj/structure/tree_stump/Initialize()
 	. = ..()
@@ -120,6 +122,7 @@
 	icon_state = "log"
 	density = TRUE
 	anchored = TRUE
+	pass_flags_self = PASSTABLE | LETPASSTHROW
 	/// Progress towards chopping this down.
 	var/chop_progress = 0
 
