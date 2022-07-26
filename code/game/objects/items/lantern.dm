@@ -23,10 +23,15 @@
 		icon_state = base_icon_state
 
 /obj/item/lantern/Moved(atom/OldLoc, Dir)
+	. = ..()
 	if(post && loc != post)
 		post.remove_lantern()
 
 /obj/item/lantern/attack_self(mob/user)
+	user_toggle(user)
+	return TRUE
+
+/obj/item/lantern/proc/user_toggle(mob/user)
 	if(!lit)
 		if(can_ignite())
 			playsound(user, 'sound/weapons/magin.ogg', 40, TRUE)
@@ -38,7 +43,6 @@
 		playsound(user, 'sound/weapons/magout.ogg', 40, TRUE)
 		to_chat(user, SPAN_NOTICE("You turn off \the [src]."))
 		set_lit_state(FALSE)
-	return TRUE
 
 /obj/item/lantern/Destroy()
 	set_lit_state(FALSE)
