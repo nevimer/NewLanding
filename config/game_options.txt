@@ -433,3 +433,7 @@ AUTOTRANSFER_VOTE_INTERVAL 36000
 ###  0 for automatic shuttle call on the first vote
 ### -1 to enable infinite extensions
 AUTOTRANSFER_VOTE_MAX_EXTENSIONS 4
+
+## Max distance for clients to view with widescren mode enabled. 
+MAX_CLIENT_VIEW_X 19
+MAX_CLIENT_VIEW_Y 16

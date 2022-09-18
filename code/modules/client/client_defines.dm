@@ -203,3 +203,6 @@
 	var/datum/ambience_controller/ambience_controller
 	var/datum/crafting_menu/crafting_menu
 
+	/// Holder variables for viewport scaling.
+	var/last_view_x_dim = 7
+	var/last_view_y_dim = 7

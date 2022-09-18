@@ -988,19 +988,21 @@ GLOBAL_LIST_INIT(blacklisted_builds, list(
 				if("LOOC")
 					winset(src, "default-[REF(key)]", "parent=default;name=[key];command=looc")
 
-/client/proc/change_view(new_size)
-	if (isnull(new_size))
-		CRASH("change_view called without argument.")
-
-	view = new_size
-	mob.hud_used.screentip_text.update_view()
-	apply_clickcatcher()
-	mob.reload_fullscreen()
-	if (isliving(mob))
-		var/mob/living/M = mob
-		M.update_damage_hud()
-	if (prefs.auto_fit_viewport)
-		addtimer(CALLBACK(src,.verb/fit_viewport,10)) //Delayed to avoid wingets from Login calls.
+/client/proc/change_view(new_size, forced)
+	if((!prefs?.widescreenpref))
+		if (isnull(new_size))
+			CRASH("change_view called without argument.")
+		view = new_size
+		apply_clickcatcher()
+		mob?.reload_fullscreen()
+		if (isliving(mob))
+			var/mob/living/M = mob
+			M.update_damage_hud()
+	else
+		apply_clickcatcher()
+		mob?.reload_fullscreen()
+		if(forced)
+			view = new_size
 
 /client/proc/generate_clickcatcher()
 	if(!void)

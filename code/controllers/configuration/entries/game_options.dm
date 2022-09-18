@@ -481,3 +481,13 @@
 /datum/config_entry/number/autotransfer_vote_max_extensions
 	config_entry_value = 4
 	min_val = -1
+
+/datum/config_entry/number/max_client_view_x
+	default = 21
+	min_val = 15
+	max_val = 50 // Byond (the) limits
+
+/datum/config_entry/number/max_client_view_y
+	default = 15
+	min_val = 15
+	max_val = 50 // Byond (the) limits
